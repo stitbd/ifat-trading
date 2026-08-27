@@ -16,7 +16,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             Alert::success('Login', 'Login Successful!');
-            return redirect()->route('admin.dashboard'); // Change to your desired home route
+            return redirect()->route('dashboard'); // Change to your desired home route
         }
 
         return back()->withErrors([

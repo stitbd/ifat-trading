@@ -301,7 +301,18 @@ License: For each use you must have a valid license purchased only from above li
     <script>
         var hostUrl = "assets/";
     </script>
-
+    @if (session('permission_error'))
+        <script>
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Access Denied',
+                    text: "{{ session('permission_error') }}",
+                    confirmButtonColor: '#FF4C29'
+                });
+            });
+        </script>
+    @endif
     <script>
         // Show the loading spinner when navigating to the page
         window.addEventListener('pageshow', function(event) {

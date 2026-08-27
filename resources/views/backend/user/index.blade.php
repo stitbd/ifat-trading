@@ -77,6 +77,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Image</th>
+                    <th>Role</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -95,6 +96,7 @@
 </div>
 <!-- Custom CSS for Table Borders -->
 @include('backend.user.create')
+
 <style>
     table.dataTable td img {
         display: block;
@@ -143,6 +145,10 @@
                     },
                     orderable: false,
                     searchable: false
+                },
+                {
+                    data: 'role',
+                    name: 'role'
                 },
                 {
                     data: 'action',

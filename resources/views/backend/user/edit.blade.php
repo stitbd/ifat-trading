@@ -35,7 +35,20 @@
                     placeholder="Enter password">
                 <div class="invalid-feedback password-error"></div>
             </div>
-
+            <div class="col-md-12 mb-3">
+                <label for="role" class="form-label fw-bold text-dark">Role: <span
+                        class="text-danger ml-1">*</span></label>
+                <select class="form-control border-dark" id="role" name="role[]" multiple>
+                    @foreach ($roles as $role)
+                        <option value="{{ $role->name }}"
+                            {{ $data->roles->pluck('name')->contains($role->name) ? 'selected' : '' }}>
+                            {{ $role->name }}
+                        </option>
+                    @endforeach
+                </select>
+                <small class="text-muted">Ctrl/Cmd chepe multiple select korun</small>
+                <div class="invalid-feedback role-error"></div>
+            </div>
             <!-- Image Upload -->
             <div class="col-md-12 mb-3">
                 <label for="image" class="form-label fw-bold text-dark">Profile Picture:</label>
@@ -43,6 +56,7 @@
                 <div class="invalid-feedback image-error"></div>
                 <img src="{{ asset('image/' . $data->image) }}" width="150" alt="">
             </div>
+
         </div>
         <input type="hidden" value="{{ $data->id }}" id="user_id">
         <!-- Submit Button -->
@@ -60,6 +74,17 @@
     <button type="button" class="btn" style="background-color: #FF4C29; color: #ffffff; border-radius: 5px;"
         data-bs-dismiss="modal">Close</button>
 </div>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#role').select2({
+            placeholder: "Select role(s)",
+            dropdownParent: $(
+                '#userEditModal') // modal er vitore thakle এটা must, নাহলে dropdown hide hoye jay
+        });
+    });
+</script>
 <script>
     $(document).ready(function() {
         $("#userEditModalForm").on("submit", function(e) {
@@ -100,7 +125,6 @@
                     if (xhr.status === 422) {
                         let errors = xhr.responseJSON.errors;
 
-                        // Display validation errors
                         if (errors.name) {
                             $(".name-error").text(errors.name[0]).show();
                         }
@@ -113,11 +137,39 @@
                         if (errors.image) {
                             $(".image-error").text(errors.image[0]).show();
                         }
+                        if (errors.role) {
+                            $(".role-error").text(errors.role[0]).show();
+                        }
 
-                        // Auto-hide error messages after 3 seconds
                         setTimeout(function() {
                             $(".invalid-feedback").fadeOut();
                         }, 3000);
+
+                    } else if (xhr.status === 403) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Access Denied',
+                            text: xhr.responseJSON?.message ||
+                                'You do not have permission to perform this action!',
+                            confirmButtonColor: '#FF4C29'
+                        });
+
+                    } else if (xhr.status === 404) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Not Found',
+                            text: xhr.responseJSON?.message || 'User not found!',
+                            confirmButtonColor: '#FF4C29'
+                        });
+
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON?.message ||
+                                'Something went wrong! Please try again.',
+                            confirmButtonColor: '#FF4C29'
+                        });
                     }
                 }
             });

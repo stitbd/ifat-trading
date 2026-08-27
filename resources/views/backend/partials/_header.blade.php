@@ -15,7 +15,7 @@
         <!--end::Sidebar mobile toggle-->
         <!--begin::Mobile logo-->
         <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-            <a href="{{ route('admin.dashboard') }}" class="d-lg-none" style="background: black; padding:5px">
+            <a href="{{ route('dashboard') }}" class="d-lg-none" style="background: black; padding:5px">
                 <img alt="Logo" src="{{ asset('image/') }}" class="h-30px" />
             </a>
         </div>
