@@ -112,12 +112,13 @@
                         request()->routeIs('social.icon.index') ||
                         request()->routeIs('social.icon.index') ||
                         request()->routeIs('banner.index') ||
-                        request()->routeIs('user.index')
+                        request()->routeIs('user.index') ||
+                        request()->routeIs('wing.index')
                             ? 'custom-show'
                             : '';
                 @endphp
                 <div data-kt-menu-trigger="click"
-                    class="menu-item {{ request()->routeIs('applications.index') || request()->routeIs('social.icon.index') || request()->routeIs('social.icon.index') || request()->routeIs('user.index') ? 'show' : '' }} {{ $settingsIsActive }} menu-accordion">
+                    class="menu-item {{ request()->routeIs('applications.index') || request()->routeIs('social.icon.index') || request()->routeIs('social.icon.index') || request()->routeIs('user.index') || request()->routeIs('wing.index') ? 'show' : '' }} {{ $settingsIsActive }} menu-accordion">
                     <!--begin:Menu link-->
                     <span class="menu-link ">
                         <span class="menu-icon">
@@ -134,6 +135,21 @@
                     <div class="menu-sub menu-sub-accordion">
 
                         <!--begin:Menu item-->
+
+                          <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('wing.index') ? 'active button-active' : '' }}"
+                                href="{{ route('wing.index') }}">
+                                <span class="menu-bullet">
+                                    <i class="far fa-circle nav-icon"></i>
+
+                                </span>
+                                <span class="menu-title">Wings</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+
+
                         <div class="menu-item">
                             <!--begin:Menu link-->
                             <a class="menu-link {{ request()->routeIs('user.index') ? 'active button-active' : '' }}"

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ApplicationController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\WingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -22,4 +23,10 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('user/distroy/{id}', [UserController::class, 'distroy'])->name('user.distroy');
     Route::get('user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
     Route::put('user/update/{id}', [UserController::class, 'update'])->name('user.update');
+
+    Route::get('wing/getdata', [WingController::class, 'getdata'])
+    ->name('wing.getdata');
+    Route::resource('wing', WingController::class);
+    
+    
 });
