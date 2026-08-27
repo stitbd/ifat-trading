@@ -19,7 +19,7 @@ class RoleController extends Controller implements HasMiddleware
     {
         return [
             'auth', // Require authentication for all actions
-            new Middleware('permission:role.list', only: ['index', 'getdata']),
+            new Middleware('permission:role.view', only: ['index', 'getdata']),
             new Middleware('permission:role.create', only: ['store']),
             new Middleware('permission:role.edit', only: ['update']),
             new Middleware('permission:role.delete', only: ['distroy']),

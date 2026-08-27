@@ -20,7 +20,7 @@ class UserController extends Controller implements HasMiddleware
     {
         return [
             'auth', // Require authentication for all actions
-            new Middleware('permission:user.list', only: ['index', 'getdata']),
+            new Middleware('permission:user.view', only: ['index', 'getdata']),
             new Middleware('permission:user.create', only: ['store']),
             new Middleware('permission:user.edit', only: ['update']),
             new Middleware('permission:user.delete', only: ['distroy']),
