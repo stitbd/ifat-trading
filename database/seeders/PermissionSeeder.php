@@ -5,11 +5,17 @@ namespace Database\Seeders;
 use App\Models\Permission;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
 
 class PermissionSeeder extends Seeder
 {
     public function run(): void
     {
+
+        $roleSuperAdmin = Role::firstOrCreate([
+            'name' => 'superadmin',
+            'guard_name' => 'web',
+        ]);
         $permissions = [
 
             // ===== Dashboard =====
@@ -30,6 +36,17 @@ class PermissionSeeder extends Seeder
                     'user.delete',
                     'user.profile',
                     'user.profile.update',
+                ]
+            ],
+                  [
+                'group_name' => 'Wing',
+                'permissions' => [
+                    'wing.view',
+                    'wing.create',
+                    'wing.edit',
+                    'wing.delete',
+                    'wing.approve',
+               
                 ]
             ],
 
@@ -62,6 +79,8 @@ class PermissionSeeder extends Seeder
                     ['name' => $permission, 'guard_name' => 'web'],
                     ['group_name' => $group['group_name']]
                 );
+
+                 $roleSuperAdmin->givePermissionTo($permission);
             }
         }
     }

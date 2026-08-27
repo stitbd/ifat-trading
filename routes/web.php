@@ -35,12 +35,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('roles/edit/{id}', [RoleController::class, 'edit'])->name('role.edit');
     Route::put('roles/update/{id}', [RoleController::class, 'update'])->name('role.update');
     Route::delete('roles/distroy/{id}', [RoleController::class, 'distroy'])->name('role.distroy');
-});
 
-    Route::get('wing/getdata', [WingController::class, 'getdata'])
+
+
+
+    //asraf 
+
+        Route::get('wing/getdata', [WingController::class, 'getdata'])
     ->name('wing.getdata');
     Route::resource('wing', WingController::class);
-    
-    
+
 });
+
+
+    
+    
+
 
