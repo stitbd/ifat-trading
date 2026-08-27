@@ -199,6 +199,64 @@
                                 </div>
                                 <!--end:Menu item-->
                             @endif
+
+
+
+                @php
+                    $settingsIsActive =
+                        request()->routeIs('applications.index') ||
+                        request()->routeIs('social.icon.index') ||
+                        request()->routeIs('social.icon.index') ||
+                        request()->routeIs('banner.index') ||
+                        request()->routeIs('user.index') ||
+                        request()->routeIs('wing.index')
+                            ? 'custom-show'
+                            : '';
+                @endphp
+                <div data-kt-menu-trigger="click"
+                    class="menu-item {{ request()->routeIs('applications.index') || request()->routeIs('social.icon.index') || request()->routeIs('social.icon.index') || request()->routeIs('user.index') || request()->routeIs('wing.index') ? 'show' : '' }} {{ $settingsIsActive }} menu-accordion">
+                    <!--begin:Menu link-->
+                    <span class="menu-link ">
+                        <span class="menu-icon">
+                            <i class="fa-solid fa-gear fs-2"></i>
+                        </span>
+
+                        <span class="menu-title">Settings</span>
+                        <span class="menu-arrow"></span>
+                    </span>
+                    <!--end:Menu link-->
+
+
+                    <!--begin:Menu sub-->
+                    <div class="menu-sub menu-sub-accordion">
+
+                        <!--begin:Menu item-->
+
+                          <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('wing.index') ? 'active button-active' : '' }}"
+                                href="{{ route('wing.index') }}">
+                                <span class="menu-bullet">
+                                    <i class="far fa-circle nav-icon"></i>
+
+                                </span>
+                                <span class="menu-title">Wings</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+
+
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->routeIs('user.index') ? 'active button-active' : '' }}"
+                                href="{{ route('user.index') }}">
+                                <span class="menu-bullet">
+                                    <i class="far fa-circle nav-icon"></i>
+
+                                </span>
+                                <span class="menu-title">User</span>
+                            </a>
+                            <!--end:Menu link-->
                         </div>
                         <!--end:Menu sub-->
                     </div>

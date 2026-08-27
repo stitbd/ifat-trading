@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ApplicationController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\WingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -25,6 +26,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('user/update/{id}', [UserController::class, 'update'])->name('user.update');
 
 
+
     // routes/web.php (admin group er vitore)
     Route::get('roles', [RoleController::class, 'index'])->name('role.index');
     Route::get('roles/getdata', [RoleController::class, 'getdata'])->name('role.getdata');
@@ -34,3 +36,11 @@ Route::middleware(['auth'])->group(function () {
     Route::put('roles/update/{id}', [RoleController::class, 'update'])->name('role.update');
     Route::delete('roles/distroy/{id}', [RoleController::class, 'distroy'])->name('role.distroy');
 });
+
+    Route::get('wing/getdata', [WingController::class, 'getdata'])
+    ->name('wing.getdata');
+    Route::resource('wing', WingController::class);
+    
+    
+});
+
