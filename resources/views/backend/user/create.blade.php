@@ -50,6 +50,17 @@
                                 accept="image/*">
                             <div class="invalid-feedback image-error"></div>
                         </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="role" class="form-label fw-bold text-dark">Role: <span
+                                    class="text-danger ml-1">*</span></label>
+                            <select class="form-control border-dark" id="role" name="role[]" multiple>
+                                @foreach ($roles as $role)
+                                    <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                @endforeach
+                            </select>
+                            <small class="text-muted">Ctrl/Cmd chepe multiple select korun</small>
+                            <div class="invalid-feedback role-error"></div>
+                        </div>
                     </div>
 
                     <!-- Submit Button -->
@@ -71,6 +82,17 @@
         </div>
     </div>
 </div>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#role').select2({
+            placeholder: "Select role(s)",
+            dropdownParent: $(
+                '#userCreateModal') // modal er vitore thakle এটা must, নাহলে dropdown hide hoye jay
+        });
+    });
+</script>
 <script>
     $(document).ready(function() {
         $("#userCreateModalForm").on("submit", function(e) {
@@ -122,11 +144,33 @@
                         if (errors.image) {
                             $(".image-error").text(errors.image[0]).show();
                         }
+                        if (errors.role) {
+                            $(".role-error").text(errors.role[0]).show();
+                        }
 
-                        // Auto-hide error messages after 3 seconds
                         setTimeout(function() {
                             $(".invalid-feedback").fadeOut();
                         }, 3000);
+
+                    } else if (xhr.status === 403) {
+                        // Permission na thakle
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Access Denied',
+                            text: xhr.responseJSON?.message ||
+                                'You do not have permission to perform this action!',
+                            confirmButtonColor: '#FF4C29'
+                        });
+
+                    } else {
+                        // Server error (500) ba onno kono unexpected error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON?.message ||
+                                'Something went wrong! Please try again.',
+                            confirmButtonColor: '#FF4C29'
+                        });
                     }
                 }
             });

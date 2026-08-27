@@ -41,7 +41,7 @@
             $companyLogo = $company ? $company->logo : '';
             $companyName = $company ? $company->company_name : '';
         @endphp
-        <a href="{{ route('admin.dashboard') }}">
+        <a href="{{ route('dashboard') }}">
             <img alt="Logo" src="{{ asset('image/' . $companyLogo) }}" class="h-55px app-sidebar-logo-default" />
             <img alt="Logo" src="{{ asset('image/' . $companyLogo) }}" class="h-20px app-sidebar-logo-minimize" />
         </a>
@@ -73,8 +73,8 @@
                 <div class="menu-item">
                     <!--begin:Menu link-->
 
-                    <a class="menu-link {{ request()->routeIs('admin.dashboard') ? 'customer-button-background-color active' : '' }}"
-                        href="{{ route('admin.dashboard') }}">
+                    <a class="menu-link {{ request()->routeIs('dashboard') ? 'customer-button-background-color active' : '' }}"
+                        href="{{ route('dashboard') }}">
                         <span class="menu-icon">
                             <i class="ki-duotone ki-element-11 fs-2">
                                 <span class="path1"></span>
@@ -97,80 +97,114 @@
                     </div>
                     <!--end:Menu content-->
                 </div>
+                @if (auth()->user()->can('user.list') || auth()->user()->can('role.list'))
+                    @php
+                        $settingsIsActive =
+                            request()->routeIs('user.index') || request()->routeIs('role.index') ? 'custom-show' : '';
+                    @endphp
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item {{ request()->routeIs('user.index') || request()->routeIs('role.index') ? 'show' : '' }} {{ $settingsIsActive }} menu-accordion">
+                        <!--begin:Menu link-->
+                        <span class="menu-link ">
+                            <span class="menu-icon">
+                                <i class="fa-solid fa-gear fs-2"></i>
+                            </span>
 
-
-
-
-
-
-
-
-
-                @php
-                    $settingsIsActive =
-                        request()->routeIs('applications.index') ||
-                        request()->routeIs('social.icon.index') ||
-                        request()->routeIs('social.icon.index') ||
-                        request()->routeIs('banner.index') ||
-                        request()->routeIs('user.index')
-                            ? 'custom-show'
-                            : '';
-                @endphp
-                <div data-kt-menu-trigger="click"
-                    class="menu-item {{ request()->routeIs('applications.index') || request()->routeIs('social.icon.index') || request()->routeIs('social.icon.index') || request()->routeIs('user.index') ? 'show' : '' }} {{ $settingsIsActive }} menu-accordion">
-                    <!--begin:Menu link-->
-                    <span class="menu-link ">
-                        <span class="menu-icon">
-                            <i class="fa-solid fa-gear fs-2"></i>
+                            <span class="menu-title">User Management</span>
+                            <span class="menu-arrow"></span>
                         </span>
-
-                        <span class="menu-title">Settings</span>
-                        <span class="menu-arrow"></span>
-                    </span>
-                    <!--end:Menu link-->
+                        <!--end:Menu link-->
 
 
-                    <!--begin:Menu sub-->
-                    <div class="menu-sub menu-sub-accordion">
+                        <!--begin:Menu sub-->
+                        <div class="menu-sub menu-sub-accordion">
+                            @if (auth()->user()->can('user.list'))
+                                <!--begin:Menu item-->
+                                <div class="menu-item">
+                                    <!--begin:Menu link-->
+                                    <a class="menu-link {{ request()->routeIs('user.index') ? 'active button-active' : '' }}"
+                                        href="{{ route('user.index') }}">
+                                        <span class="menu-bullet">
+                                            <i class="far fa-circle nav-icon"></i>
 
-                        <!--begin:Menu item-->
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('user.index') ? 'active button-active' : '' }}"
-                                href="{{ route('user.index') }}">
-                                <span class="menu-bullet">
-                                    <i class="far fa-circle nav-icon"></i>
+                                        </span>
+                                        <span class="menu-title">User</span>
+                                    </a>
+                                    <!--end:Menu link-->
+                                </div>
+                            @endif
+                            <!--end:Menu item-->
+                            @if (auth()->user()->can('role.list'))
+                                <!--begin:Menu item-->
+                                <!--begin:Menu item-->
+                                <div class="menu-item">
+                                    <!--begin:Menu link-->
+                                    <a class="menu-link {{ request()->routeIs('role.index') ? 'active button-active' : '' }}"
+                                        href="{{ route('role.index') }}">
+                                        <span class="menu-bullet">
+                                            <i class="far fa-circle nav-icon"></i>
 
-                                </span>
-                                <span class="menu-title">User</span>
-                            </a>
-                            <!--end:Menu link-->
+                                        </span>
+                                        <span class="menu-title">Roles</span>
+                                    </a>
+                                    <!--end:Menu link-->
+                                </div>
+                                <!--end:Menu item-->
+                            @endif
+
                         </div>
-                        <!--end:Menu item-->
+                        <!--end:Menu sub-->
 
                     </div>
-                    <!--end:Menu sub-->
-                    <!--begin:Menu sub-->
-                    <div class="menu-sub menu-sub-accordion">
+                @endif
 
-                        <!--begin:Menu item-->
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->routeIs('applications.index') ? 'active button-active' : '' }}"
-                                href="{{ route('applications.index') }}">
-                                <span class="menu-bullet">
-                                    <i class="far fa-circle nav-icon"></i>
 
-                                </span>
-                                <span class="menu-title">System-Settings</span>
-                            </a>
-                            <!--end:Menu link-->
+
+
+                @if (auth()->user()->can('system_settings.view'))
+                    @php
+                        $settingsIsActive = request()->routeIs('applications.index') ? 'custom-show' : '';
+                    @endphp
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item {{ request()->routeIs('applications.index') ? 'show' : '' }} {{ $settingsIsActive }} menu-accordion">
+                        <!--begin:Menu link-->
+                        <span class="menu-link ">
+                            <span class="menu-icon">
+                                <i class="fa-solid fa-gear fs-2"></i>
+                            </span>
+
+                            <span class="menu-title">Settings</span>
+                            <span class="menu-arrow"></span>
+                        </span>
+                        <!--end:Menu link-->
+
+
+
+                        <!--end:Menu sub-->
+                        <!--begin:Menu sub-->
+                        <div class="menu-sub menu-sub-accordion">
+                            @if (auth()->user()->can('system_settings.view'))
+                                <!--begin:Menu item-->
+                                <div class="menu-item">
+                                    <!--begin:Menu link-->
+                                    <a class="menu-link {{ request()->routeIs('applications.index') ? 'active button-active' : '' }}"
+                                        href="{{ route('applications.index') }}">
+                                        <span class="menu-bullet">
+                                            <i class="far fa-circle nav-icon"></i>
+
+                                        </span>
+                                        <span class="menu-title">System-Settings</span>
+                                    </a>
+                                    <!--end:Menu link-->
+                                </div>
+                                <!--end:Menu item-->
+                            @endif
                         </div>
-                        <!--end:Menu item-->
-
+                        <!--end:Menu sub-->
                     </div>
-                    <!--end:Menu sub-->
-                </div>
+                @endif
+
+
 
 
 

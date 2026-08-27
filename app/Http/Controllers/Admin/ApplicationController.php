@@ -6,9 +6,18 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Application;
 use Alert;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class ApplicationController extends Controller
+class ApplicationController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            'auth', // Require authentication for all actions
+            new Middleware('permission:system_settings.view', only: ['index', 'update'])
+        ];
+    }
     public function index()
     {
         $data = Application::first();
