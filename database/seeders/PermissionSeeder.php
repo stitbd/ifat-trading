@@ -38,7 +38,7 @@ class PermissionSeeder extends Seeder
                     'user.profile.update',
                 ]
             ],
-                  [
+            [
                 'group_name' => 'Wing',
                 'permissions' => [
                     'wing.view',
@@ -46,7 +46,40 @@ class PermissionSeeder extends Seeder
                     'wing.edit',
                     'wing.delete',
                     'wing.approve',
-               
+
+                ]
+            ],
+            [
+                'group_name' => 'Categories',
+                'permissions' => [
+                    'category.view',
+                    'category.create',
+                    'category.edit',
+                    'category.delete',
+                    'category.approve',
+
+                ]
+            ],
+            [
+                'group_name' => 'SubCategories',
+                'permissions' => [
+                    'subcategory.view',
+                    'subcategory.create',
+                    'subcategory.edit',
+                    'subcategory.delete',
+                    'subcategory.approve',
+
+                ]
+            ],
+                 [
+                'group_name' => 'Brand',
+                'permissions' => [
+                    'brand.view',
+                    'brand.create',
+                    'brand.edit',
+                    'brand.delete',
+                    'brand.approve',
+
                 ]
             ],
 
@@ -80,7 +113,7 @@ class PermissionSeeder extends Seeder
                     ['group_name' => $group['group_name']]
                 );
 
-                 $roleSuperAdmin->givePermissionTo($permission);
+                $roleSuperAdmin->givePermissionTo($permission);
             }
         }
     }

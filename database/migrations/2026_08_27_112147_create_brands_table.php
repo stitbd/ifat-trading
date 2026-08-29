@@ -11,15 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('wings', function (Blueprint $table) {
+        Schema::create('brands', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100)->nullable();
-            $table->string('imported_number', 100)->unique()->nullable();
-            $table->string('bin_number', 50)->unique()->nullable();
-            $table->string('mobile_number', 50)->nullable();
-            $table->string('email',50)->nullable();
+            $table->string('name', 100)->unique();
             $table->string('image')->nullable();
-            $table->string('authority_signature')->nullable();
             $table->text('description')->nullable();
             $table->tinyInteger('status')->default(1);
 
@@ -43,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('wings');
+        Schema::dropIfExists('brands');
     }
 };
