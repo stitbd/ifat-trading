@@ -40,7 +40,7 @@ class ApplicationController extends Controller implements HasMiddleware
         $data = Application::findOrFail($id);
         //    chairman image
         if ($request->hasFile('fav_icon')) {
-            $oldImagePath = public_path('image/' . $data->fav_icon);
+            $oldImagePath = public_path('image/application/' . $data->fav_icon);
             if (file_exists($oldImagePath)) {
                 unlink($oldImagePath);
             }
@@ -49,12 +49,12 @@ class ApplicationController extends Controller implements HasMiddleware
             $file = $request->file('fav_icon');
             $extension = $file->getClientOriginalExtension();
             $filename = time() . '_'  . uniqid() . '.' . $extension;
-            $path = 'image/';
+            $path = 'image/application/';
             $file->move(public_path($path), $filename);
             $data->fav_icon = $filename;
         }
         if ($request->hasFile('logo')) {
-            $oldImagePath = public_path('image/' . $data->logo);
+            $oldImagePath = public_path('image/application/' . $data->logo);
             if (file_exists($oldImagePath)) {
                 unlink($oldImagePath);
             }
@@ -63,7 +63,7 @@ class ApplicationController extends Controller implements HasMiddleware
             $file = $request->file('logo');
             $extension = $file->getClientOriginalExtension();
             $filename = time() . '_' . uniqid() . '.' . $extension;
-            $path = 'image/';
+            $path = 'image/application/';
             $file->move(public_path($path), $filename);
             $data->logo = $filename;
         }
