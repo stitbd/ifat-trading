@@ -71,7 +71,7 @@ class PermissionSeeder extends Seeder
 
                 ]
             ],
-                 [
+            [
                 'group_name' => 'Brand',
                 'permissions' => [
                     'brand.view',
@@ -143,6 +143,26 @@ class PermissionSeeder extends Seeder
                     'warranty_period.edit',
                     'warranty_period.delete',
                     'warranty_period.approve',
+                ]
+            ],
+            [
+                'group_name' => 'Manufacturer',
+                'permissions' => [
+                    'manufacturer.view',
+                    'manufacturer.create',
+                    'manufacturer.edit',
+                    'manufacturer.delete',
+                    'manufacturer.approve',
+                ]
+            ],
+            [
+                'group_name' => 'Country Of Origin',
+                'permissions' => [
+                    'country_of_origin.view',
+                    'country_of_origin.create',
+                    'country_of_origin.edit',
+                    'country_of_origin.delete',
+                    'country_of_origin.approve',
                 ]
             ],
 

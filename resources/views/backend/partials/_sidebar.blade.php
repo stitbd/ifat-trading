@@ -109,7 +109,7 @@
                 </div>
                 <!--end::Dashboard-->
 
-                 @if (auth()->user()->can('category.view'))
+                @if (auth()->user()->can('category.view'))
                     <div class="menu-item">
 
                         <a class="menu-link
@@ -133,7 +133,7 @@
 
                     </div>
                 @endif
-                 @if (auth()->user()->can('subcategory.view'))
+                @if (auth()->user()->can('subcategory.view'))
                     <div class="menu-item">
 
                         <a class="menu-link
@@ -158,7 +158,7 @@
                     </div>
                 @endif
 
-                      @if (auth()->user()->can('brand.view'))
+                @if (auth()->user()->can('brand.view'))
                     <div class="menu-item">
 
                         <a class="menu-link
@@ -324,7 +324,13 @@
                             request()->routeIs('vat-percentage.edit') ||
                             request()->routeIs('warranty-period.index') ||
                             request()->routeIs('warranty-period.create') ||
-                            request()->routeIs('warranty-period.edit');
+                            request()->routeIs('warranty-period.edit') ||
+                            request()->routeIs('manufacturer.index') ||
+                            request()->routeIs('manufacturer.create') ||
+                            request()->routeIs('manufacturer.edit') ||
+                            request()->routeIs('country-of-origin.index') ||
+                            request()->routeIs('country-of-origin.create') ||
+                            request()->routeIs('country-of-origin.edit');
 
                         $settingsClass = $settingsActive ? 'custom-show' : '';
                     @endphp
@@ -416,6 +422,44 @@
 
                                         <span class="menu-title">
                                             Product Type
+                                        </span>
+
+                                    </a>
+
+                                </div>
+                            @endif
+                            @if (auth()->user()->can('manufacturer.view'))
+                                <div class="menu-item">
+
+                                    <a class="menu-link
+                                        {{ request()->routeIs('manufacturer.index') ? 'active button-active' : '' }}"
+                                        href="{{ route('manufacturer.index') }}">
+
+                                        <span class="menu-bullet">
+                                            <i class="far fa-circle nav-icon"></i>
+                                        </span>
+
+                                        <span class="menu-title">
+                                            Manufacturer
+                                        </span>
+
+                                    </a>
+
+                                </div>
+                            @endif
+                            @if (auth()->user()->can('country_of_origin.view'))
+                                <div class="menu-item">
+
+                                    <a class="menu-link
+                                        {{ request()->routeIs('country-of-origin.index') ? 'active button-active' : '' }}"
+                                        href="{{ route('country-of-origin.index') }}">
+
+                                        <span class="menu-bullet">
+                                            <i class="far fa-circle nav-icon"></i>
+                                        </span>
+
+                                        <span class="menu-title">
+                                            Country-of-origin
                                         </span>
 
                                     </a>
