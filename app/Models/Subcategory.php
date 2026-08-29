@@ -5,10 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Wing extends Model
+class Subcategory extends Model
 {
     use SoftDeletes;
-    protected $guarded = [];
+
+    protected $fillable = [
+        'category_id',
+        'name',
+        'image',
+        'description',
+        'created_by',
+        'updated_by',
+    ];
+
+
+  public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');

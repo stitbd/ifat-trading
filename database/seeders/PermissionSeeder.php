@@ -49,6 +49,40 @@ class PermissionSeeder extends Seeder
 
                 ]
             ],
+            [
+                'group_name' => 'Categories',
+                'permissions' => [
+                    'category.view',
+                    'category.create',
+                    'category.edit',
+                    'category.delete',
+                    'category.approve',
+
+                ]
+            ],
+            [
+                'group_name' => 'SubCategories',
+                'permissions' => [
+                    'subcategory.view',
+                    'subcategory.create',
+                    'subcategory.edit',
+                    'subcategory.delete',
+                    'subcategory.approve',
+
+                ]
+            ],
+                 [
+                'group_name' => 'Brand',
+                'permissions' => [
+                    'brand.view',
+                    'brand.create',
+                    'brand.edit',
+                    'brand.delete',
+                    'brand.approve',
+
+
+                ]
+            ],
 
             // ===== Role =====
             [

@@ -10,12 +10,21 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
 class WingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+        public static function middleware(): array
+    {
+        return [
+            'auth', // Require authentication for all actions
+            new Middleware('permission:wing.view', only: ['index', 'getdata']),
+            new Middleware('permission:wing.create', only: ['store']),
+            new Middleware('permission:wing.edit', only: ['update']),
+            new Middleware('permission:wing.delete', only: ['distroy']),
+        ];
+    }
     public function index()
     {
         return view('backend.wings.index');
@@ -34,8 +43,8 @@ class WingController extends Controller
 
                 ->addColumn('image', function ($row) {
 
-                    if ($row->image && file_exists(public_path('image/' . $row->image))) {
-                        return '<img src="' . asset('image/' . $row->image) . '"
+                    if ($row->image && file_exists(public_path('wings/image/' . $row->image))) {
+                        return '<img src="' . asset('wings/image/' . $row->image) . '"
                                 alt="Wing Image"
                                 style="width:50px;height:50px;object-fit:cover;border-radius:5px;">';
                     }
@@ -132,7 +141,7 @@ class WingController extends Controller
 
                 $filename = time() . '_' . uniqid() . '.' . $extension;
 
-                $path = 'image/';
+                $path = 'wings/image/';
 
                 $file->move(public_path($path), $filename);
 
@@ -244,7 +253,7 @@ class WingController extends Controller
 
                 if ($find->image !== null) {
 
-                    $imagePath = public_path('image/' . $find->image);
+                    $imagePath = public_path('wings/image/' . $find->image);
 
                     if (file_exists($imagePath)) {
                         unlink($imagePath);
@@ -257,7 +266,7 @@ class WingController extends Controller
 
                 $filename = time() . '_' . uniqid() . '.' . $extension;
 
-                $path = 'image/';
+                $path = 'wings/image/';
 
                 $file->move(public_path($path), $filename);
 
@@ -323,7 +332,7 @@ class WingController extends Controller
 
         if ($find->image !== null) {
 
-            $imagePath = public_path('image/' . $find->image);
+            $imagePath = public_path('wings/image/' . $find->image);
 
             if (file_exists($imagePath)) {
                 unlink($imagePath);

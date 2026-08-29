@@ -1,10 +1,13 @@
 <?php
 
 use App\Http\Controllers\Admin\ApplicationController;
+use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\ProductSizeController;
 use App\Http\Controllers\Admin\ProductTypeController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VatPercentageController;
 use App\Http\Controllers\Admin\VehicleTypeController;
@@ -87,4 +90,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('wing/getdata', [WingController::class, 'getdata'])
         ->name('wing.getdata');
     Route::resource('wing', WingController::class);
+        Route::get('category/getdata', [CategoryController::class, 'getdata'])
+        ->name('category.getdata');
+    Route::resource('category', CategoryController::class);
+
+    Route::get('subcategory/getdata', [SubcategoryController::class, 'getdata'])
+        ->name('subcategory.getdata');
+    Route::resource('subcategory', SubcategoryController::class);
+
+        Route::get('brand/getdata', [BrandController::class, 'getdata'])
+        ->name('brand.getdata');
+    Route::resource('brand', BrandController::class);
 });

@@ -109,6 +109,80 @@
                 </div>
                 <!--end::Dashboard-->
 
+                 @if (auth()->user()->can('category.view'))
+                    <div class="menu-item">
+
+                        <a class="menu-link
+                        {{ request()->routeIs('category.index') ? 'customer-button-background-color active' : '' }}"
+                            href="{{ route('category.index') }}">
+
+                            <span class="menu-icon">
+                                <i class="ki-duotone ki-element-11 fs-2">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                    <span class="path3"></span>
+                                    <span class="path4"></span>
+                                </i>
+                            </span>
+
+                            <span class="menu-title">
+                                Category
+                            </span>
+
+                        </a>
+
+                    </div>
+                @endif
+                 @if (auth()->user()->can('subcategory.view'))
+                    <div class="menu-item">
+
+                        <a class="menu-link
+                        {{ request()->routeIs('subcategory.index') ? 'customer-button-background-color active' : '' }}"
+                            href="{{ route('subcategory.index') }}">
+
+                            <span class="menu-icon">
+                                <i class="ki-duotone ki-element-11 fs-2">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                    <span class="path3"></span>
+                                    <span class="path4"></span>
+                                </i>
+                            </span>
+
+                            <span class="menu-title">
+                                SubCategory
+                            </span>
+
+                        </a>
+
+                    </div>
+                @endif
+
+                      @if (auth()->user()->can('brand.view'))
+                    <div class="menu-item">
+
+                        <a class="menu-link
+                        {{ request()->routeIs('brand.index') ? 'customer-button-background-color active' : '' }}"
+                            href="{{ route('brand.index') }}">
+
+                            <span class="menu-icon">
+                                <i class="ki-duotone ki-element-11 fs-2">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                    <span class="path3"></span>
+                                    <span class="path4"></span>
+                                </i>
+                            </span>
+
+                            <span class="menu-title">
+                                Brand
+                            </span>
+
+                        </a>
+
+                    </div>
+                @endif
+
 
                 <!--begin::Pages-->
                 <div class="menu-item pt-5">
