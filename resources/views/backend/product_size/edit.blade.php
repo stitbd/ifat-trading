@@ -1,51 +1,95 @@
-<!-- Modal Header -->
-<div class="modal-header" style="background-color: #333333; border-bottom: 1px solid #ccc;">
-    <h5 class="modal-title" id="productSizeEditModalLabel" style="color: #ffffff;">Edit Product Size</h5>
-    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-</div>
+<!-- Modal Content Wrapper (matches create modal style) -->
+<div class="modal-content" style="border-radius: 12px; border: none; overflow: hidden;">
 
-<!-- Modal Body -->
-<div class="modal-body">
-    <form id="productSizeEditForm" method="POST">
-        @csrf
-        @method('put')
-        <div class="row">
-            <!-- Name -->
-            <div class="col-md-12 mb-3">
-                <label for="name" class="form-label fw-bold text-dark">Name: <span
-                        class="text-danger ml-1">*</span></label>
-                <input type="text" class="form-control border-dark" id="name" name="name"
-                    placeholder="Enter product size name" value="{{ $data->name }}">
-                <div class="invalid-feedback name-error"></div>
-            </div>
-
-            <!-- Status -->
-            <div class="col-md-12 mb-3">
-                <label for="status" class="form-label fw-bold text-dark">Status:</label>
-                <select class="form-control border-dark" id="status" name="status">
-                    <option value="1" {{ $data->status == 1 ? 'selected' : '' }}>Active</option>
-                    <option value="0" {{ $data->status == 0 ? 'selected' : '' }}>Inactive</option>
-                </select>
-                <div class="invalid-feedback status-error"></div>
-            </div>
+    <!-- Header -->
+    <div class="modal-header align-items-start"
+        style="background-color: #ffffff; border-bottom: 1px solid #eef0f2; padding: 20px 24px;">
+        <div>
+            <h5 class="modal-title mb-1" id="productSizeEditModalLabel"
+                style="color:#1e1e2d; font-weight:700; font-size:18px;">
+                <i class="bi bi-pencil-square me-2" style="color:#4361ee;"></i>
+                Edit Product Size
+            </h5>
+            <p class="mb-0" style="color:#8a8a9a; font-size:13px;">
+                Update the details for this product size
+            </p>
         </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
 
-        <input type="hidden" value="{{ $data->id }}" id="product_size_id">
+    <!-- Body -->
+    <div class="modal-body" style="padding: 24px; background-color: #fbfbfd;">
+        <form id="productSizeEditForm" method="POST">
+            @csrf
+            @method('put')
 
-        <!-- Submit Button -->
-        <div class="text-end">
-            <button type="submit" class="btn submit-btn"
-                style="background-color: #FF4C29; color: #ffffff; border-radius: 5px;">
-                Update Product Size
+            <div class="p-4 mb-3" style="background:#fff; border:1px solid #eef0f2; border-radius:10px;">
+
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="category_id" class="form-label fw-bold" style="color:#1e1e2d; font-size:13px;">
+                            Category <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select" id="category_id" name="category_id"
+                            style="border:1px solid #dfe2e8; border-radius:8px; padding:11px 14px; font-size:14px;">
+                            <option value="">Select Category</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}"
+                                    {{ $data->category_id == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <div class="invalid-feedback category-error"></div>
+                    </div>
+                    <!-- Name -->
+                    <div class="col-md-12 mb-3">
+                        <label for="name" class="form-label fw-bold" style="color:#1e1e2d; font-size:13px;">
+                            Name <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control" id="name" name="name"
+                            placeholder="Enter product size name" value="{{ $data->name }}"
+                            style="border:1px solid #dfe2e8; border-radius:8px; padding:11px 14px; font-size:14px;">
+                        <div class="invalid-feedback name-error"></div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="col-md-12">
+                        <label for="status" class="form-label fw-bold" style="color:#1e1e2d; font-size:13px;">
+                            Status
+                        </label>
+                        <select class="form-select" id="status" name="status"
+                            style="border:1px solid #dfe2e8; border-radius:8px; padding:11px 14px; font-size:14px;">
+                            <option value="1" {{ $data->status == 1 ? 'selected' : '' }}>Active</option>
+                            <option value="0" {{ $data->status == 0 ? 'selected' : '' }}>Inactive</option>
+                        </select>
+                        <div class="invalid-feedback status-error"></div>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" value="{{ $data->id }}" id="product_size_id">
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer d-flex justify-content-between align-items-center"
+        style="background-color: #ffffff; border-top: 1px solid #eef0f2; padding: 16px 24px;">
+        <span style="color:#8a8a9a; font-size:13px;">
+            <i class="bi bi-check-circle-fill text-success me-1"></i> 2 Fields
+        </span>
+        <div>
+            <button type="button" class="btn me-2" data-bs-dismiss="modal"
+                style="border:1px solid #dfe2e8; color:#4a4a5a; border-radius:8px; padding:8px 18px; font-size:14px;">
+                <i class="bi bi-x-lg me-1"></i> Cancel
+            </button>
+            <button type="submit" form="productSizeEditForm" class="btn submit-btn"
+                style="background-color:#4361ee; color:#fff; border-radius:8px; padding:8px 20px; font-size:14px; font-weight:600;">
+                <i class="bi bi-check-lg me-1"></i> Update
             </button>
         </div>
-    </form>
-</div>
+    </div>
 
-<!-- Modal Footer -->
-<div class="modal-footer" style="background-color: #f8f9fa; border-top: 1px solid #ccc;">
-    <button type="button" class="btn" style="background-color: #FF4C29; color: #ffffff; border-radius: 5px;"
-        data-bs-dismiss="modal">Close</button>
 </div>
 
 <script>
@@ -86,6 +130,8 @@
                         if (errors.name) {
                             $(".name-error").text(errors.name[0]).show();
                         }
+                        if (errors.category_id) $(".category-error").text(errors
+                            .category_id[0]).show();
                         if (errors.status) {
                             $(".status-error").text(errors.status[0]).show();
                         }

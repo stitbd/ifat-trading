@@ -5,40 +5,46 @@
     VAT Percentage
 @endsection
 
-<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
-    <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
-        <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
-            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">VAT
-                Percentage
-            </h1>
+<div class="app-toolbar py-3 py-lg-6">
+    <div class="app-container container-fluid">
+        <div class="admin-page-header">
+            <div class="admin-page-header-title">
+                <span class="icon-box"><i class="bi bi-percent"></i></span>
+                <h1>VAT Percentage</h1>
+            </div>
+            <button data-bs-toggle="modal" data-bs-target="#vatPercentageCreateModal" class="btn-admin-primary">
+                <i class="bi bi-plus-lg"></i> Add VAT Percentage
+            </button>
         </div>
     </div>
 </div>
 
 <div id="kt_app_content" class="app-content flex-column-fluid">
     <div id="kt_app_content_container" class="app-container container-fluid">
-        <button data-bs-toggle="modal" data-bs-target="#vatPercentageCreateModal" class="btn btn-sm btn-success mb-2">
-            Add VAT Percentage
-        </button>
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h5><i class="bi bi-table" style="color:#4361ee;"></i> VAT Percentage List</h5>
+                <div id="vatPercentageTableButtons"></div>
+            </div>
 
-        <table id="vatPercentageTable" class="display" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Serial ID</th>
-                    <th>Title</th>
-                    <th>Value</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-        </table>
+            <table id="vatPercentageTable" class="display admin-table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Value</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
 </div>
 
 <div class="modal fade" id="vatPercentageEditModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content" id="modalShow"
-            style="background-color: #f8f9fa; border-radius: 8px; border: 1px solid #ddd;"></div>
+        <div class="modal-content admin-modal-content" id="modalShow"></div>
     </div>
 </div>
 
@@ -46,16 +52,38 @@
 
 <script>
     $(document).ready(function() {
-        $('#vatPercentageTable').DataTable({
+        var table = $('#vatPercentageTable').DataTable({
             processing: true,
             serverSide: true,
             ajax: '{{ route('vat-percentage.getdata') }}',
+            dom: 'Blfrtip', // B = buttons
+            buttons: [{
+                    extend: 'excelHtml5',
+                    text: '<i class="bi bi-file-earmark-excel-fill"></i> Excel',
+                    title: 'VAT Percentage List',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3] // exclude Action column
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="bi bi-printer-fill"></i> Print',
+                    title: 'VAT Percentage List',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3] // exclude Action column
+                    }
+                }
+            ],
             columns: [{
                     data: null,
                     name: 'serial_number',
                     orderable: false,
                     searchable: false,
-                    render: (data, type, row, meta) => meta.row + meta.settings._iDisplayStart + 1
+                    render: (data, type, row, meta) =>
+                        type === 'display' ?
+                        '<span class="serial-badge">' + (meta.row + meta.settings._iDisplayStart +
+                            1) +
+                        '</span>' : (meta.row + meta.settings._iDisplayStart + 1)
                 },
                 {
                     data: 'title',
@@ -67,7 +95,13 @@
                 },
                 {
                     data: 'status',
-                    name: 'status'
+                    name: 'status',
+                    render: function(data, type, row) {
+                        if (type === 'export') {
+                            return $(data).text(); // plain text for excel/print, no html badge
+                        }
+                        return data;
+                    }
                 },
                 {
                     data: 'action',
@@ -77,6 +111,9 @@
                 }
             ]
         });
+
+        // move buttons into custom header container
+        table.buttons().container().appendTo('#vatPercentageTableButtons');
     });
 
     $(document).on('click', '.edit', function() {
@@ -156,6 +193,7 @@
 @if (request()->has('added-successfully'))
     <script>
         $(document).ready(function() {
+
             Swal.fire({
                 icon: "success",
                 title: "{{ request('added-successfully') }}",

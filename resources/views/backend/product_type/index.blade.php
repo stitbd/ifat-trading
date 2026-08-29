@@ -5,38 +5,46 @@
     Product Type
 @endsection
 
-<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
-    <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
-        <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
-            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Product Type
-            </h1>
+<div class="app-toolbar py-3 py-lg-6">
+    <div class="app-container container-fluid">
+        <div class="admin-page-header">
+            <div class="admin-page-header-title">
+                <span class="icon-box"><i class="bi bi-boxes"></i></span>
+                <h1>Product Type</h1>
+            </div>
+            <button data-bs-toggle="modal" data-bs-target="#productTypeCreateModal" class="btn-admin-primary">
+                <i class="bi bi-plus-lg"></i> Add Product Type
+            </button>
         </div>
     </div>
 </div>
 
 <div id="kt_app_content" class="app-content flex-column-fluid">
     <div id="kt_app_content_container" class="app-container container-fluid">
-        <button data-bs-toggle="modal" data-bs-target="#productTypeCreateModal" class="btn btn-sm btn-success mb-2">
-            Add Product Type
-        </button>
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h5><i class="bi bi-table" style="color:#4361ee;"></i> Product Type List</h5>
+                <div id="productTypeTableButtons"></div>
+            </div>
 
-        <table id="productTypeTable" class="display" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Serial ID</th>
-                    <th>Name</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-        </table>
+            <table id="productTypeTable" class="display admin-table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Category</th>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
 </div>
 
 <div class="modal fade" id="productTypeEditModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content" id="modalShow"
-            style="background-color: #f8f9fa; border-radius: 8px; border: 1px solid #ddd;"></div>
+        <div class="modal-content admin-modal-content" id="modalShow"></div>
     </div>
 </div>
 
@@ -44,24 +52,57 @@
 
 <script>
     $(document).ready(function() {
-        $('#productTypeTable').DataTable({
+        var table = $('#productTypeTable').DataTable({
             processing: true,
             serverSide: true,
             ajax: '{{ route('product-type.getdata') }}',
+            dom: 'Blfrtip', // B = buttons
+            buttons: [{
+                    extend: 'excelHtml5',
+                    text: '<i class="bi bi-file-earmark-excel-fill"></i> Excel',
+                    title: 'Product Type List',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3] // exclude Action column
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="bi bi-printer-fill"></i> Print',
+                    title: 'Product Type List',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3] // exclude Action column
+                    }
+                }
+            ],
             columns: [{
                     data: null,
                     name: 'serial_number',
                     orderable: false,
                     searchable: false,
-                    render: (data, type, row, meta) => meta.row + meta.settings._iDisplayStart + 1
+                    render: (data, type, row, meta) =>
+                        type === 'display' ?
+                        '<span class="serial-badge">' + (meta.row + meta.settings._iDisplayStart +
+                            1) +
+                        '</span>' : (meta.row + meta.settings._iDisplayStart + 1)
+                },
+                {
+                    data: 'category',
+                    name: 'category'
                 },
                 {
                     data: 'name',
                     name: 'name'
                 },
+
                 {
                     data: 'status',
-                    name: 'status'
+                    name: 'status',
+                    render: function(data, type, row) {
+                        if (type === 'export') {
+                            return $(data).text(); // plain text for excel/print, no html badge
+                        }
+                        return data;
+                    }
                 },
                 {
                     data: 'action',
@@ -71,6 +112,9 @@
                 }
             ]
         });
+
+        // move buttons into custom header container
+        table.buttons().container().appendTo('#productTypeTableButtons');
     });
 
     $(document).on('click', '.edit', function() {
@@ -158,7 +202,6 @@
                 timer: 2000
             });
 
-            // Clear the query parameter from the URL
             const url = new URL(window.location.href);
             url.searchParams.delete('added-successfully');
             window.history.replaceState(null, '', url);

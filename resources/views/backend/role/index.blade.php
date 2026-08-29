@@ -4,57 +4,82 @@
     Roles List
 @endsection
 
-<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
-    <div class="app-container container-fluid d-flex flex-stack">
-        <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
-            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Roles List
-            </h1>
-            <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
-                <li class="breadcrumb-item text-muted"><a href="{{ route('role.index') }}"
-                        class="text-muted text-hover-primary">Roles</a></li>
-                <li class="breadcrumb-item"><span class="bullet bg-gray-400 w-5px h-2px"></span></li>
-                <li class="breadcrumb-item text-muted">Roles</li>
-            </ul>
+<div class="app-toolbar py-3 py-lg-6">
+    <div class="app-container container-fluid">
+        <div class="admin-page-header">
+            <div class="admin-page-header-title">
+                <span class="icon-box"><i class="bi bi-shield-lock"></i></span>
+                <h1>Roles List</h1>
+            </div>
+            <a href="{{ route('role.create') }}" class="btn-admin-primary">
+                <i class="bi bi-plus-lg"></i> Create Role
+            </a>
         </div>
-        <a href="{{ route('role.create') }}" class="btn btn-primary">Create</a>
     </div>
 </div>
 
 <div id="kt_app_content" class="app-content flex-column-fluid">
-    <div class="app-container container-fluid">
-        <div class="card">
-            <div class="card-body">
-                <table id="roleTable" class="display" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Permission</th>
-                            <th>Created At</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                </table>
+    <div id="kt_app_content_container" class="app-container container-fluid">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h5><i class="bi bi-table" style="color:#4361ee;"></i> Role List</h5>
+                <div id="roleTableButtons"></div>
             </div>
+
+            <table id="roleTable" class="display admin-table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Permission</th>
+                        <th>Created At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+            </table>
         </div>
     </div>
 </div>
 
 <script>
     $(document).ready(function() {
-        $('#roleTable').DataTable({
+        var table = $('#roleTable').DataTable({
             processing: true,
             serverSide: true,
             ajax: '{{ route('role.getdata') }}',
+            dom: 'Blfrtip', // B = buttons
+            buttons: [{
+                    extend: 'excelHtml5',
+                    text: '<i class="bi bi-file-earmark-excel-fill"></i> Excel',
+                    title: 'Role List',
+                    exportOptions: {
+                        columns: [0, 1, 3] // exclude Permission & Action column
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="bi bi-printer-fill"></i> Print',
+                    title: 'Role List',
+                    exportOptions: {
+                        columns: [0, 1, 3] // exclude Permission & Action column
+                    }
+                }
+            ],
             columns: [{
-                    data: 'id',
-                    name: 'id'
+                    data: null,
+                    name: 'serial_number',
+                    orderable: false,
+                    searchable: false,
+                    render: (data, type, row, meta) =>
+                        type === 'display' ?
+                        '<span class="serial-badge">' + (meta.row + meta.settings._iDisplayStart +
+                            1) +
+                        '</span>' : (meta.row + meta.settings._iDisplayStart + 1)
                 },
                 {
                     data: 'name',
                     name: 'name'
                 },
-
                 {
                     data: 'permission',
                     name: 'permission',
@@ -80,6 +105,9 @@
                 }
             ]
         });
+
+        // move buttons into custom header container
+        table.buttons().container().appendTo('#roleTableButtons');
     });
 </script>
 @endsection
