@@ -1,436 +1,236 @@
-<!-- Modal Header -->
-<div class="modal-header"
-    style="background-color:#333333; border-bottom:1px solid #ccc;">
+<!-- Modal Content Wrapper (matches create modal style) -->
+<div class="modal-content" style="border-radius: 12px; border: none; overflow: hidden;">
 
-    <h5 class="modal-title"
-        id="wingEditModalLabel"
-        style="color:#ffffff;">
-        Edit Wing
-    </h5>
-
-    <button type="button"
-        class="btn-close btn-close-white"
-        data-bs-dismiss="modal"
-        aria-label="Close">
-    </button>
-
-</div>
-
-
-<!-- Modal Body -->
-<div class="modal-body">
-
-    <form id="wingEditModalForm"
-        method="POST"
-        enctype="multipart/form-data">
-
-        @csrf
-        @method('PUT')
-
-        <!-- Row 1 -->
-        <div class="row">
-
-            <!-- Name -->
-            <div class="col-md-6 mb-3">
-
-                <label for="name"
-                    class="form-label fw-bold text-dark">
-                    Wing Name:
-                </label>
-
-                <input type="text"
-                    class="form-control border-dark"
-                    id="name"
-                    name="name"
-                    maxlength="100"
-                    placeholder="Enter wing name"
-                    value="{{ $data->name }}">
-
-                <div class="invalid-feedback name-error"></div>
-
-            </div>
-
-
-            <!-- Imported Number -->
-            <div class="col-md-6 mb-3">
-
-                <label for="imported_number"
-                    class="form-label fw-bold text-dark">
-                    Imported Number:
-                </label>
-
-                <input type="text"
-                    class="form-control border-dark"
-                    id="imported_number"
-                    name="imported_number"
-                    maxlength="100"
-                    placeholder="Enter imported number"
-                    value="{{ $data->imported_number }}">
-
-                <div class="invalid-feedback imported_number-error"></div>
-
-            </div>
-
+    <!-- Header -->
+    <div class="modal-header align-items-start"
+        style="background-color: #ffffff; border-bottom: 1px solid #eef0f2; padding: 20px 24px;">
+        <div>
+            <h5 class="modal-title mb-1" id="wingEditModalLabel" style="color:#1e1e2d; font-weight:700; font-size:18px;">
+                <i class="bi bi-pencil-square me-2" style="color:#4361ee;"></i>
+                Edit Wing
+            </h5>
+            <p class="mb-0" style="color:#8a8a9a; font-size:13px;">
+                Update the details for this wing
+            </p>
         </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
 
+    <!-- Body -->
+    <div class="modal-body" style="padding: 24px; background-color: #fbfbfd;">
+        <form id="wingEditModalForm" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
 
-        <!-- Row 2 -->
-        <div class="row">
+            <div class="p-4 mb-3" style="background:#fff; border:1px solid #eef0f2; border-radius:10px;">
 
-            <!-- BIN Number -->
-            <div class="col-md-6 mb-3">
-
-                <label for="bin_number"
-                    class="form-label fw-bold text-dark">
-                    BIN Number:
-                </label>
-
-                <input type="text"
-                    class="form-control border-dark"
-                    id="bin_number"
-                    name="bin_number"
-                    maxlength="50"
-                    placeholder="Enter BIN number"
-                    value="{{ $data->bin_number }}">
-
-                <div class="invalid-feedback bin_number-error"></div>
-
-            </div>
-
-
-            <!-- Mobile Number -->
-            <div class="col-md-6 mb-3">
-
-                <label for="mobile_number"
-                    class="form-label fw-bold text-dark">
-                    Mobile Number:
-                </label>
-
-                <input type="text"
-                    class="form-control border-dark"
-                    id="mobile_number"
-                    name="mobile_number"
-                    maxlength="50"
-                    placeholder="Enter mobile number"
-                    value="{{ $data->mobile_number }}">
-
-                <div class="invalid-feedback mobile_number-error"></div>
-
-            </div>
-
-        </div>
-
-
-        <!-- Row 3 -->
-        <div class="row">
-
-            <!-- Email -->
-            <div class="col-md-6 mb-3">
-
-                <label for="email"
-                    class="form-label fw-bold text-dark">
-                    Email:
-                </label>
-
-                <input type="email"
-                    class="form-control border-dark"
-                    id="email"
-                    name="email"
-                    maxlength="50"
-                    placeholder="Enter email"
-                    value="{{ $data->email }}">
-
-                <div class="invalid-feedback email-error"></div>
-
-            </div>
-
-
-            <!-- Image -->
-            <div class="col-md-6 mb-3">
-
-                <label for="image"
-                    class="form-label fw-bold text-dark">
-                    Wing Image:
-                </label>
-
-                <input type="file"
-                    class="form-control border-dark"
-                    id="image"
-                    name="image"
-                    accept="image/*">
-
-                <div class="invalid-feedback image-error"></div>
-
-
-                @if ($data->image)
-                    <div class="mt-2">
-
-                        <img src="{{ asset('image/' . $data->image) }}"
-                            width="120"
-                            height="120"
-                            style="object-fit:cover;border-radius:5px;border:1px solid #ddd;"
-                            alt="Wing Image">
-
+                <div class="row">
+                    <!-- Name -->
+                    <div class="col-md-6 mb-3">
+                        <label for="name" class="form-label fw-bold" style="color:#1e1e2d; font-size:13px;">
+                            Name <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control" id="name" name="name" maxlength="100"
+                            placeholder="Enter wing name" value="{{ $data->name }}"
+                            style="border:1px solid #dfe2e8; border-radius:8px; padding:11px 14px; font-size:14px;">
+                        <div class="invalid-feedback name-error"></div>
                     </div>
-                @endif
 
-            </div>
-
-        </div>
-
-
-        <!-- Row 4 -->
-        <div class="row">
-
-            <!-- Authority Signature -->
-            <div class="col-md-6 mb-3">
-
-                <label for="authority_signature"
-                    class="form-label fw-bold text-dark">
-                    Authority Signature:
-                </label>
-
-                <input type="file"
-                    class="form-control border-dark"
-                    id="authority_signature"
-                    name="authority_signature"
-                    accept="image/*">
-
-                <div class="invalid-feedback authority_signature-error"></div>
-
-
-                @if ($data->authority_signature)
-                    <div class="mt-2">
-
-                        <img src="{{ asset('signature/' . $data->authority_signature) }}"
-                            width="150"
-                            height="70"
-                            style="object-fit:contain;border:1px solid #ddd;border-radius:5px;"
-                            alt="Authority Signature">
-
+                    <!-- Imported Number -->
+                    <div class="col-md-6 mb-3">
+                        <label for="imported_number" class="form-label fw-bold" style="color:#1e1e2d; font-size:13px;">
+                            Imported Number
+                        </label>
+                        <input type="text" class="form-control" id="imported_number" name="imported_number"
+                            maxlength="100" placeholder="Enter imported number" value="{{ $data->imported_number }}"
+                            style="border:1px solid #dfe2e8; border-radius:8px; padding:11px 14px; font-size:14px;">
+                        <div class="invalid-feedback imported_number-error"></div>
                     </div>
-                @endif
 
+                    <!-- BIN Number -->
+                    <div class="col-md-6 mb-3">
+                        <label for="bin_number" class="form-label fw-bold" style="color:#1e1e2d; font-size:13px;">
+                            BIN Number
+                        </label>
+                        <input type="text" class="form-control" id="bin_number" name="bin_number" maxlength="50"
+                            placeholder="Enter BIN number" value="{{ $data->bin_number }}"
+                            style="border:1px solid #dfe2e8; border-radius:8px; padding:11px 14px; font-size:14px;">
+                        <div class="invalid-feedback bin_number-error"></div>
+                    </div>
+
+                    <!-- Mobile Number -->
+                    <div class="col-md-6 mb-3">
+                        <label for="mobile_number" class="form-label fw-bold" style="color:#1e1e2d; font-size:13px;">
+                            Mobile Number
+                        </label>
+                        <input type="text" class="form-control" id="mobile_number" name="mobile_number"
+                            maxlength="50" placeholder="Enter mobile number" value="{{ $data->mobile_number }}"
+                            style="border:1px solid #dfe2e8; border-radius:8px; padding:11px 14px; font-size:14px;">
+                        <div class="invalid-feedback mobile_number-error"></div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="col-md-6 mb-3">
+                        <label for="email" class="form-label fw-bold" style="color:#1e1e2d; font-size:13px;">
+                            Email
+                        </label>
+                        <input type="email" class="form-control" id="email" name="email" maxlength="50"
+                            placeholder="Enter email" value="{{ $data->email }}"
+                            style="border:1px solid #dfe2e8; border-radius:8px; padding:11px 14px; font-size:14px;">
+                        <div class="invalid-feedback email-error"></div>
+                    </div>
+
+                    <!-- Image -->
+                    <div class="col-md-6 mb-3">
+                        <label for="image" class="form-label fw-bold" style="color:#1e1e2d; font-size:13px;">
+                            Image
+                        </label>
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*"
+                            style="border:1px solid #dfe2e8; border-radius:8px; padding:11px 14px; font-size:14px;">
+                        <div class="invalid-feedback image-error"></div>
+
+                        @if ($data->image)
+                            <div class="mt-2">
+                                <img src="{{ asset('wings/image/' . $data->image) }}" width="90" height="90"
+                                    style="object-fit:cover; border-radius:8px; border:1px solid #eef0f2;"
+                                    alt="Wing Image">
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Authority Signature -->
+                    <div class="col-md-6 mb-3">
+                        <label for="authority_signature" class="form-label fw-bold"
+                            style="color:#1e1e2d; font-size:13px;">
+                            Authority Signature
+                        </label>
+                        <input type="file" class="form-control" id="authority_signature"
+                            name="authority_signature" accept="image/*"
+                            style="border:1px solid #dfe2e8; border-radius:8px; padding:11px 14px; font-size:14px;">
+                        <div class="invalid-feedback authority_signature-error"></div>
+
+                        @if ($data->authority_signature)
+                            <div class="mt-2">
+                                <img src="{{ asset('signature/' . $data->authority_signature) }}" width="120"
+                                    height="60"
+                                    style="object-fit:contain; border-radius:8px; border:1px solid #eef0f2;"
+                                    alt="Authority Signature">
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Description -->
+                    <div class="col-md-6 mb-3">
+                        <label for="description" class="form-label fw-bold" style="color:#1e1e2d; font-size:13px;">
+                            Description
+                        </label>
+                        <textarea class="form-control" id="description" name="description" rows="4" placeholder="Enter description"
+                            style="border:1px solid #dfe2e8; border-radius:8px; padding:11px 14px; font-size:14px;">{{ $data->description }}</textarea>
+                        <div class="invalid-feedback description-error"></div>
+                    </div>
+                </div>
             </div>
 
+            <input type="hidden" value="{{ $data->id }}" id="wing_id">
+        </form>
+    </div>
 
-            <!-- Description -->
-            <div class="col-md-6 mb-3">
-
-                <label for="description"
-                    class="form-label fw-bold text-dark">
-                    Description:
-                </label>
-
-                <textarea class="form-control border-dark"
-                    id="description"
-                    name="description"
-                    rows="4"
-                    placeholder="Enter description">{{ $data->description }}</textarea>
-
-                <div class="invalid-feedback description-error"></div>
-
-            </div>
-
-        </div>
-
-
-        <input type="hidden"
-            value="{{ $data->id }}"
-            id="wing_id">
-
-
-        <!-- Submit Button -->
-        <div class="text-end">
-
-            <button type="submit"
-                class="btn submit-btn"
-                style="background-color:#FF4C29;
-                       color:#ffffff;
-                       border-radius:5px;">
-
-                Update Wing
-
+    <!-- Footer -->
+    <div class="modal-footer d-flex justify-content-between align-items-center"
+        style="background-color: #ffffff; border-top: 1px solid #eef0f2; padding: 16px 24px;">
+        <span style="color:#8a8a9a; font-size:13px;">
+            <i class="bi bi-check-circle-fill text-success me-1"></i> 8 Fields
+        </span>
+        <div>
+            <button type="button" class="btn me-2" data-bs-dismiss="modal"
+                style="border:1px solid #dfe2e8; color:#4a4a5a; border-radius:8px; padding:8px 18px; font-size:14px;">
+                <i class="bi bi-x-lg me-1"></i> Cancel
             </button>
-
+            <button type="submit" form="wingEditModalForm" class="btn submit-btn"
+                style="background-color:#4361ee; color:#fff; border-radius:8px; padding:8px 20px; font-size:14px; font-weight:600;">
+                <i class="bi bi-check-lg me-1"></i> Update
+            </button>
         </div>
-
-    </form>
-
-</div>
-
-
-<!-- Modal Footer -->
-<div class="modal-footer"
-    style="background-color:#f8f9fa;
-           border-top:1px solid #ccc;">
-
-    <button type="button"
-        class="btn"
-        style="background-color:#FF4C29;
-               color:#ffffff;
-               border-radius:5px;"
-        data-bs-dismiss="modal">
-
-        Close
-
-    </button>
+    </div>
 
 </div>
-
 
 <script>
-
     $(document).ready(function() {
-
         $("#wingEditModalForm").on("submit", function(e) {
-
             e.preventDefault();
-
             showLoading();
 
             let formData = new FormData(this);
-
             let wingId = $("#wing_id").val();
 
-
             $.ajax({
-
-                url: "{{ route('wing.update', ':id') }}"
-                    .replace(':id', wingId),
-
+                url: "{{ route('wing.update', ':id') }}".replace(':id', wingId),
                 type: "POST",
-
                 data: formData,
-
                 processData: false,
-
                 contentType: false,
-
-
                 beforeSend: function() {
-
-                    $(".invalid-feedback")
-                        .text("")
-                        .hide();
-
+                    $(".invalid-feedback").text("").hide();
                 },
-
-
                 success: function(response) {
-
                     hideLoading();
-
                     if (response.success) {
-
                         $("#wingEditModalForm")[0].reset();
-
                         $("#wingEditModal").modal("hide");
-
                         window.location.href =
                             "{{ route('wing.index') }}?added-successfully=" +
                             encodeURIComponent(response.message);
-
                     }
-
                 },
-
-
                 error: function(xhr) {
-
                     hideLoading();
-
                     if (xhr.status === 422) {
-
                         let errors = xhr.responseJSON.errors;
 
-
-                        if (errors.name) {
-
-                            $(".name-error")
-                                .text(errors.name[0])
-                                .show();
-
-                        }
-
-
-                        if (errors.imported_number) {
-
-                            $(".imported_number-error")
-                                .text(errors.imported_number[0])
-                                .show();
-
-                        }
-
-
-                        if (errors.bin_number) {
-
-                            $(".bin_number-error")
-                                .text(errors.bin_number[0])
-                                .show();
-
-                        }
-
-
-                        if (errors.mobile_number) {
-
-                            $(".mobile_number-error")
-                                .text(errors.mobile_number[0])
-                                .show();
-
-                        }
-
-
-                        if (errors.email) {
-
-                            $(".email-error")
-                                .text(errors.email[0])
-                                .show();
-
-                        }
-
-
-                        if (errors.image) {
-
-                            $(".image-error")
-                                .text(errors.image[0])
-                                .show();
-
-                        }
-
-
-                        if (errors.authority_signature) {
-
-                            $(".authority_signature-error")
-                                .text(errors.authority_signature[0])
-                                .show();
-
-                        }
-
-
-                        if (errors.description) {
-
-                            $(".description-error")
-                                .text(errors.description[0])
-                                .show();
-
-                        }
-
+                        if (errors.name) $(".name-error").text(errors.name[0]).show();
+                        if (errors.imported_number) $(".imported_number-error").text(errors
+                            .imported_number[0]).show();
+                        if (errors.bin_number) $(".bin_number-error").text(errors
+                            .bin_number[0]).show();
+                        if (errors.mobile_number) $(".mobile_number-error").text(errors
+                            .mobile_number[0]).show();
+                        if (errors.email) $(".email-error").text(errors.email[0]).show();
+                        if (errors.image) $(".image-error").text(errors.image[0]).show();
+                        if (errors.authority_signature) $(".authority_signature-error")
+                            .text(errors.authority_signature[0]).show();
+                        if (errors.description) $(".description-error").text(errors
+                            .description[0]).show();
 
                         setTimeout(function() {
-
                             $(".invalid-feedback").fadeOut();
-
                         }, 3000);
-
+                    } else if (xhr.status === 403) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Access Denied',
+                            text: xhr.responseJSON?.message ||
+                                'You do not have permission to perform this action!',
+                            confirmButtonColor: '#FF4C29'
+                        });
+                    } else if (xhr.status === 404) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Not Found',
+                            text: xhr.responseJSON?.message || 'Wing not found!',
+                            confirmButtonColor: '#FF4C29'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON?.message ||
+                                'Something went wrong! Please try again.',
+                            confirmButtonColor: '#FF4C29'
+                        });
                     }
-
                 }
-
             });
-
         });
-
     });
-
 </script>

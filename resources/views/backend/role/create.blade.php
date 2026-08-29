@@ -4,42 +4,47 @@
     Role Create
 @endsection
 
-<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
-    <div class="app-container container-fluid d-flex flex-stack">
-        <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
-            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Role Create
-            </h1>
-            <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
-                <li class="breadcrumb-item text-muted"><a href="{{ route('role.index') }}"
-                        class="text-muted text-hover-primary">Roles</a></li>
-                <li class="breadcrumb-item"><span class="bullet bg-gray-400 w-5px h-2px"></span></li>
-                <li class="breadcrumb-item text-muted">Role Create</li>
-            </ul>
+<div class="app-toolbar py-3 py-lg-6">
+    <div class="app-container container-fluid">
+        <div class="admin-page-header">
+            <div class="admin-page-header-title">
+                <span class="icon-box"><i class="bi bi-shield-plus"></i></span>
+                <h1>Role Create</h1>
+            </div>
+            <a href="{{ route('role.index') }}" class="btn-admin-primary">
+                <i class="bi bi-arrow-left"></i> Back to Roles
+            </a>
         </div>
     </div>
 </div>
 
 <div id="kt_app_content" class="app-content flex-column-fluid">
-    <div class="app-container container-fluid">
-        <div class="card">
-            <div class="card-header" style="background-color:#0d6efd;">
-                <h3 class="card-title text-white py-3">Create Role</h3>
+    <div id="kt_app_content_container" class="app-container container-fluid">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h5><i class="bi bi-shield-lock" style="color:#4361ee;"></i> Create Role</h5>
             </div>
-            <div class="card-body">
+
+            <div style="padding: 24px;">
                 <form method="POST" action="{{ route('role.store') }}">
                     @csrf
 
                     <div class="mb-4">
-                        <label class="form-label fw-bold">Role Name <span class="text-danger">*</span></label>
+                        <label class="form-label fw-bold" style="color:#1e1e2d; font-size:13px;">
+                            Role Name <span class="text-danger">*</span>
+                        </label>
                         <input type="text" name="name" class="form-control" value="{{ old('name') }}"
-                            placeholder="Enter Role Name" required>
+                            placeholder="Enter Role Name" required
+                            style="border:1px solid #dfe2e8; border-radius:8px; padding:11px 14px; font-size:14px;">
                         @error('name')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Select Permissions:</label>
+                        <label class="form-label fw-bold" style="color:#1e1e2d; font-size:13px;">
+                            Select Permissions:
+                        </label>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="checkAll">
                             <label class="form-check-label" for="checkAll">Select All</label>
@@ -49,9 +54,10 @@
                     <div class="row g-4 mb-4">
                         @foreach ($permissions as $group => $items)
                             <div class="col-md-4">
-                                <div class="card h-100 shadow-sm">
+                                <div class="card h-100 shadow-sm"
+                                    style="border-radius:10px; overflow:hidden; border:1px solid #eef0f2;">
                                     <div class="card-header d-flex align-items-center"
-                                        style="background-color:#28a745;">
+                                        style="background-color:#4361ee; border:none;">
                                         <div class="form-check mb-0">
                                             <input class="form-check-input group-check" type="checkbox"
                                                 id="group_{{ $group }}">
@@ -61,7 +67,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="card-body" style="background-color:#f1f1f2;">
+                                    <div class="card-body" style="background-color:#fbfbfd;">
                                         @foreach ($items as $permission)
                                             <div class="form-check mb-2">
                                                 <input class="form-check-input child-check-{{ $group }}"
@@ -78,8 +84,14 @@
                         @endforeach
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <a href="{{ route('role.index') }}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn submit-btn"
+                        style="background-color:#4361ee; color:#fff; border-radius:8px; padding:8px 20px; font-size:14px; font-weight:600;">
+                        <i class="bi bi-check-lg me-1"></i> Submit
+                    </button>
+                    <a href="{{ route('role.index') }}" class="btn me-2"
+                        style="border:1px solid #dfe2e8; color:#4a4a5a; border-radius:8px; padding:8px 18px; font-size:14px;">
+                        <i class="bi bi-x-lg me-1"></i> Cancel
+                    </a>
                 </form>
             </div>
         </div>

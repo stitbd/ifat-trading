@@ -1,413 +1,228 @@
 @extends('layouts.backend')
-
-@section('title')
-    Categories
-@endsection
-
 @section('content')
 
-    {{-- Success Message --}}
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+@section('title')
+    Category
+@endsection
 
-    {{-- Error Message --}}
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
-
-
-    <!-- Toolbar -->
-    <div id="kt_app_toolbar"
-        class="app-toolbar py-3 py-lg-6">
-
-        <div id="kt_app_toolbar_container"
-            class="app-container container-fluid d-flex flex-stack">
-
-            <!-- Page Title -->
-            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
-
-                <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">
-                    Categories
-                </h1>
-
-                <!-- Breadcrumb -->
-                <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
-
-                    <li class="breadcrumb-item text-muted">
-                        <a href="{{ route('category.index') }}"
-                            class="text-muted text-hover-primary">
-                            All-Categories
-                        </a>
-                    </li>
-
-                    <li class="breadcrumb-item">
-                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
-                    </li>
-
-                    <li class="breadcrumb-item text-muted">
-                        Categories
-                    </li>
-
-                </ul>
-
+<div class="app-toolbar py-3 py-lg-6">
+    <div class="app-container container-fluid">
+        <div class="admin-page-header">
+            <div class="admin-page-header-title">
+                <span class="icon-box"><i class="bi bi-tags"></i></span>
+                <h1>Category</h1>
             </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- Content -->
-    <div id="kt_app_content"
-        class="app-content flex-column-fluid">
-
-        <div id="kt_app_content_container"
-            class="app-container container-fluid">
-
-
-            {{-- Add Category Button --}}
-            <button
-                data-bs-toggle="modal"
-                data-bs-target="#categoryCreateModal"
-                class="btn btn-sm btn-success mb-2">
-
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    style="width:20px;height:20px;">
-
-                    <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="m3.99 16.854-1.314 3.504a.75.75 0 0 0 .966.965l3.503-1.314a3 3 0 0 0 1.068-.687L18.36 9.175s-.354-1.061-1.414-2.122c-1.06-1.06-2.122-1.414-2.122-1.414L4.677 15.786a3 3 0 0 0-.687 1.068zm12.249-12.63 1.383-1.383c.248-.248.579-.406.925-.348.487.08 1.232.322 1.934 1.025.703.703.945 1.447 1.025 1.934.058.346-.1.677-.348.925L19.774 7.76s-.353-1.06-1.414-2.12c-1.06-1.062-2.121-1.415-2.121-1.415z"
-                        fill="#ffffff">
-                    </path>
-
-                </svg>
-
-                Add Category
-
+            <button data-bs-toggle="modal" data-bs-target="#categoryCreateModal" class="btn-admin-primary">
+                <i class="bi bi-plus-lg"></i> Add Category
             </button>
-
-
-            {{-- Category Table --}}
-            <table
-                id="categoryTable"
-                class="display"
-                style="width:100%;">
-
-                <thead>
-
-                    <tr>
-
-                        <th>Serial ID</th>
-
-                        <th>Name</th>
-
-                        <th>Image</th>
-
-                        <th>Description</th>
-
-                        <th>Action</th>
-
-                    </tr>
-
-                </thead>
-
-            </table>
-
         </div>
-
     </div>
+</div>
 
-
-    {{-- Edit Modal --}}
-    <div
-        class="modal fade"
-        id="categoryEditModal"
-        tabindex="-1"
-        aria-labelledby="categoryEditModalLabel"
-        aria-hidden="true">
-
-        <div class="modal-dialog modal-xl">
-
-            <div
-                class="modal-content"
-                id="modalShow"
-                style="
-                    background-color:#f8f9fa;
-                    border-radius:8px;
-                    border:1px solid #ddd;
-                ">
-
+<div id="kt_app_content" class="app-content flex-column-fluid">
+    <div id="kt_app_content_container" class="app-container container-fluid">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h5><i class="bi bi-table" style="color:#4361ee;"></i> Category List</h5>
+                <div id="categoryTableButtons"></div>
             </div>
 
+            <table id="categoryTable" class="display admin-table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Image</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+            </table>
         </div>
-
     </div>
+</div>
 
+<div class="modal fade" id="categoryEditModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content admin-modal-content" id="modalShow"></div>
+    </div>
+</div>
 
-    {{-- Create Modal --}}
-    @include('backend.categories.create')
+@include('backend.categories.create')
 
+<style>
+    table.dataTable td img {
+        display: block;
+        height: 60px;
+        width: 60px;
+        object-fit: cover;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+    }
+</style>
 
-    <style>
-
-        table.dataTable td img {
-            display: block;
-            height: 60px;
-            width: 60px;
-            object-fit: cover;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-
-    </style>
-
-
-    <script>
-
-        $(document).ready(function() {
-
-            /*
-            |--------------------------------------------------------------------------
-            | DataTable
-            |--------------------------------------------------------------------------
-            */
-
-            $('#categoryTable').DataTable({
-
-                processing: true,
-
-                serverSide: true,
-
-                ajax: '{{ route('category.getdata') }}',
-
-                columns: [
-
-                    {
-                        data: null,
-
-                        name: 'serial_number',
-
-                        render: function(
-                            data,
-                            type,
-                            row,
-                            meta
-                        ) {
-
-                            return meta.row +
-                                meta.settings
-                                    ._iDisplayStart +
-                                1;
-                        },
-
-                        orderable: false,
-
-                        searchable: false
-                    },
-
-                    {
-                        data: 'name',
-
-                        name: 'name'
-                    },
-
-                    {
-                        data: 'image',
-
-                        name: 'image',
-
-                        orderable: false,
-
-                        searchable: false
-                    },
-
-                    {
-                        data: 'description',
-
-                        name: 'description'
-                    },
-
-                    {
-                        data: 'action',
-
-                        name: 'action',
-
-                        orderable: false,
-
-                        searchable: false
+<script>
+    $(document).ready(function() {
+        var table = $('#categoryTable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: '{{ route('category.getdata') }}',
+            dom: 'Blfrtip', // B = buttons
+            buttons: [{
+                    extend: 'excelHtml5',
+                    text: '<i class="bi bi-file-earmark-excel-fill"></i> Excel',
+                    title: 'Category List',
+                    exportOptions: {
+                        columns: [0, 1, 3, 4] // exclude Image & Action column
                     }
-
-                ]
-
-            });
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Edit Category
-            |--------------------------------------------------------------------------
-            */
-
-            $(document).on(
-                'click',
-                '.edit',
-                function() {
-
-                    var dataId =
-                        $(this).data('id');
-
-                    $.ajax({
-
-                        url:
-                            "{{ route('category.edit', ':id') }}"
-                            .replace(
-                                ':id',
-                                dataId
-                            ),
-
-                        type: 'GET',
-
-                        success: function(response) {
-
-                            $('#modalShow')
-                                .html(response);
-
-                            $('#categoryEditModal')
-                                .modal('show');
-
-                        },
-
-                        error: function() {
-
-                            Swal.fire({
-
-                                icon: 'error',
-
-                                title: 'Error',
-
-                                text:
-                                    'Something went wrong!'
-
-                            });
-
-                        }
-
-                    });
-
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="bi bi-printer-fill"></i> Print',
+                    title: 'Category List',
+                    exportOptions: {
+                        columns: [0, 1, 3, 4] // exclude Image & Action column
+                    }
                 }
-            );
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Delete Category
-            |--------------------------------------------------------------------------
-            */
-
-            $(document).on(
-                'click',
-                '.delete',
-                function(event) {
-
-                    event.preventDefault();
-
-                    let form =
-                        $(this).closest('form');
-
-                    Swal.fire({
-
-                        title:
-                            "Are you sure?",
-
-                        text:
-                            "This category will be deleted!",
-
-                        icon:
-                            "warning",
-
-                        showCancelButton:
-                            true,
-
-                        confirmButtonColor:
-                            "#d33",
-
-                        cancelButtonColor:
-                            "#3085d6",
-
-                        confirmButtonText:
-                            "Yes, delete it!"
-
-                    }).then(
-                        (result) => {
-
-                            if (
-                                result.isConfirmed
-                            ) {
-
-                                form.submit();
-
-                            }
-
+            ],
+            columns: [{
+                    data: null,
+                    name: 'serial_number',
+                    orderable: false,
+                    searchable: false,
+                    render: (data, type, row, meta) =>
+                        type === 'display' ?
+                        '<span class="serial-badge">' + (meta.row + meta.settings._iDisplayStart +
+                            1) +
+                        '</span>' : (meta.row + meta.settings._iDisplayStart + 1)
+                },
+                {
+                    data: 'name',
+                    name: 'name'
+                },
+                {
+                    data: 'image',
+                    name: 'image',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'description',
+                    name: 'description'
+                },
+                {
+                    data: 'status',
+                    name: 'status',
+                    render: function(data, type, row) {
+                        if (type === 'export') {
+                            return $(data).text(); // plain text for excel/print, no html badge
                         }
-                    );
-
+                        return data;
+                    }
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
                 }
-            );
-
+            ]
         });
 
-    </script>
+        // move buttons into custom header container
+        table.buttons().container().appendTo('#categoryTableButtons');
+    });
 
+    $(document).on('click', '.edit', function() {
+        var dataId = $(this).data('id');
+        $.ajax({
+            url: '/category/' + dataId + '/edit/',
+            type: 'GET',
+            success: function(response) {
+                $('#modalShow').html(response);
+                $('#categoryEditModal').modal('show');
+            }
+        });
+    });
 
-    {{-- Added Successfully --}}
-    @if (request()->has('added-successfully'))
+    $(document).on('click', '.delete', function(event) {
+        event.preventDefault();
+        let form = $(this).closest('form');
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) form.submit();
+        });
+    });
+</script>
+<script>
+    $(document).on('click', '.status-toggle', function() {
+        let btn = $(this);
+        let id = btn.data('id');
 
-        <script>
+        $.ajax({
+            url: '/category/status/' + id,
+            type: 'PUT',
+            data: {
+                _token: '{{ csrf_token() }}'
+            },
+            beforeSend: function() {
+                btn.prop('disabled', true);
+            },
+            success: function(response) {
+                if (response.success) {
+                    $('#categoryTable').DataTable().ajax.reload(null, false);
 
-            $(document).ready(function() {
+                    Swal.fire({
+                        icon: 'success',
+                        title: response.message,
+                        showConfirmButton: false,
+                        timer: 1200
+                    });
+                }
+            },
+            error: function(xhr) {
+                btn.prop('disabled', false);
 
-                Swal.fire({
+                if (xhr.status === 403) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Access Denied',
+                        text: xhr.responseJSON?.message || 'You do not have permission!',
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: xhr.responseJSON?.message || 'Something went wrong!',
+                    });
+                }
+            }
+        });
+    });
+</script>
+@if (request()->has('added-successfully'))
+    <script>
+        $(document).ready(function() {
 
-                    icon: "success",
-
-                    title:
-                        "{{ request('added-successfully') }}",
-
-                    showConfirmButton: false,
-
-                    timer: 2000
-
-                });
-
-
-                const url =
-                    new URL(
-                        window.location.href
-                    );
-
-                url.searchParams.delete(
-                    'added-successfully'
-                );
-
-                window.history.replaceState(
-                    null,
-                    '',
-                    url
-                );
-
+            Swal.fire({
+                icon: "success",
+                title: "{{ request('added-successfully') }}",
+                showConfirmButton: false,
+                timer: 2000
             });
 
-        </script>
-
-    @endif
-
+            const url = new URL(window.location.href);
+            url.searchParams.delete('added-successfully');
+            window.history.replaceState(null, '', url);
+        });
+    </script>
+@endif
 @endsection

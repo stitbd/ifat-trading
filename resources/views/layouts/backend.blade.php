@@ -67,21 +67,445 @@ License: For each use you must have a valid license purchased only from above li
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js@1.11.1/src/toastify.min.css">
     <script src="https://cdn.jsdelivr.net/npm/toastify-js@1.11.1/src/toastify.min.js"></script>
 
-
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <style>
-        /* body {
-            font-family: 'Kalpurush', sans-serif !important;
-        } */
+        /* DataTables length & search controls */
+        .dataTables_wrapper .dataTables_length,
+        .dataTables_wrapper .dataTables_filter {
+            margin-bottom: 16px;
+        }
 
+        .dataTables_wrapper .dataTables_length label,
+        .dataTables_wrapper .dataTables_filter label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a4a5a;
+            margin: 0;
+        }
+
+        .dataTables_wrapper .dataTables_length select {
+            border: 1px solid #dfe2e8 !important;
+            border-radius: 8px !important;
+            padding: 6px 28px 6px 12px !important;
+            font-size: 13px !important;
+            font-weight: 600;
+            color: #1e1e2d;
+            background-color: #fff !important;
+            cursor: pointer;
+            box-shadow: none !important;
+        }
+
+        .dataTables_wrapper .dataTables_length select:focus {
+            border-color: #4361ee !important;
+            outline: none;
+        }
+
+        .dataTables_wrapper .dataTables_filter input {
+            border: 1px solid #dfe2e8 !important;
+            border-radius: 8px !important;
+            padding: 8px 14px !important;
+            font-size: 13px !important;
+            color: #1e1e2d;
+            margin-left: 8px !important;
+            min-width: 220px;
+            box-shadow: none !important;
+            transition: border-color 0.15s ease;
+        }
+
+        .dataTables_wrapper .dataTables_filter input:focus {
+            border-color: #4361ee !important;
+            outline: none;
+        }
+
+        .dataTables_wrapper .dataTables_filter input::placeholder {
+            color: #9aa0ac;
+        }
+
+        /* row that holds length + search side by side */
+        .dataTables_wrapper .row:first-child {
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .dataTables_wrapper .dataTables_filter label {
+            position: relative;
+        }
+
+        .dataTables_wrapper .dataTables_filter input {
+            padding-left: 34px !important;
+        }
+
+        .dataTables_wrapper .dataTables_filter::before {
+            content: "\f52a";
+            /* bootstrap-icons search glyph */
+            font-family: "bootstrap-icons";
+            position: absolute;
+            margin-left: 20px;
+            margin-top: 9px;
+            color: #9aa0ac;
+            font-size: 13px;
+            pointer-events: none;
+        }
+
+        /* Export/Print buttons */
+        .dt-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dt-buttons .dt-button {
+            border: 1px solid #dfe2e8 !important;
+            background: #fff !important;
+            color: #4a4a5a !important;
+            border-radius: 8px !important;
+            padding: 8px 14px !important;
+            font-size: 13px !important;
+            font-weight: 600 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            box-shadow: none !important;
+        }
+
+        .dt-buttons .dt-button:hover {
+            background: #f5f6fa !important;
+            color: #1e1e2d !important;
+        }
+
+        .dt-buttons .buttons-excel {
+            color: #17c653 !important;
+            border-color: #d1fadf !important;
+        }
+
+        .dt-buttons .buttons-print {
+            color: #1b84ff !important;
+            border-color: #d6e0ff !important;
+        }
+
+        /* ==== Reusable Admin UI Components (shared across all pages) ==== */
+        i.bi,
+        i[class*=" fa-"],
+        i[class*=" fonticon-"],
+        i[class*=" la-"],
+        i[class^=fa-],
+        i[class^=fonticon-],
+        i[class^=la-] {
+            line-height: 1;
+            font-size: 1rem;
+            color: inherit !important;
+        }
+
+        table.dataTable.no-footer {
+            border-bottom: 1px solid #f1f3f6;
+        }
+
+        /* Page Header */
+        .admin-page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .admin-page-header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-page-header-title .icon-box {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: #eaf0ff;
+            color: #4361ee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .admin-page-header-title h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1e1e2d;
+            margin: 0;
+        }
+
+        /* Buttons */
+        .btn-admin-primary {
+            background: #4361ee;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 18px;
+            font-weight: 600;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-admin-primary:hover {
+            background: #3651d4;
+            color: #fff;
+        }
+
+        /* Card wrapper for tables/content */
+        .admin-card {
+            background: #fff;
+            border: 1px solid #eef0f2;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+
+        .admin-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .admin-card-header h5 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e1e2d;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* DataTable styling */
+        /* DataTable styling */
+        .admin-card table.dataTable thead th {
+            background: #f5f6fa !important;
+            color: #7e8299 !important;
+            font-size: 12px !important;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            font-weight: 600 !important;
+            border-bottom: 1px solid #eef0f2 !important;
+            padding: 14px !important;
+        }
+
+        .admin-card table.dataTable tbody td {
+            padding: 14px !important;
+            font-size: 14px !important;
+            color: #2a2a3c !important;
+            border-bottom: 1px solid #f2f3f5 !important;
+            vertical-align: middle;
+            background: #fff !important;
+        }
+
+        .admin-card table.dataTable tbody tr:hover td {
+            background: #fbfbfd !important;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background: #4361ee !important;
+            border-color: #4361ee !important;
+            color: #fff !important;
+            border-radius: 6px;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            border-radius: 6px !important;
+            margin: 0 2px;
+        }
+
+        /* Serial number badge */
+        .serial-badge {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #eaf0ff;
+            color: #4361ee;
+            font-weight: 700;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Status pill */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-pill i {
+            font-size: 6px;
+        }
+
+        .status-active {
+            background: #e7f9ee;
+            color: #12b76a;
+        }
+
+        .status-inactive {
+            background: #fdeceb;
+            color: #f04438;
+        }
+
+        /* Action icon buttons — outline style only, no fill background */
+        .action-icon-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: 1.5px solid;
+            background: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            padding: 0;
+            box-shadow: none;
+            transition: all 0.15s ease;
+        }
+
+        .action-view {
+            color: #1b84ff;
+            border-color: #1b84ff;
+        }
+
+        .action-edit {
+            color: #198754;
+            border-color: #198754;
+        }
+
+        .action-delete {
+            color: #f1416c;
+            border-color: #f1416c;
+        }
+
+        .action-status-on {
+            color: #17c653;
+            border-color: #17c653;
+        }
+
+        .action-status-off {
+            color: #98a2b3;
+            border-color: #98a2b3;
+        }
+
+        .action-icon-btn:hover {
+            opacity: 0.8;
+        }
+
+        /* Modal */
+        .admin-modal-content {
+            border-radius: 12px;
+            border: none;
+            overflow: hidden;
+        }
+
+        .admin-modal-header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #eef0f2;
+            padding: 20px 24px;
+            align-items: flex-start;
+        }
+
+        .admin-modal-header h5 {
+            color: #1e1e2d;
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .admin-modal-header p {
+            color: #8a8a9a;
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+
+        .admin-modal-body {
+            padding: 24px;
+            background-color: #fbfbfd;
+        }
+
+        .admin-modal-section {
+            background: #fff;
+            border: 1px solid #eef0f2;
+            border-radius: 10px;
+            padding: 24px;
+            margin-bottom: 12px;
+        }
+
+        .admin-modal-section .section-badge {
+            background: #eaf0ff;
+            color: #4361ee;
+            font-weight: 600;
+            font-size: 12px;
+            padding: 5px 10px;
+        }
+
+        .admin-modal-section label {
+            color: #1e1e2d;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .admin-modal-section .form-control,
+        .admin-modal-section .form-select {
+            border: 1px solid #dfe2e8;
+            border-radius: 8px;
+            padding: 11px 14px;
+            font-size: 14px;
+        }
+
+        .admin-modal-footer {
+            background-color: #ffffff;
+            border-top: 1px solid #eef0f2;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-modal-cancel {
+            border: 1px solid #dfe2e8;
+            color: #4a4a5a;
+            border-radius: 8px;
+            padding: 8px 18px;
+            font-size: 14px;
+        }
+
+        .btn-modal-submit {
+            background-color: #4361ee;
+            color: #fff;
+            border-radius: 8px;
+            padding: 8px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+        }
+
+        /* ==== Layout essentials (kept, still used by JS) ==== */
         #loading {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 9999;
-            /* Make sure it appears on top */
         }
 
         #backdrop {
@@ -96,87 +520,15 @@ License: For each use you must have a valid license purchased only from above li
 
         .spinner-border {
             color: white;
-            /* Change the color to white */
         }
 
-        table.dataTable {
-            border-collapse: collapse;
-            width: 100%;
-            background: #1E1E2D;
-            /* Dark background for admin panel */
-            color: #2A2A3C;
-            /* Light text for contrast */
-            /* border-radius: 8px; */
-            overflow: hidden;
-        }
-
-        /* Header Styling */
-        table.dataTable thead th {
-            background: #2A2A3C;
-            /* Slightly lighter dark shade */
-            color: #ffffff;
-            font-weight: bold;
-            padding: 12px;
-            text-align: left;
-            border-bottom: 2px solid #3A3A4D;
-        }
-
-        /* Table Body Styling */
-        table.dataTable tbody tr {
-            transition: all 0.3s ease-in-out;
-            border-bottom: 1px solid #3A3A4D;
-            /* Dark border */
-        }
-
-        table.dataTable tbody tr:nth-child(even) {
-            background-color: #fffff;
-            /* Slightly lighter dark row */
-        }
-
-        table.dataTable tbody tr:hover {
-            background: #33334D;
-            /* Hover effect */
-        }
-
-        /* Table Cells */
-        table.dataTable th,
-        table.dataTable td {
-            padding: 10px;
-            font-size: 14px;
-        }
-
-        /* Image Styling */
-
-
-        /* Responsive Design */
         @media (max-width: 768px) {
-            table.dataTable {
-                font-size: 12px;
-            }
 
             table.dataTable th,
             table.dataTable td {
                 padding: 8px;
+                font-size: 12px;
             }
-        }
-
-        .btn-success {
-            background: #00802b !important;
-        }
-
-        .btn-check:active+.btn.btn-success,
-        .btn-check:checked+.btn.btn-success,
-        .btn.btn-success.active,
-        .btn.btn-success.show,
-        .btn.btn-success:active:not(.btn-active),
-        .btn.btn-success:focus:not(.btn-active),
-        .btn.btn-success:hover:not(.btn-active),
-        .show>.btn.btn-success {
-            background: #00802b !important;
-        }
-
-        .btn-danger {
-            background: #e60000 !important;
         }
     </style>
 </head>
@@ -402,6 +754,12 @@ License: For each use you must have a valid license purchased only from above li
     <script src="{{ asset('assets/js/custom/utilities/modals/users-search.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     @include('sweetalert::alert')
     <!--end::Custom Javascript-->
     <!--end::Javascript-->

@@ -54,6 +54,7 @@ class ApplicationController extends Controller implements HasMiddleware
             $data->fav_icon = $filename;
         }
         if ($request->hasFile('logo')) {
+
             $oldImagePath = public_path('image/application/' . $data->logo);
             if (file_exists($oldImagePath)) {
                 unlink($oldImagePath);
