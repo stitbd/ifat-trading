@@ -80,6 +80,7 @@ class PermissionSeeder extends Seeder
                     'brand.delete',
                     'brand.approve',
 
+
                 ]
             ],
 
@@ -92,6 +93,56 @@ class PermissionSeeder extends Seeder
                     'role.edit',
                     'role.delete',
                     'role.permissions',
+                ]
+            ],
+            [
+                'group_name' => 'Product Type',
+                'permissions' => [
+                    'product_type.view',
+                    'product_type.create',
+                    'product_type.edit',
+                    'product_type.delete',
+                    'product_type.approve',
+                ]
+            ],
+            [
+                'group_name' => 'Vehicle Type',
+                'permissions' => [
+                    'vehicle_type.view',
+                    'vehicle_type.create',
+                    'vehicle_type.edit',
+                    'vehicle_type.delete',
+                    'vehicle_type.approve',
+                ]
+            ],
+            [
+                'group_name' => 'Product Size',
+                'permissions' => [
+                    'product_size.view',
+                    'product_size.create',
+                    'product_size.edit',
+                    'product_size.delete',
+                    'product_size.approve',
+                ]
+            ],
+            [
+                'group_name' => 'Vat Percentage',
+                'permissions' => [
+                    'vat_percentage.view',
+                    'vat_percentage.create',
+                    'vat_percentage.edit',
+                    'vat_percentage.delete',
+                    'vat_percentage.approve',
+                ]
+            ],
+            [
+                'group_name' => 'Warranty Period',
+                'permissions' => [
+                    'warranty_period.view',
+                    'warranty_period.create',
+                    'warranty_period.edit',
+                    'warranty_period.delete',
+                    'warranty_period.approve',
                 ]
             ],
 

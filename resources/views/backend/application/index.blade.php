@@ -156,7 +156,7 @@
                             <div class="col-md-9">
                                 <input type="file" class="form-control" id="logo" name="logo">
                                 @if ($data->logo)
-                                    <img src="{{ asset('image/' . $data->logo) }}" height="100"
+                                    <img src="{{ asset('image/application/' . $data->logo) }}" height="100"
                                         class="mt-2 border rounded" alt="Current Logo">
                                 @endif
                             </div>
@@ -167,7 +167,7 @@
                             <div class="col-md-9">
                                 <input type="file" class="form-control" id="fav_icon" name="fav_icon">
                                 @if ($data->fav_icon)
-                                    <img src="{{ asset('image/' . $data->fav_icon) }}" height="50"
+                                    <img src="{{ asset('image/application/' . $data->fav_icon) }}" height="50"
                                         class="mt-2 border rounded" alt="Current Icon">
                                 @endif
                             </div>
