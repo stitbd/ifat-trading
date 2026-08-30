@@ -107,105 +107,6 @@
                     </a>
 
                 </div>
-                <!--end::Dashboard-->
-
-                @if (auth()->user()->can('category.view'))
-                    <div class="menu-item">
-
-                        <a class="menu-link
-                        {{ request()->routeIs('category.index') ? 'customer-button-background-color active' : '' }}"
-                            href="{{ route('category.index') }}">
-
-                            <span class="menu-icon">
-                                <i class="ki-duotone ki-element-11 fs-2">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                    <span class="path3"></span>
-                                    <span class="path4"></span>
-                                </i>
-                            </span>
-
-                            <span class="menu-title">
-                                Category
-                            </span>
-
-                        </a>
-
-                    </div>
-                @endif
-                @if (auth()->user()->can('subcategory.view'))
-                    <div class="menu-item">
-
-                        <a class="menu-link
-                        {{ request()->routeIs('subcategory.index') ? 'customer-button-background-color active' : '' }}"
-                            href="{{ route('subcategory.index') }}">
-
-                            <span class="menu-icon">
-                                <i class="ki-duotone ki-element-11 fs-2">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                    <span class="path3"></span>
-                                    <span class="path4"></span>
-                                </i>
-                            </span>
-
-                            <span class="menu-title">
-                                SubCategory
-                            </span>
-
-                        </a>
-
-                    </div>
-                @endif
-
-                @if (auth()->user()->can('brand.view'))
-                    <div class="menu-item">
-
-                        <a class="menu-link
-                        {{ request()->routeIs('brand.index') ? 'customer-button-background-color active' : '' }}"
-                            href="{{ route('brand.index') }}">
-
-                            <span class="menu-icon">
-                                <i class="ki-duotone ki-element-11 fs-2">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                    <span class="path3"></span>
-                                    <span class="path4"></span>
-                                </i>
-                            </span>
-
-                            <span class="menu-title">
-                                Brand
-                            </span>
-
-                        </a>
-
-                    </div>
-                @endif
-                @if (auth()->user()->can('product.view'))
-                    <div class="menu-item">
-
-                        <a class="menu-link
-                        {{ request()->routeIs('product.index') ? 'customer-button-background-color active' : '' }}"
-                            href="{{ route('product.index') }}">
-
-                            <span class="menu-icon">
-                                <i class="ki-duotone ki-element-11 fs-2">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                    <span class="path3"></span>
-                                    <span class="path4"></span>
-                                </i>
-                            </span>
-
-                            <span class="menu-title">
-                                Product
-                            </span>
-
-                        </a>
-
-                    </div>
-                @endif
 
 
                 <!--begin::Pages-->
@@ -219,7 +120,160 @@
 
                 </div>
                 <!--end::Pages-->
+                {{-- ===================================================== --}}
+                {{-- PRODUCT INVENTORY --}}
+                {{-- ===================================================== --}}
 
+                @if (auth()->user()->can('category.view') ||
+                        auth()->user()->can('subcategory.view') ||
+                        auth()->user()->can('brand.view') ||
+                        auth()->user()->can('product.view') ||
+                        auth()->user()->can('product_type.view') ||
+                        auth()->user()->can('product_size.view'))
+
+                    @php
+                        $productInventoryActive =
+                            request()->routeIs('category.index') ||
+                            request()->routeIs('subcategory.index') ||
+                            request()->routeIs('brand.index') ||
+                            request()->routeIs('product.index') ||
+                            request()->routeIs('product-type.index') ||
+                            request()->routeIs('product-type.create') ||
+                            request()->routeIs('product-type.edit') ||
+                            request()->routeIs('product-size.index') ||
+                            request()->routeIs('product-size.create') ||
+                            request()->routeIs('product-size.edit');
+
+                        $productInventoryClass = $productInventoryActive ? 'custom-show' : '';
+                    @endphp
+
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item
+        {{ $productInventoryActive ? 'show' : '' }}
+        {{ $productInventoryClass }}
+        menu-accordion">
+
+                        <!--begin::Product Inventory Link-->
+                        <span class="menu-link">
+
+                            <span class="menu-icon">
+                                <i class="fa-solid fa-boxes-stacked fs-2"></i>
+                            </span>
+
+                            <span class="menu-title">
+                                Product Inventory
+                            </span>
+
+                            <span class="menu-arrow"></span>
+
+                        </span>
+                        <!--end::Product Inventory Link-->
+
+                        <!--begin::Product Inventory Sub-->
+                        <div class="menu-sub menu-sub-accordion">
+
+                            {{-- Category --}}
+                            @if (auth()->user()->can('category.view'))
+                                <div class="menu-item">
+                                    <a class="menu-link
+                        {{ request()->routeIs('category.index') ? 'active button-active' : '' }}"
+                                        href="{{ route('category.index') }}">
+                                        <span class="menu-bullet">
+                                            <i class="far fa-circle nav-icon"></i>
+                                        </span>
+                                        <span class="menu-title">
+                                            Category
+                                        </span>
+                                    </a>
+                                </div>
+                            @endif
+
+                            {{-- SubCategory --}}
+                            @if (auth()->user()->can('subcategory.view'))
+                                <div class="menu-item">
+                                    <a class="menu-link
+                        {{ request()->routeIs('subcategory.index') ? 'active button-active' : '' }}"
+                                        href="{{ route('subcategory.index') }}">
+                                        <span class="menu-bullet">
+                                            <i class="far fa-circle nav-icon"></i>
+                                        </span>
+                                        <span class="menu-title">
+                                            SubCategory
+                                        </span>
+                                    </a>
+                                </div>
+                            @endif
+
+                            {{-- Brand --}}
+                            @if (auth()->user()->can('brand.view'))
+                                <div class="menu-item">
+                                    <a class="menu-link
+                        {{ request()->routeIs('brand.index') ? 'active button-active' : '' }}"
+                                        href="{{ route('brand.index') }}">
+                                        <span class="menu-bullet">
+                                            <i class="far fa-circle nav-icon"></i>
+                                        </span>
+                                        <span class="menu-title">
+                                            Brand
+                                        </span>
+                                    </a>
+                                </div>
+                            @endif
+
+                            {{-- Product --}}
+                            @if (auth()->user()->can('product.view'))
+                                <div class="menu-item">
+                                    <a class="menu-link
+                        {{ request()->routeIs('product.index') ? 'active button-active' : '' }}"
+                                        href="{{ route('product.index') }}">
+                                        <span class="menu-bullet">
+                                            <i class="far fa-circle nav-icon"></i>
+                                        </span>
+                                        <span class="menu-title">
+                                            Product
+                                        </span>
+                                    </a>
+                                </div>
+                            @endif
+
+                            {{-- Product Type --}}
+                            @if (auth()->user()->can('product_type.view'))
+                                <div class="menu-item">
+                                    <a class="menu-link
+                        {{ request()->routeIs('product-type.index') ? 'active button-active' : '' }}"
+                                        href="{{ route('product-type.index') }}">
+                                        <span class="menu-bullet">
+                                            <i class="far fa-circle nav-icon"></i>
+                                        </span>
+                                        <span class="menu-title">
+                                            Product Type
+                                        </span>
+                                    </a>
+                                </div>
+                            @endif
+
+                            {{-- Product Size --}}
+                            @if (auth()->user()->can('product_size.view'))
+                                <div class="menu-item">
+                                    <a class="menu-link
+                        {{ request()->routeIs('product-size.index') ? 'active button-active' : '' }}"
+                                        href="{{ route('product-size.index') }}">
+                                        <span class="menu-bullet">
+                                            <i class="far fa-circle nav-icon"></i>
+                                        </span>
+                                        <span class="menu-title">
+                                            Product Size
+                                        </span>
+                                    </a>
+                                </div>
+                            @endif
+
+                        </div>
+                        <!--end::Product Inventory Sub-->
+
+                    </div>
+
+                @endif
 
                 {{-- ===================================================== --}}
                 {{-- USER MANAGEMENT --}}
@@ -334,15 +388,9 @@
                             request()->routeIs('wing.index') ||
                             request()->routeIs('wing.create') ||
                             request()->routeIs('wing.edit') ||
-                            request()->routeIs('product-type.index') ||
-                            request()->routeIs('product-type.create') ||
-                            request()->routeIs('product-type.edit') ||
                             request()->routeIs('vehicle-type.index') ||
                             request()->routeIs('vehicle-type.create') ||
                             request()->routeIs('vehicle-type.edit') ||
-                            request()->routeIs('product-size.index') ||
-                            request()->routeIs('product-size.create') ||
-                            request()->routeIs('product-size.edit') ||
                             request()->routeIs('vat-percentage.index') ||
                             request()->routeIs('vat-percentage.create') ||
                             request()->routeIs('vat-percentage.edit') ||
@@ -433,25 +481,7 @@
 
                             {{-- code from pranto --}}
 
-                            @if (auth()->user()->can('product_type.view'))
-                                <div class="menu-item">
 
-                                    <a class="menu-link
-                                        {{ request()->routeIs('product-type.index') ? 'active button-active' : '' }}"
-                                        href="{{ route('product-type.index') }}">
-
-                                        <span class="menu-bullet">
-                                            <i class="far fa-circle nav-icon"></i>
-                                        </span>
-
-                                        <span class="menu-title">
-                                            Product Type
-                                        </span>
-
-                                    </a>
-
-                                </div>
-                            @endif
                             @if (auth()->user()->can('manufacturer.view'))
                                 <div class="menu-item">
 
@@ -509,25 +539,7 @@
 
                                 </div>
                             @endif
-                            @if (auth()->user()->can('product_size.view'))
-                                <div class="menu-item">
 
-                                    <a class="menu-link
-                                        {{ request()->routeIs('product-size.index') ? 'active button-active' : '' }}"
-                                        href="{{ route('product-size.index') }}">
-
-                                        <span class="menu-bullet">
-                                            <i class="far fa-circle nav-icon"></i>
-                                        </span>
-
-                                        <span class="menu-title">
-                                            Product Size
-                                        </span>
-
-                                    </a>
-
-                                </div>
-                            @endif
                             @if (auth()->user()->can('vat_percentage.view'))
                                 <div class="menu-item">
 

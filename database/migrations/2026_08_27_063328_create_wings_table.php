@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('imported_number', 100)->unique()->nullable();
             $table->string('bin_number', 50)->unique()->nullable();
             $table->string('mobile_number', 50)->nullable();
-            $table->string('email',50)->nullable();
+            $table->string('email', 50)->nullable();
             $table->string('image')->nullable();
             $table->string('authority_signature')->nullable();
             $table->text('description')->nullable();
@@ -32,7 +32,7 @@ return new class extends Migration
                 ->nullable()
                 ->constrained('users')
                 ->nullOnDelete();
-
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });

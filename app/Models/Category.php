@@ -17,6 +17,7 @@ class Category extends Model
         'status',
         'created_by',
         'updated_by',
+        'deleted_by',
     ];
     public function creator()
     {

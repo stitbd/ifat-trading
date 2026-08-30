@@ -74,7 +74,7 @@ class CategoryController extends Controller
     {
         return view('backend.categories.index');
     }
-   
+
 
 
     public function getdata(Request $request)
@@ -441,6 +441,7 @@ class CategoryController extends Controller
 
         $find->update([
             'updated_by' => Auth::id(),
+            'deleted_by' => Auth::id(),
         ]);
 
         /*
