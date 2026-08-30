@@ -41,6 +41,35 @@ class CategoryController extends Controller
         ];
     }
 
+    public function statusUpdate(Request $request, $id)
+    {
+
+        $find = Category::find($id);
+
+        if (!$find) {
+            return response()->json(['success' => false, 'message' => 'Country of Origin not found!'], 404);
+        }
+
+        try {
+            $find->update([
+                'status' => $find->status ? 0 : 1, // toggle kora
+                'updated_by' => auth()->user()->id,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Status Updated Successfully!',
+                'status' => $find->status,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong! Please try again.',
+            ], 500);
+        }
+    }
+
+
     public function index()
     {
         return view('backend.categories.index');
@@ -106,7 +135,7 @@ class CategoryController extends Controller
                     */
 
                     $editBtn =
-                        '<button data-id="' . $row->id . '" type="button" class="edit action-icon-btn action-edit me-2" title="Edit">
+                        '<button data-id="' . $row->id . '" type="button" class="edit action-icon-btn action-edit mx-2" title="Edit">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </button>';
 
@@ -124,15 +153,25 @@ class CategoryController extends Controller
                         >
                             ' . $csrfToken . '
                             ' . $method . '
-<button type="submit" class="delete action-icon-btn action-delete" title="Delete">
-                        <i class="bi bi-trash-fill"></i>
-                    </button>
+                        <button type="submit" class="delete action-icon-btn action-delete" title="Delete">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
 
                         </form>';
 
+                    if ($row->status) {
+                        $statusBtn = '<button data-id="' . $row->id . '" type="button" class="status-toggle action-icon-btn action-status-on" title="Active - click to deactivate">
+                        <i class="bi bi-toggle-on"></i>
+                    </button>';
+                    } else {
+                        $statusBtn = '<button data-id="' . $row->id . '" type="button" class="status-toggle action-icon-btn action-status-off" title="Inactive - click to activate">
+                        <i class="bi bi-toggle-off"></i>
+                    </button>';
+                    }
+
                     return
                         '<div class="d-flex align-items-center mb-2">' .
-                        $editBtn .
+                        $statusBtn .  $editBtn .
                         $deleteBtn .
                         '</div>';
                 })

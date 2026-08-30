@@ -59,6 +59,34 @@ class BrandController extends Controller implements HasMiddleware
     |--------------------------------------------------------------------------
     */
 
+    public function statusUpdate(Request $request, $id)
+    {
+
+        $find = Brand::find($id);
+
+        if (!$find) {
+            return response()->json(['success' => false, 'message' => 'Brand not found!'], 404);
+        }
+
+        try {
+            $find->update([
+                'status' => $find->status ? 0 : 1, // toggle kora
+                'updated_by' => auth()->user()->id,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Status Updated Successfully!',
+                'status' => $find->status,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong! Please try again.',
+            ], 500);
+        }
+    }
+
     public function getdata(Request $request)
     {
         if (!$request->ajax()) {
@@ -69,7 +97,11 @@ class BrandController extends Controller implements HasMiddleware
             ->get();
 
         return DataTables::of($data)
-
+            ->addColumn('status', function ($row) {
+                return $row->status
+                    ? '<span class="badge badge-success">Active</span>'
+                    : '<span class="badge badge-danger">Inactive</span>';
+            })
             ->addColumn('image', function ($row) {
 
                 if (
@@ -120,7 +152,7 @@ class BrandController extends Controller implements HasMiddleware
                 $method = method_field('DELETE');
 
                 $editBtn = '
-                  <button data-id="' . $row->id . '" type="button" class="edit action-icon-btn action-edit me-2" title="Edit">
+                  <button data-id="' . $row->id . '" type="button" class="edit action-icon-btn action-edit mx-2" title="Edit">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </button>
                 ';
@@ -143,17 +175,26 @@ class BrandController extends Controller implements HasMiddleware
                     </form>
                 ';
 
-                return '
-                    <div class="d-flex align-items-center mb-2">
-                        ' .
-                    $editBtn .
+                if ($row->status) {
+                    $statusBtn = '<button data-id="' . $row->id . '" type="button" class="status-toggle action-icon-btn action-status-on" title="Active - click to deactivate">
+                        <i class="bi bi-toggle-on"></i>
+                    </button>';
+                } else {
+                    $statusBtn = '<button data-id="' . $row->id . '" type="button" class="status-toggle action-icon-btn action-status-off" title="Inactive - click to activate">
+                        <i class="bi bi-toggle-off"></i>
+                    </button>';
+                }
+
+                return
+                    '<div class="d-flex align-items-center mb-2">' .
+                    $statusBtn .  $editBtn .
                     $deleteBtn .
-                    '</div>
-                ';
+                    '</div>';
             })
 
             ->rawColumns([
                 'image',
+                'status',
                 'action',
             ])
 

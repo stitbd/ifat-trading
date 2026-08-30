@@ -14,6 +14,7 @@ class Category extends Model
         'name',
         'image',
         'description',
+        'status',
         'created_by',
         'updated_by',
     ];
@@ -27,7 +28,7 @@ class Category extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
     public function subcategories()
-{
-    return $this->hasMany(Subcategory::class);
-}
+    {
+        return $this->hasMany(Subcategory::class);
+    }
 }
