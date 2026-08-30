@@ -74,32 +74,7 @@ class CategoryController extends Controller
     {
         return view('backend.categories.index');
     }
-    public function statusUpdate(Request $request, $id)
-    {
-        $find = Category::find($id);
-
-        if (!$find) {
-            return response()->json(['success' => false, 'message' => 'Category not found!'], 404);
-        }
-
-        try {
-            $find->update([
-                'status' => $find->status ? 0 : 1, // toggle kora
-                'updated_by' => auth()->user()->id,
-            ]);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Status Updated Successfully!',
-                'status' => $find->status,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Something went wrong! Please try again.',
-            ], 500);
-        }
-    }
+   
 
 
     public function getdata(Request $request)
