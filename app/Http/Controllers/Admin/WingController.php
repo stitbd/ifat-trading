@@ -13,7 +13,7 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 
-class WingController extends Controller
+class WingController extends Controller implements HasMiddleware
 {
     public static function middleware(): array
     {
@@ -86,17 +86,13 @@ class WingController extends Controller
                 })
 
                 ->addColumn('action', function ($row) {
-
                     $editUrl = route('wing.edit', $row->id);
                     $deleteUrl = route('wing.destroy', $row->id);
-
                     $csrfToken = csrf_field();
                     $method = method_field('DELETE');
-
                     $editBtn = '<button data-id="' . $row->id . '" type="button" class="edit action-icon-btn action-edit mx-2" title="Edit">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </button>';
-
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>';
                     $deleteBtn = '<form action="' . $deleteUrl . '"
                                         method="POST"
                                         style="display:inline;">
@@ -104,18 +100,18 @@ class WingController extends Controller
                                     ' . $method . '
 
                                     <button type="submit" class="delete action-icon-btn action-delete" title="Delete">
-                        <i class="bi bi-trash-fill"></i>
-                    </button>
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
                                 </form>';
 
                     if ($row->status) {
                         $statusBtn = '<button data-id="' . $row->id . '" type="button" class="status-toggle action-icon-btn action-status-on" title="Active - click to deactivate">
-                        <i class="bi bi-toggle-on"></i>
-                    </button>';
+                                        <i class="bi bi-toggle-on"></i>
+                                     </button>';
                     } else {
                         $statusBtn = '<button data-id="' . $row->id . '" type="button" class="status-toggle action-icon-btn action-status-off" title="Inactive - click to activate">
-                        <i class="bi bi-toggle-off"></i>
-                    </button>';
+                                        <i class="bi bi-toggle-off"></i>
+                                    </button>';
                     }
 
                     return
@@ -165,33 +161,21 @@ class WingController extends Controller
             $signaturePath = null;
 
             if ($request->hasFile('image')) {
-
                 $file = $request->file('image');
-
                 $extension = $file->getClientOriginalExtension();
-
                 $filename = time() . '_' . uniqid() . '.' . $extension;
-
                 $path = 'wings/image/';
-
                 $file->move(public_path($path), $filename);
-
                 $imagePath = $filename;
             }
 
 
             if ($request->hasFile('authority_signature')) {
-
                 $file = $request->file('authority_signature');
-
                 $extension = $file->getClientOriginalExtension();
-
                 $filename = time() . '_signature_' . uniqid() . '.' . $extension;
-
                 $path = 'signature/';
-
                 $file->move(public_path($path), $filename);
-
                 $signaturePath = $filename;
             }
 
@@ -280,54 +264,36 @@ class WingController extends Controller
 
 
             if ($request->hasFile('image')) {
-
                 if ($find->image !== null) {
-
                     $imagePath = public_path('wings/image/' . $find->image);
-
                     if (file_exists($imagePath)) {
                         unlink($imagePath);
                     }
                 }
-
                 $file = $request->file('image');
-
                 $extension = $file->getClientOriginalExtension();
-
                 $filename = time() . '_' . uniqid() . '.' . $extension;
-
                 $path = 'wings/image/';
-
                 $file->move(public_path($path), $filename);
-
                 $data['image'] = $filename;
             }
 
 
 
             if ($request->hasFile('authority_signature')) {
-
                 if ($find->authority_signature !== null) {
-
                     $signaturePath = public_path(
                         'signature/' . $find->authority_signature
                     );
-
                     if (file_exists($signaturePath)) {
                         unlink($signaturePath);
                     }
                 }
-
                 $file = $request->file('authority_signature');
-
                 $extension = $file->getClientOriginalExtension();
-
                 $filename = time() . '_signature_' . uniqid() . '.' . $extension;
-
                 $path = 'signature/';
-
                 $file->move(public_path($path), $filename);
-
                 $data['authority_signature'] = $filename;
             }
 
@@ -360,9 +326,7 @@ class WingController extends Controller
 
 
         if ($find->image !== null) {
-
             $imagePath = public_path('wings/image/' . $find->image);
-
             if (file_exists($imagePath)) {
                 unlink($imagePath);
             }
@@ -370,11 +334,9 @@ class WingController extends Controller
 
 
         if ($find->authority_signature !== null) {
-
             $signaturePath = public_path(
                 'signature/' . $find->authority_signature
             );
-
             if (file_exists($signaturePath)) {
                 unlink($signaturePath);
             }

@@ -74,8 +74,8 @@ class ProductTypeController extends Controller implements HasMiddleware
                 })
                 ->addColumn('action', function ($row) {
                     $editBtn = '<button data-id="' . $row->id . '" type="button" class="edit action-icon-btn action-edit" title="Edit">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </button>';
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>';
 
                     $deleteUrl = route('product-type.distroy', $row->id);
                     $csrfToken = csrf_field();
@@ -84,19 +84,19 @@ class ProductTypeController extends Controller implements HasMiddleware
                     $deleteBtn = '<form action="' . $deleteUrl . '" method="POST" class="d-inline">
                     ' . $csrfToken . '
                     ' . $method . '
-                    <button type="submit" class="delete action-icon-btn action-delete" title="Delete">
-                        <i class="bi bi-trash-fill"></i>
-                    </button>
-                </form>';
+                                    <button type="submit" class="delete action-icon-btn action-delete" title="Delete">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                </form>';
 
                     if ($row->status) {
                         $statusBtn = '<button data-id="' . $row->id . '" type="button" class="status-toggle action-icon-btn action-status-on" title="Active - click to deactivate">
-                        <i class="bi bi-toggle-on"></i>
-                    </button>';
+                                        <i class="bi bi-toggle-on"></i>
+                                    </button>';
                     } else {
                         $statusBtn = '<button data-id="' . $row->id . '" type="button" class="status-toggle action-icon-btn action-status-off" title="Inactive - click to activate">
-                        <i class="bi bi-toggle-off"></i>
-                    </button>';
+                                        <i class="bi bi-toggle-off"></i>
+                                    </button>';
                     }
 
                     return '<div class="d-flex align-items-center gap-2">' . $statusBtn . $editBtn . $deleteBtn . '</div>';

@@ -69,8 +69,8 @@ class VehicleTypeController extends Controller implements HasMiddleware
                 })
                 ->addColumn('action', function ($row) {
                     $editBtn = '<button data-id="' . $row->id . '" type="button" class="edit mx-2 action-icon-btn action-edit" title="Edit">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </button>';
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>';
 
                     $deleteUrl = route('vehicle-type.distroy', $row->id);
                     $csrfToken = csrf_field();

@@ -119,7 +119,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('requisition/create', [RequisitionController::class, 'create'])->name('requisition.create');
     Route::get('requisition/products-by-category/{id}', [RequisitionController::class, 'getProductsByCategory'])->name('requisition.products-by-category');
     Route::post('requisition/store', [RequisitionController::class, 'store'])->name('requisition.store');
-
+    Route::get('requisition/{id}/edit', [RequisitionController::class, 'edit'])->name('requisition.edit');
+    Route::put('requisition/{id}', [RequisitionController::class, 'update'])->name('requisition.update');
     //asraf
 
     Route::get('wing/getdata', [WingController::class, 'getdata'])
