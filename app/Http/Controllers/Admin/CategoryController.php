@@ -31,7 +31,7 @@ class CategoryController extends Controller
 
             new Middleware(
                 'permission:category.edit',
-                only: ['update']
+                only: ['update', 'statusUpdate']
             ),
 
             new Middleware(
@@ -74,6 +74,7 @@ class CategoryController extends Controller
     {
         return view('backend.categories.index');
     }
+   
 
 
     public function getdata(Request $request)
@@ -159,6 +160,7 @@ class CategoryController extends Controller
 
                         </form>';
 
+
                     if ($row->status) {
                         $statusBtn = '<button data-id="' . $row->id . '" type="button" class="status-toggle action-icon-btn action-status-on" title="Active - click to deactivate">
                         <i class="bi bi-toggle-on"></i>
@@ -169,11 +171,7 @@ class CategoryController extends Controller
                     </button>';
                     }
 
-                    return
-                        '<div class="d-flex align-items-center mb-2">' .
-                        $statusBtn .  $editBtn .
-                        $deleteBtn .
-                        '</div>';
+                    return '<div class="d-flex align-items-center gap-2">' . $statusBtn . $editBtn . $deleteBtn . '</div>';
                 })
 
                 ->rawColumns([

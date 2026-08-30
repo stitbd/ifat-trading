@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CountryOfOriginController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\ManufacturerController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductSizeController;
 use App\Http\Controllers\Admin\ProductTypeController;
 use App\Http\Controllers\Admin\RoleController;
@@ -105,23 +106,43 @@ Route::middleware(['auth'])->group(function () {
     Route::put('warranty-period/status/{id}', [WarrantyPeriodController::class, 'statusUpdate'])->name('warranty-period.status');
     //asraf
 
-    Route::put('wing/status/{id}', [WingController::class, 'statusUpdate'])->name('wing.status');
     Route::get('wing/getdata', [WingController::class, 'getdata'])
         ->name('wing.getdata');
     Route::resource('wing', WingController::class);
     Route::get('category/getdata', [CategoryController::class, 'getdata'])
         ->name('category.getdata');
     Route::resource('category', CategoryController::class);
-    Route::put('category/status/{id}', [CategoryController::class, 'statusUpdate'])->name('category.status');
+    Route::put('category/status/{id}', [CategoryController::class, 'statusUpdate']);
 
-
-    Route::put('subcategory/status/{id}', [SubcategoryController::class, 'statusUpdate'])->name('subcategory.status');
     Route::get('subcategory/getdata', [SubcategoryController::class, 'getdata'])
         ->name('subcategory.getdata');
     Route::resource('subcategory', SubcategoryController::class);
 
-    Route::put('brand/status/{id}', [BrandController::class, 'statusUpdate'])->name('brand.status');
     Route::get('brand/getdata', [BrandController::class, 'getdata'])
         ->name('brand.getdata');
     Route::resource('brand', BrandController::class);
+
+    Route::put('product/status/{id}', [ProductController::class, 'statusUpdate']);
+    Route::get('product/getdata', [ProductController::class, 'getdata'])
+        ->name('product.getdata');
+    Route::get(
+        '/product/{id}/view',
+        [ProductController::class, 'view']
+    )->name('product.view');
+    Route::resource('product', ProductController::class);
+    Route::get('/product/subcategories/{categoryId}', [
+        ProductController::class,
+        'getSubcategoriesByCategory'
+    ])->name('product.subcategories');
+
+    Route::get('/product/product-types/{categoryId}', [
+        ProductController::class,
+        'getProductTypesByCategory'
+    ])->name('product.product-types');
+
+    Route::get('/product/product-sizes/{categoryId}', [
+        ProductController::class,
+        'getProductSizesByCategory'
+    ])->name('product.product-sizes');
+
 });
