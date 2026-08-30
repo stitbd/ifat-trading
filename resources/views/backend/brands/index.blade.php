@@ -78,6 +78,28 @@
                     }
                 },
                 {
+                    extend: 'pdfHtml5',
+                    text: '<i class="bi bi-file-earmark-pdf-fill"></i> PDF',
+                    title: 'Brand List',
+                    orientation: 'landscape',
+                    pageSize: 'A4',
+                    exportOptions: {
+                        columns: [0, 1, 3, 4] // exclude Image & Action column
+                    },
+                    customize: function(doc) {
+                        doc.content[1].table.widths = ['8%', '22%', '50%', '20%'];
+
+                        doc.styles.tableHeader = {
+                            bold: true,
+                            fontSize: 11,
+                            color: 'white',
+                            fillColor: '#4361ee',
+                        };
+
+                        doc.defaultStyle.fontSize = 9;
+                    }
+                },
+                {
                     extend: 'print',
                     text: '<i class="bi bi-printer-fill"></i> Print',
                     title: 'Brand List',

@@ -52,6 +52,7 @@
                             <th>Email</th>
                             <th>Image</th>
                             <th>Authority Signature</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -92,6 +93,29 @@
                         title: 'Wing List',
                         exportOptions: {
                             columns: [0, 1, 2, 3, 4, 5] // exclude Image, Signature & Action column
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: '<i class="bi bi-file-earmark-pdf-fill"></i> PDF',
+                        title: 'Wing List',
+                        orientation: 'landscape',
+                        pageSize: 'A4',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5] // exclude Image, Signature & Action column
+                        },
+                        customize: function(doc) {
+                            // ৬টা কলাম → ৬টা width value
+                            doc.content[1].table.widths = ['5%', '17%', '18%', '18%', '18%', '24%'];
+
+                            doc.styles.tableHeader = {
+                                bold: true,
+                                fontSize: 10,
+                                color: 'white',
+                                fillColor: '#4361ee',
+                            };
+
+                            doc.defaultStyle.fontSize = 8; // কলাম বেশি হওয়ায় ফন্ট আরেকটু ছোট
                         }
                     },
                     {
@@ -161,6 +185,16 @@
                         }
                     },
                     {
+                        data: 'status',
+                        name: 'status',
+                        render: function(data, type, row) {
+                            if (type === 'export') {
+                                return $(data).text(); // plain text for excel/print, no html badge
+                            }
+                            return data;
+                        }
+                    },
+                    {
                         data: 'action',
                         name: 'action',
                         orderable: false,
@@ -223,7 +257,52 @@
             });
         });
     </script>
+    <script>
+        $(document).on('click', '.status-toggle', function() {
+            let btn = $(this);
+            let id = btn.data('id');
 
+            $.ajax({
+                url: '/wing/status/' + id,
+                type: 'PUT',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                beforeSend: function() {
+                    btn.prop('disabled', true);
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#wingTable').DataTable().ajax.reload(null, false);
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 1200
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    btn.prop('disabled', false);
+
+                    if (xhr.status === 403) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Access Denied',
+                            text: xhr.responseJSON?.message || 'You do not have permission!',
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON?.message || 'Something went wrong!',
+                        });
+                    }
+                }
+            });
+        });
+    </script>
     {{-- Added Successfully --}}
     @if (request()->has('added-successfully'))
         <script>

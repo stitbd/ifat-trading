@@ -65,6 +65,31 @@
                     }
                 },
                 {
+                    extend: 'pdfHtml5',
+                    text: '<i class="bi bi-file-earmark-pdf-fill"></i> PDF',
+                    title: 'Manufacturer List',
+                    orientation: 'portrait',
+                    pageSize: 'A4',
+                    exportOptions: {
+                        columns: [0, 1, 2]
+                    },
+                    customize: function(doc) {
+                        // Full width টেবিল বানাতে column widths override করা
+                        doc.content[1].table.widths = ['10%', '60%', '30%'];
+
+                        // চাইলে হেডার স্টাইলও ঠিক করা যায়
+                        doc.styles.tableHeader = {
+                            bold: true,
+                            fontSize: 11,
+                            color: 'white',
+                            fillColor: '#4361ee',
+                        };
+
+                        // পুরো টেবিলের ফন্ট সাইজ ঠিক করা (ঐচ্ছিক)
+                        doc.defaultStyle.fontSize = 10;
+                    }
+                },
+                {
                     extend: 'print',
                     text: '<i class="bi bi-printer-fill"></i> Print',
                     title: 'Country Of Origin List',

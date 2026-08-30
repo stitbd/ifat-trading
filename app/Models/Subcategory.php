@@ -14,12 +14,13 @@ class Subcategory extends Model
         'name',
         'image',
         'description',
+        'status',
         'created_by',
         'updated_by',
     ];
 
 
-  public function category()
+    public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
     }

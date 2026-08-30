@@ -90,6 +90,28 @@
                     }
                 },
                 {
+                    extend: 'pdfHtml5',
+                    text: '<i class="bi bi-file-earmark-pdf-fill"></i> PDF',
+                    title: 'User List',
+                    orientation: 'landscape', // Email কলাম লম্বা হতে পারে
+                    pageSize: 'A4',
+                    exportOptions: {
+                        columns: [0, 1, 2, 4] // exclude Image & Action column
+                    },
+                    customize: function(doc) {
+                        doc.content[1].table.widths = ['8%', '27%', '40%', '25%'];
+
+                        doc.styles.tableHeader = {
+                            bold: true,
+                            fontSize: 11,
+                            color: 'white',
+                            fillColor: '#4361ee',
+                        };
+
+                        doc.defaultStyle.fontSize = 9;
+                    }
+                },
+                {
                     extend: 'print',
                     text: '<i class="bi bi-printer-fill"></i> Print',
                     title: 'User List',
