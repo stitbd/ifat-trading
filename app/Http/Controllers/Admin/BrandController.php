@@ -510,6 +510,9 @@ class BrandController extends Controller implements HasMiddleware
 
             'updated_by' =>
             Auth::id(),
+            'deleted_by' =>
+            Auth::id(),
+
         ]);
 
         /*

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('subcategories', function (Blueprint $table) {
             $table->id();
-           $table->foreignId('category_id')
+            $table->foreignId('category_id')
                 ->constrained('categories')
                 ->cascadeOnDelete();
 
@@ -28,13 +28,13 @@ return new class extends Migration
                 ->constrained('users')
                 ->nullOnDelete();
 
-                $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('status')->default(1);
 
             $table->foreignId('updated_by')
                 ->nullable()
                 ->constrained('users')
                 ->nullOnDelete();
-
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
             $table->softDeletes();
 
             $table->timestamps();

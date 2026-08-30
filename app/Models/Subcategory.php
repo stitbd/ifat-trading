@@ -17,6 +17,7 @@ class Subcategory extends Model
         'status',
         'created_by',
         'updated_by',
+        'deleted_by'
     ];
 
 

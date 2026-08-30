@@ -538,6 +538,8 @@ class SubcategoryController extends Controller implements HasMiddleware
 
             'updated_by' =>
             Auth::id(),
+            'deleted_by' =>
+            Auth::id(),
         ]);
 
         /*
