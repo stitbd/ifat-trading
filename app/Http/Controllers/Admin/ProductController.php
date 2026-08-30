@@ -138,6 +138,15 @@ class ProductController extends Controller
                 'warrantyPeriod',
                 'vatPercentage',
             ])
+                ->when($request->filled('wing_id'), function ($query) use ($request) {
+                    $query->where('wing_id', $request->wing_id);
+                })
+                ->when($request->filled('category_id'), function ($query) use ($request) {
+                    $query->where('categories_id', $request->category_id);
+                })
+                ->when($request->filled('brand_id'), function ($query) use ($request) {
+                    $query->where('brand_id', $request->brand_id);
+                })
                 ->orderBy('created_at', 'desc')
                 ->get();
 
@@ -225,8 +234,8 @@ class ProductController extends Controller
 
                 ->addColumn('action', function ($row) {
 
-                 $viewBtn =
-        '<button
+                    $viewBtn =
+                        '<button
             data-id="' . $row->id . '"
             type="button"
             class="view action-icon-btn action-view me-2"
@@ -310,7 +319,40 @@ class ProductController extends Controller
                 ->make(true);
         }
     }
+    /**
+     * Show Create Product Page
+     */
+    public function create()
+    {
+        $wings = Wing::where('status', 1)->orderBy('name')->get();
+        $categories = Category::where('status', 1)->orderBy('name')->get();
+        $subcategories = Subcategory::where('status', 1)->orderBy('name')->get();
+        $brands = Brand::where('status', 1)->orderBy('name')->get();
+        $manufacturers = Manufacturer::where('status', 1)->orderBy('name')->get();
+        $countries = CountryOfOrigin::where('status', 1)->orderBy('name')->get();
+        $productTypes = ProductType::where('status', 1)->orderBy('name')->get();
+        $vehicleTypes = VehicleType::where('status', 1)->orderBy('name')->get();
+        $productSizes = ProductSize::where('status', 1)->orderBy('name')->get();
+        $warrantyPeriods = WarrantyPeriod::where('status', 1)->orderBy('title')->get();
+        $vatPercentages = VatPercentage::where('status', 1)->orderBy('title')->get();
 
+        return view(
+            'backend.products.create',
+            compact(
+                'wings',
+                'categories',
+                'subcategories',
+                'brands',
+                'manufacturers',
+                'countries',
+                'productTypes',
+                'vehicleTypes',
+                'productSizes',
+                'warrantyPeriods',
+                'vatPercentages'
+            )
+        );
+    }
 
 
     /**
@@ -495,29 +537,29 @@ class ProductController extends Controller
     }
 
     /**
- * View Product
- */
-public function view(string $id)
-{
-    $data = Product::with([
-        'wing',
-        'category',
-        'subCategory',
-        'brand',
-        'manufacturer',
-        'countryOfOrigin',
-        'productType',
-        'vehicleType',
-        'productSize',
-        'warrantyPeriod',
-        'vatPercentage',
-    ])->findOrFail($id);
+     * View Product
+     */
+    public function view(string $id)
+    {
+        $data = Product::with([
+            'wing',
+            'category',
+            'subCategory',
+            'brand',
+            'manufacturer',
+            'countryOfOrigin',
+            'productType',
+            'vehicleType',
+            'productSize',
+            'warrantyPeriod',
+            'vatPercentage',
+        ])->findOrFail($id);
 
-    return view(
-        'backend.products.view',
-        compact('data')
-    );
-}
+        return view(
+            'backend.products.view',
+            compact('data')
+        );
+    }
 
 
     /**

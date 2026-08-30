@@ -5,549 +5,509 @@
 @endsection
 
 @section('content')
+    <div class="app-toolbar py-3 py-lg-6">
+        <div class="app-container container-fluid">
 
-<div class="app-toolbar py-3 py-lg-6">
-    <div class="app-container container-fluid">
+            <div class="admin-page-header">
 
-        <div class="admin-page-header">
+                <div class="admin-page-header-title">
+                    <span class="icon-box">
+                        <i class="bi bi-box-seam"></i>
+                    </span>
 
-            <div class="admin-page-header-title">
-                <span class="icon-box">
-                    <i class="bi bi-box-seam"></i>
-                </span>
+                    <h1>Product</h1>
+                </div>
 
-                <h1>Product</h1>
-            </div>
-
-            <button
-                data-bs-toggle="modal"
-                data-bs-target="#productCreateModal"
-                class="btn-admin-primary">
-
-                <i class="bi bi-plus-lg"></i>
-                Add Product
-
-            </button>
-
-        </div>
-
-    </div>
-</div>
-
-
-<div id="kt_app_content" class="app-content flex-column-fluid">
-
-    <div
-        id="kt_app_content_container"
-        class="app-container container-fluid">
-
-        <div class="admin-card">
-
-            <div class="admin-card-header">
-
-                <h5>
-                    <i
-                        class="bi bi-table"
-                        style="color:#4361ee;">
-                    </i>
-
-                    Product List
-                </h5>
-
-                <div id="productTableButtons"></div>
+                <a href="{{ route('product.create') }}" class="btn-admin-primary">
+                    <i class="bi bi-plus-lg"></i>
+                    Add Product
+                </a>
 
             </div>
 
+        </div>
+    </div>
 
-            <table
-                id="productTable"
-                class="display admin-table"
-                style="width:100%">
 
-                <thead>
+    <div id="kt_app_content" class="app-content flex-column-fluid">
 
-                    <tr>
-                        <th>#</th>
-                        <th>Product Code</th>
-                        <th>Name</th>
-                        <th>Image</th>
-                        <th>Wing</th>
-                        <th>Category</th>
-                        
-                        <th>Brand</th>
-                        
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
+        <div id="kt_app_content_container" class="app-container container-fluid">
 
-                </thead>
+            <div class="admin-card">
 
-            </table>
+                <div class="admin-card-header">
+                    <h5><i class="bi bi-table" style="color:#4361ee;"></i> Product List</h5>
+                    <div id="productTableButtons"></div>
+                </div>
+
+                <!-- Filters -->
+                <div class="row p-3" style="border-bottom:1px solid #eef0f2;">
+
+                    <div class="col-md-3 mb-2">
+                        <select id="filter_wing" class="form-select">
+                            <option value="">All Wings</option>
+                            @foreach ($wings as $wing)
+                                <option value="{{ $wing->id }}">{{ $wing->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 mb-2">
+                        <select id="filter_category" class="form-select">
+                            <option value="">All Categories</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 mb-2">
+                        <select id="filter_brand" class="form-select">
+                            <option value="">All Brands</option>
+                            @foreach ($brands as $brand)
+                                <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 mb-2">
+                        <button id="filter_reset" class="btn btn-outline-secondary w-100">
+                            <i class="bi bi-x-circle"></i> Reset Filters
+                        </button>
+                    </div>
+
+                </div>
+
+                <table id="productTable" class="display admin-table" style="width:100%">
+
+                    <thead>
+
+                        <tr>
+                            <th>#</th>
+                            <th>Product Code</th>
+                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Wing</th>
+                            <th>Category</th>
+
+                            <th>Brand</th>
+
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+
+                    </thead>
+
+                </table>
+
+            </div>
 
         </div>
 
     </div>
 
-</div>
 
+    <div class="modal fade" id="productEditModal" tabindex="-1" aria-hidden="true">
 
-<div
-    class="modal fade"
-    id="productEditModal"
-    tabindex="-1"
-    aria-hidden="true">
+        <div class="modal-dialog modal-xl">
 
-    <div class="modal-dialog modal-xl">
+            <div class="modal-content admin-modal-content" id="productModalShow">
+            </div>
 
-        <div
-            class="modal-content admin-modal-content"
-            id="productModalShow">
         </div>
 
     </div>
 
-</div>
+    <!-- Product View Modal -->
 
-<!-- Product View Modal -->
+    <div class="modal fade" id="productViewModal" tabindex="-1" aria-hidden="true">
 
-<div
-    class="modal fade"
-    id="productViewModal"
-    tabindex="-1"
-    aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
 
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-
-        <div
-            class="modal-content"
-            id="productViewModalContent"
-            style="
+            <div class="modal-content" id="productViewModalContent"
+                style="
                 border-radius:12px;
                 border:none;
                 overflow:hidden;
             ">
+            </div>
+
         </div>
 
     </div>
 
-</div>
 
 
 
-@include('backend.products.create')
 
-
-<style>
-
-    table.dataTable td img {
-        display: block;
-        height: 60px;
-        width: 60px;
-        object-fit: cover;
-        border-radius: 5px;
-        border: 1px solid #ddd;
-    }
-
-</style>
-
-
-<script>
-
-$(document).ready(function () {
-
-    var table = $('#productTable').DataTable({
-
-        processing: true,
-        serverSide: true,
-
-        ajax: '{{ route('product.getdata') }}',
-
-        dom: 'Blfrtip',
-
-        buttons: [
-
-            {
-                extend: 'excelHtml5',
-
-                text:
-                    '<i class="bi bi-file-earmark-excel-fill"></i> Excel',
-
-                title: 'Product List',
-
-                exportOptions: {
-                    columns: [
-                        0,1,2,
-                        4,5,6,7,8,9,10,11,12,13,
-                        14,15,16,17
-                    ]
-                }
-            },
-
-            {
-                extend: 'print',
-
-                text:
-                    '<i class="bi bi-printer-fill"></i> Print',
-
-                title: 'Product List',
-
-                exportOptions: {
-                    columns: [
-                        0,1,2,
-                        4,5,6,7,8,9,10,11,12,13,
-                        14,15,16,17
-                    ]
-                }
-            }
-
-        ],
-
-        columns: [
-
-            {
-                data: null,
-                name: 'serial_number',
-                orderable: false,
-                searchable: false,
-
-                render: function (
-                    data,
-                    type,
-                    row,
-                    meta
-                ) {
-
-                    let number =
-                        meta.row +
-                        meta.settings._iDisplayStart +
-                        1;
-
-                    return type === 'display'
-                        ? '<span class="serial-badge">' +
-                            number +
-                          '</span>'
-                        : number;
-                }
-            },
-
-            {
-        data: 'product_code',
-        name: 'product_code'
-    },
-
-    {
-        data: 'name',
-        name: 'name'
-    },
-
-    {
-        data: 'image',
-        name: 'image',
-        orderable: false,
-        searchable: false
-    },
-
-    {
-        data: 'wing_name',
-        name: 'wing.name'
-    },
-
-    {
-        data: 'category_name',
-        name: 'category.name'
-    },
-
-    {
-        data: 'brand_name',
-        name: 'brand.name'
-    },
-
-    {
-        data: 'status',
-        name: 'status',
-
-        render: function (
-            data,
-            type,
-            row
-        ) {
-
-            if (type === 'export') {
-                return $(data).text();
-            }
-
-            return data;
+    <style>
+        table.dataTable td img {
+            display: block;
+            height: 60px;
+            width: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 1px solid #ddd;
         }
-    },
-
-           
-
-            {
-                data: 'action',
-                name: 'action',
-                orderable: false,
-                searchable: false
-            }
-
-        ]
-
-    });
+    </style>
 
 
-    table
-        .buttons()
-        .container()
-        .appendTo('#productTableButtons');
+    <script>
+        $(document).ready(function() {
 
+            var table = $('#productTable').DataTable({
 
-    /*
-    |--------------------------------------------------------------------------
-    | Edit
-    |--------------------------------------------------------------------------
-    */
+                processing: true,
+                serverSide: true,
 
-    $(document).on(
-        'click',
-        '.edit',
-        function () {
-
-            let dataId =
-                $(this).data('id');
-
-            $.ajax({
-
-                url:
-                    '/product/' +
-                    dataId +
-                    '/edit',
-
-                type: 'GET',
-
-                success: function (response) {
-
-                    $('#productModalShow')
-                        .html(response);
-
-                    $('#productEditModal')
-                        .modal('show');
-
+                ajax: {
+                    url: '{{ route('product.getdata') }}',
+                    data: function(d) {
+                        d.wing_id = $('#filter_wing').val();
+                        d.category_id = $('#filter_category').val();
+                        d.brand_id = $('#filter_brand').val();
+                    }
                 },
 
-                error: function (xhr) {
+                dom: 'Blfrtip',
+
+                buttons: [
+
+                    {
+                        extend: 'excelHtml5',
+
+                        text: '<i class="bi bi-file-earmark-excel-fill"></i> Excel',
+
+                        title: 'Product List',
+
+                        exportOptions: {
+                            columns: [
+                                0, 1, 2,
+                                4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
+                                14, 15, 16, 17
+                            ]
+                        }
+                    },
+
+                    {
+                        extend: 'print',
+
+                        text: '<i class="bi bi-printer-fill"></i> Print',
+
+                        title: 'Product List',
+
+                        exportOptions: {
+                            columns: [
+                                0, 1, 2,
+                                4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
+                                14, 15, 16, 17
+                            ]
+                        }
+                    }
+
+                ],
+
+                columns: [
+
+                    {
+                        data: null,
+                        name: 'serial_number',
+                        orderable: false,
+                        searchable: false,
+
+                        render: function(
+                            data,
+                            type,
+                            row,
+                            meta
+                        ) {
+
+                            let number =
+                                meta.row +
+                                meta.settings._iDisplayStart +
+                                1;
+
+                            return type === 'display' ?
+                                '<span class="serial-badge">' +
+                                number +
+                                '</span>' :
+                                number;
+                        }
+                    },
+
+                    {
+                        data: 'product_code',
+                        name: 'product_code'
+                    },
+
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+
+                    {
+                        data: 'image',
+                        name: 'image',
+                        orderable: false,
+                        searchable: false
+                    },
+
+                    {
+                        data: 'wing_name',
+                        name: 'wing.name'
+                    },
+
+                    {
+                        data: 'category_name',
+                        name: 'category.name'
+                    },
+
+                    {
+                        data: 'brand_name',
+                        name: 'brand.name'
+                    },
+
+                    {
+                        data: 'status',
+                        name: 'status',
+
+                        render: function(
+                            data,
+                            type,
+                            row
+                        ) {
+
+                            if (type === 'export') {
+                                return $(data).text();
+                            }
+
+                            return data;
+                        }
+                    },
+
+
+
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+
+                ]
+
+            });
+
+
+            table
+                .buttons()
+                .container()
+                .appendTo('#productTableButtons');
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Edit
+            |--------------------------------------------------------------------------
+            */
+            $('#filter_wing, #filter_category, #filter_brand').on('change', function() {
+                table.ajax.reload();
+            });
+
+            $('#filter_reset').on('click', function() {
+                $('#filter_wing, #filter_category, #filter_brand').val('');
+                table.ajax.reload();
+            });
+            $(document).on('click', '.edit', function() {
+                let dataId = $(this).data('id');
+                window.location.href = "{{ route('product.edit', ':id') }}".replace(':id', dataId);
+            });
+
+            /*
+            |--------------------------------------------------------------------------
+            | Delete
+            |--------------------------------------------------------------------------
+            */
+
+            $(document).on(
+                'click',
+                '.delete',
+                function(event) {
+
+                    event.preventDefault();
+
+                    let form =
+                        $(this).closest('form');
 
                     Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text:
-                            xhr.responseJSON?.message ||
-                            'Something went wrong!'
+
+                        title: "Are you sure?",
+
+                        text: "You won't be able to revert this!",
+
+                        icon: "warning",
+
+                        showCancelButton: true,
+
+                        confirmButtonColor: "#d33",
+
+                        cancelButtonColor: "#3085d6",
+
+                        confirmButtonText: "Yes, delete it!"
+
+                    }).then((result) => {
+
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+
                     });
 
                 }
-
-            });
-
-        }
-    );
+            );
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Delete
-    |--------------------------------------------------------------------------
-    */
+            /*
+            |--------------------------------------------------------------------------
+            | Status
+            |--------------------------------------------------------------------------
+            */
 
-    $(document).on(
-        'click',
-        '.delete',
-        function (event) {
+            $(document).on(
+                'click',
+                '.status-toggle',
+                function() {
 
-            event.preventDefault();
+                    let btn = $(this);
 
-            let form =
-                $(this).closest('form');
+                    let id =
+                        btn.data('id');
 
-            Swal.fire({
+                    $.ajax({
 
-                title: "Are you sure?",
+                        url: '/product/status/' +
+                            id,
 
-                text:
-                    "You won't be able to revert this!",
+                        type: 'PUT',
 
-                icon: "warning",
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
 
-                showCancelButton: true,
+                        beforeSend: function() {
 
-                confirmButtonColor: "#d33",
+                            btn.prop(
+                                'disabled',
+                                true
+                            );
 
-                cancelButtonColor: "#3085d6",
+                        },
 
-                confirmButtonText:
-                    "Yes, delete it!"
+                        success: function(response) {
 
-            }).then((result) => {
+                            if (response.success) {
 
-                if (result.isConfirmed) {
-                    form.submit();
-                }
+                                $('#productTable')
+                                    .DataTable()
+                                    .ajax
+                                    .reload(
+                                        null,
+                                        false
+                                    );
 
-            });
+                                Swal.fire({
 
-        }
-    );
+                                    icon: 'success',
 
+                                    title: response.message,
 
-    /*
-    |--------------------------------------------------------------------------
-    | Status
-    |--------------------------------------------------------------------------
-    */
+                                    showConfirmButton: false,
 
-    $(document).on(
-        'click',
-        '.status-toggle',
-        function () {
+                                    timer: 1200
+                                });
+                            }
 
-            let btn = $(this);
+                        },
 
-            let id =
-                btn.data('id');
+                        error: function(xhr) {
 
-            $.ajax({
-
-                url:
-                    '/product/status/' +
-                    id,
-
-                type: 'PUT',
-
-                data: {
-                    _token:
-                        '{{ csrf_token() }}'
-                },
-
-                beforeSend: function () {
-
-                    btn.prop(
-                        'disabled',
-                        true
-                    );
-
-                },
-
-                success: function (response) {
-
-                    if (response.success) {
-
-                        $('#productTable')
-                            .DataTable()
-                            .ajax
-                            .reload(
-                                null,
+                            btn.prop(
+                                'disabled',
                                 false
                             );
 
-                        Swal.fire({
+                            Swal.fire({
 
-                            icon: 'success',
+                                icon: 'error',
 
-                            title:
-                                response.message,
+                                title: xhr.status === 403 ?
+                                    'Access Denied' : 'Error',
 
-                            showConfirmButton:
-                                false,
+                                text: xhr.responseJSON?.message ||
+                                    'Something went wrong!'
 
-                            timer: 1200
-                        });
-                    }
+                            });
 
-                },
-
-                error: function (xhr) {
-
-                    btn.prop(
-                        'disabled',
-                        false
-                    );
-
-                    Swal.fire({
-
-                        icon: 'error',
-
-                        title:
-                            xhr.status === 403
-                                ? 'Access Denied'
-                                : 'Error',
-
-                        text:
-                            xhr.responseJSON?.message ||
-                            'Something went wrong!'
+                        }
 
                     });
 
                 }
+            );
+
+        });
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Success Message
+        |--------------------------------------------------------------------------
+        */
+
+        @if (request()->has('added-successfully'))
+
+            $(document).ready(function() {
+
+                Swal.fire({
+
+                    icon: "success",
+
+                    title: "{{ request('added-successfully') }}",
+
+                    showConfirmButton: false,
+
+                    timer: 2000
+
+                });
+
+
+                const url =
+                    new URL(window.location.href);
+
+                url.searchParams.delete(
+                    'added-successfully'
+                );
+
+                window.history.replaceState(
+                    null,
+                    '',
+                    url
+                );
 
             });
+        @endif
+    </script>
 
-        }
-    );
+    <script>
+        $(document).on(
+            'click',
+            '.view',
+            function() {
 
-});
+                let dataId =
+                    $(this).data('id');
 
-
-/*
-|--------------------------------------------------------------------------
-| Success Message
-|--------------------------------------------------------------------------
-*/
-
-@if (request()->has('added-successfully'))
-
-$(document).ready(function () {
-
-    Swal.fire({
-
-        icon: "success",
-
-        title:
-            "{{ request('added-successfully') }}",
-
-        showConfirmButton: false,
-
-        timer: 2000
-
-    });
-
-
-    const url =
-        new URL(window.location.href);
-
-    url.searchParams.delete(
-        'added-successfully'
-    );
-
-    window.history.replaceState(
-        null,
-        '',
-        url
-    );
-
-});
-
-@endif
-
-</script>
-
-<script>
-    $(document).on(
-    'click',
-    '.view',
-    function () {
-
-        let dataId =
-            $(this).data('id');
-
-        $('#productViewModalContent').html(`
+                $('#productViewModalContent').html(`
             <div
                 class="modal-body text-center"
                 style="padding:50px;">
@@ -567,48 +527,43 @@ $(document).ready(function () {
             </div>
         `);
 
-        $('#productViewModal').modal('show');
+                $('#productViewModal').modal('show');
 
 
-        $.ajax({
+                $.ajax({
 
-            url:
-                "{{ route('product.view', ':id') }}"
-                    .replace(':id', dataId),
+                    url: "{{ route('product.view', ':id') }}"
+                        .replace(':id', dataId),
 
-            type: 'GET',
+                    type: 'GET',
 
-            success: function (response) {
+                    success: function(response) {
 
-                $('#productViewModalContent')
-                    .html(response);
+                        $('#productViewModalContent')
+                            .html(response);
 
-            },
+                    },
 
-            error: function (xhr) {
+                    error: function(xhr) {
 
-                $('#productViewModal').modal('hide');
+                        $('#productViewModal').modal('hide');
 
-                Swal.fire({
+                        Swal.fire({
 
-                    icon: 'error',
+                            icon: 'error',
 
-                    title: 'Error',
+                            title: 'Error',
 
-                    text:
-                        xhr.responseJSON?.message ||
-                        'Unable to load product details!'
+                            text: xhr.responseJSON?.message ||
+                                'Unable to load product details!'
+
+                        });
+
+                    }
 
                 });
 
             }
-
-        });
-
-    }
-);
-</script>
-
-
-
+        );
+    </script>
 @endsection

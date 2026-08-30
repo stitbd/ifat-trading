@@ -400,6 +400,9 @@
                             request()->routeIs('manufacturer.index') ||
                             request()->routeIs('manufacturer.create') ||
                             request()->routeIs('manufacturer.edit') ||
+                            request()->routeIs('warehouse.index') ||
+                            request()->routeIs('warehouse.create') ||
+                            request()->routeIs('warehouse.edit') ||
                             request()->routeIs('country-of-origin.index') ||
                             request()->routeIs('country-of-origin.create') ||
                             request()->routeIs('country-of-origin.edit');
@@ -572,6 +575,25 @@
 
                                         <span class="menu-title">
                                             Warranty Period
+                                        </span>
+
+                                    </a>
+
+                                </div>
+                            @endif
+                            @if (auth()->user()->can('warehouse.view'))
+                                <div class="menu-item">
+
+                                    <a class="menu-link
+                                        {{ request()->routeIs('warehouse.index') ? 'active button-active' : '' }}"
+                                        href="{{ route('warehouse.index') }}">
+
+                                        <span class="menu-bullet">
+                                            <i class="far fa-circle nav-icon"></i>
+                                        </span>
+
+                                        <span class="menu-title">
+                                            Warehouse
                                         </span>
 
                                     </a>
