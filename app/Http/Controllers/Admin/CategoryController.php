@@ -31,7 +31,7 @@ class CategoryController extends Controller
 
             new Middleware(
                 'permission:category.edit',
-                only: ['update']
+                only: ['update', 'statusUpdate']
             ),
 
             new Middleware(
@@ -44,6 +44,32 @@ class CategoryController extends Controller
     public function index()
     {
         return view('backend.categories.index');
+    }
+    public function statusUpdate(Request $request, $id)
+    {
+        $find = Category::find($id);
+
+        if (!$find) {
+            return response()->json(['success' => false, 'message' => 'Category not found!'], 404);
+        }
+
+        try {
+            $find->update([
+                'status' => $find->status ? 0 : 1, // toggle kora
+                'updated_by' => auth()->user()->id,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Status Updated Successfully!',
+                'status' => $find->status,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong! Please try again.',
+            ], 500);
+        }
     }
 
 
@@ -130,11 +156,18 @@ class CategoryController extends Controller
 
                         </form>';
 
-                    return
-                        '<div class="d-flex align-items-center mb-2">' .
-                        $editBtn .
-                        $deleteBtn .
-                        '</div>';
+
+                    if ($row->status) {
+                        $statusBtn = '<button data-id="' . $row->id . '" type="button" class="status-toggle action-icon-btn action-status-on" title="Active - click to deactivate">
+                        <i class="bi bi-toggle-on"></i>
+                    </button>';
+                    } else {
+                        $statusBtn = '<button data-id="' . $row->id . '" type="button" class="status-toggle action-icon-btn action-status-off" title="Inactive - click to activate">
+                        <i class="bi bi-toggle-off"></i>
+                    </button>';
+                    }
+
+                    return '<div class="d-flex align-items-center gap-2">' . $statusBtn . $editBtn . $deleteBtn . '</div>';
                 })
 
                 ->rawColumns([

@@ -14,6 +14,7 @@ class Category extends Model
         'name',
         'image',
         'description',
+        'status',
         'created_by',
         'updated_by',
     ];
