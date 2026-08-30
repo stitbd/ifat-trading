@@ -105,17 +105,22 @@ Route::middleware(['auth'])->group(function () {
     Route::put('warranty-period/status/{id}', [WarrantyPeriodController::class, 'statusUpdate'])->name('warranty-period.status');
     //asraf
 
+    Route::put('wing/status/{id}', [WingController::class, 'statusUpdate'])->name('wing.status');
     Route::get('wing/getdata', [WingController::class, 'getdata'])
         ->name('wing.getdata');
     Route::resource('wing', WingController::class);
     Route::get('category/getdata', [CategoryController::class, 'getdata'])
         ->name('category.getdata');
     Route::resource('category', CategoryController::class);
+    Route::put('category/status/{id}', [CategoryController::class, 'statusUpdate'])->name('category.status');
 
+
+    Route::put('subcategory/status/{id}', [SubcategoryController::class, 'statusUpdate'])->name('subcategory.status');
     Route::get('subcategory/getdata', [SubcategoryController::class, 'getdata'])
         ->name('subcategory.getdata');
     Route::resource('subcategory', SubcategoryController::class);
 
+    Route::put('brand/status/{id}', [BrandController::class, 'statusUpdate'])->name('brand.status');
     Route::get('brand/getdata', [BrandController::class, 'getdata'])
         ->name('brand.getdata');
     Route::resource('brand', BrandController::class);
