@@ -83,7 +83,7 @@ class PermissionSeeder extends Seeder
 
                 ]
             ],
-             [
+            [
                 'group_name' => 'Products',
                 'permissions' => [
                     'product.view',
@@ -174,6 +174,16 @@ class PermissionSeeder extends Seeder
                     'country_of_origin.edit',
                     'country_of_origin.delete',
                     'country_of_origin.approve',
+                ]
+            ],
+            [
+                'group_name' => 'Warehouse',
+                'permissions' => [
+                    'warehouse.view',
+                    'warehouse.create',
+                    'warehouse.edit',
+                    'warehouse.delete',
+                    'warehouse.approve',
                 ]
             ],
 

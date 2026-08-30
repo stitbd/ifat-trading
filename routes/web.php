@@ -9,11 +9,13 @@ use App\Http\Controllers\Admin\ManufacturerController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductSizeController;
 use App\Http\Controllers\Admin\ProductTypeController;
+use App\Http\Controllers\Admin\RequisitionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VatPercentageController;
 use App\Http\Controllers\Admin\VehicleTypeController;
+use App\Http\Controllers\Admin\WarehouseController;
 use App\Http\Controllers\Admin\WarrantyPeriodController;
 use App\Http\Controllers\Admin\WingController;
 use Illuminate\Support\Facades\Route;
@@ -104,6 +106,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('warranty-period/edit/{id}', [WarrantyPeriodController::class, 'edit'])->name('warranty-period.edit');
     Route::put('warranty-period/update/{id}', [WarrantyPeriodController::class, 'update'])->name('warranty-period.update');
     Route::put('warranty-period/status/{id}', [WarrantyPeriodController::class, 'statusUpdate'])->name('warranty-period.status');
+
+    Route::get('warehouse', [WarehouseController::class, 'index'])->name('warehouse.index');
+    Route::get('warehouse/getdata', [WarehouseController::class, 'getdata'])->name('warehouse.getdata');
+    Route::post('warehouse/store', [WarehouseController::class, 'store'])->name('warehouse.store');
+    Route::delete('warehouse/distroy/{id}', [WarehouseController::class, 'distroy'])->name('warehouse.distroy');
+    Route::get('warehouse/edit/{id}', [WarehouseController::class, 'edit'])->name('warehouse.edit');
+    Route::put('warehouse/update/{id}', [WarehouseController::class, 'update'])->name('warehouse.update');
+    Route::put('warehouse/status/{id}', [WarehouseController::class, 'statusUpdate'])->name('warehouse.status');
+
+    Route::get('requisition', [RequisitionController::class, 'index'])->name('requisition.index');
+    Route::get('requisition/create', [RequisitionController::class, 'create'])->name('requisition.create');
+    Route::get('requisition/products-by-category/{id}', [RequisitionController::class, 'getProductsByCategory'])->name('requisition.products-by-category');
+    Route::post('requisition/store', [RequisitionController::class, 'store'])->name('requisition.store');
+
     //asraf
 
     Route::get('wing/getdata', [WingController::class, 'getdata'])
@@ -144,5 +160,4 @@ Route::middleware(['auth'])->group(function () {
         ProductController::class,
         'getProductSizesByCategory'
     ])->name('product.product-sizes');
-
 });
