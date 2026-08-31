@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Yajra\DataTables\Facades\DataTables;
 
 class RequisitionController extends Controller implements HasMiddleware
 {
@@ -31,10 +32,190 @@ class RequisitionController extends Controller implements HasMiddleware
             new Middleware('permission:requisition.edit', only: ['edit', 'update']),
         ];
     }
-    public function index()
-    {
-        return redirect()->back();
+       public function index(){
+           $wings = Wing::where('status', 1)
+            ->orderBy('name')
+            ->get();
+            $warehouses = Warehouse::where('status', 1)
+            ->orderBy('name')
+            ->get();
+         return view('backend.requisitions.index',compact('wings','warehouses'));
     }
+
+    public function getdata(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $data = Requisition::with([
+                'wing',
+                'warehouse',
+                'details.product',
+            ])
+                ->when($request->filled('wing_id'), function ($query) use ($request) {
+                    $query->where('wing_id', $request->wing_id);
+                })
+                ->when($request->filled('warehouse_id'), function ($query) use ($request) {
+                    $query->where('warehouse_id', $request->warehouse_id);
+                })
+                ->when($request->filled('requisition_type'), function ($query) use ($request) {
+                    $query->where(
+                        'requisition_type',
+                        $request->requisition_type
+                    );
+                })
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            return DataTables::of($data)
+
+                ->addIndexColumn()
+
+                ->addColumn('requisition_no', function ($row) {
+                    return $row->requisition_no ?? '-';
+                })
+
+                ->addColumn('wing_name', function ($row) {
+                    return $row->wing?->name ?? '-';
+                })
+
+                ->addColumn('warehouse_name', function ($row) {
+                    return $row->warehouse?->name ?? '-';
+                })
+
+                ->addColumn('requisition_type_name', function ($row) {
+
+                    return $row->requisition_type ?? '-';
+                })
+
+                ->addColumn('total_quantity', function ($row) {
+                    return $row->total_quantity ?? 0;
+                })
+
+                ->addColumn('date', function ($row) {
+                    return $row->date
+                        ? \Carbon\Carbon::parse($row->date)->format('d-m-Y')
+                        : '-';
+                })
+
+                ->addColumn('place_of_supply', function ($row) {
+                    return $row->place_of_supply ?? '-';
+                })
+
+                ->addColumn('products', function ($row) {
+
+                    if ($row->details->isEmpty()) {
+                        return '<span class="text-muted">No Product</span>';
+                    }
+
+                    $html = '<div class="d-flex flex-column gap-1">';
+
+                    foreach ($row->details as $detail) {
+
+                        $productName = $detail->product?->name ?? 'Unknown Product';
+
+                        $html .= '
+                        <div>
+                            <strong>' . e($productName) . '</strong>
+                            <span class="text-muted">
+                                (Qty: ' . e($detail->quantity) . ')
+                            </span>
+                        </div>
+                    ';
+                    }
+
+                    $html .= '</div>';
+
+                    return $html;
+                })
+
+                ->addColumn('status', function ($row) {
+
+                    return $row->status
+                        ? '<span class="status-pill status-active">
+                            <i class="bi bi-circle-fill"></i> Active
+                        </span>'
+                        : '<span class="status-pill status-inactive">
+                            <i class="bi bi-circle-fill"></i> Inactive
+                        </span>';
+                })
+
+                ->addColumn('action', function ($row) {
+
+                    $viewBtn =
+                        '<button
+                        data-id="' . $row->id . '"
+                        type="button"
+                        class="view action-icon-btn action-view me-2"
+                        title="View">
+                        <i class="bi bi-eye-fill"></i>
+                    </button>';
+
+                    $editBtn =
+                        '<button
+                        data-id="' . $row->id . '"
+                        type="button"
+                        class="edit action-icon-btn action-edit me-2"
+                        title="Edit">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>';
+
+                    $deleteUrl = route(
+                        'requisition.destroy',
+                        $row->id
+                    );
+
+                    $csrfToken = csrf_field();
+
+                    $method = method_field('DELETE');
+
+                    $deleteBtn =
+                        '<form
+                        action="' . $deleteUrl . '"
+                        method="POST"
+                        style="display:inline;"
+                    >
+                        ' . $csrfToken . '
+                        ' . $method . '
+
+                        <button
+                            type="submit"
+                            class="delete action-icon-btn action-delete"
+                            title="Delete">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </form>';
+
+                    return '
+                    <div class="d-flex align-items-center gap-2">
+                        ' . $viewBtn . '
+                        ' . $editBtn . '
+                        ' . $deleteBtn . '
+                    </div>
+                ';
+                })
+
+                ->rawColumns([
+                    'products',
+                    'status',
+                    'action',
+                ])
+
+                ->make(true);
+        }
+    }
+    public function view($id)
+{
+    $data = Requisition::with([
+        'wing',
+        'warehouse',
+        'details.product',
+    ])->findOrFail($id);
+
+    return view(
+        'backend.requisitions.view',
+        compact('data')
+    );
+}
     /**
      * Show Edit Requisition Page
      */
