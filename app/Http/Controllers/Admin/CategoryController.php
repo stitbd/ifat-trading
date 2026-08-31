@@ -12,32 +12,17 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 
-class CategoryController extends Controller
+class CategoryController extends Controller implements HasMiddleware
 {
+
     public static function middleware(): array
     {
         return [
             'auth',
-
-            new Middleware(
-                'permission:category.view',
-                only: ['index', 'getdata']
-            ),
-
-            new Middleware(
-                'permission:category.create',
-                only: ['store']
-            ),
-
-            new Middleware(
-                'permission:category.edit',
-                only: ['update', 'statusUpdate']
-            ),
-
-            new Middleware(
-                'permission:category.delete',
-                only: ['destroy']
-            ),
+            new Middleware('permission:category.view', only: ['index', 'getdata']),
+            new Middleware('permission:category.create', only: ['store']),
+            new Middleware('permission:category.edit', only: ['update', 'approve']),
+            new Middleware('permission:category.delete', only: ['distroy']),
         ];
     }
 

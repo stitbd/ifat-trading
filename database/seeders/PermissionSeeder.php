@@ -186,6 +186,16 @@ class PermissionSeeder extends Seeder
                     'warehouse.approve',
                 ]
             ],
+            [
+                'group_name' => 'Requisition',
+                'permissions' => [
+                    'requisition.view',
+                    'requisition.create',
+                    'requisition.edit',
+                    'requisition.delete',
+                    'requisition.approve',
+                ]
+            ],
 
             // ===== System Settings =====
             [

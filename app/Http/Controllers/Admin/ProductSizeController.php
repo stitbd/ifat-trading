@@ -144,11 +144,9 @@ class ProductSizeController extends Controller implements HasMiddleware
     public function update(Request $request, $id)
     {
         $find = ProductSize::find($id);
-
         if (!$find) {
             return response()->json(['success' => false, 'message' => 'Product Size not found!'], 404);
         }
-
         $request->validate([
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
