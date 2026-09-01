@@ -241,6 +241,29 @@
             });
 
             renderSummaryTable();
+            /*
+            |--------------------------------------------------------------------------
+            | Toggle Qty/Note fields based on checkbox state
+            |--------------------------------------------------------------------------
+            */
+            $(document).on('change', '.product-check', function() {
+
+                let row = $(this).closest('tr');
+                let qtyInput = row.find('.product-qty');
+                let noteInput = row.find('.product-note');
+
+                if ($(this).is(':checked')) {
+                    qtyInput.prop('disabled', false);
+                    noteInput.prop('disabled', false);
+                    if (!qtyInput.val() || qtyInput.val() <= 0) {
+                        qtyInput.val(1);
+                    }
+                } else {
+                    qtyInput.prop('disabled', true).val('');
+                    noteInput.prop('disabled', true).val('');
+                }
+            });
+
 
             /*
             |--------------------------------------------------------------------------
@@ -283,20 +306,20 @@
                                 requisitionItems[p.id].note : '';
 
                             rows += `
-                        <tr data-product-id="${p.id}"
-                            data-name="${p.name}"
-                            data-code="${p.product_code}"
-                            data-brand="${p.brand_name}"
-                            data-size="${p.size_name}">
-                            <td><input type="checkbox" class="product-check" ${alreadyAdded}></td>
-                            <td>${p.name}</td>
-                            <td>${p.product_code}</td>
-                            <td>${p.brand_name}</td>
-                            <td>${p.size_name}</td>
-                            <td><input type="number" min="1" class="form-control product-qty" value="${existingQty}"></td>
-                            <td><input type="text" class="form-control product-note" value="${existingNote ?? ''}" placeholder="Note"></td>
-                        </tr>
-                    `;
+                                    <tr data-product-id="${p.id}"
+                                        data-name="${p.name}"
+                                        data-code="${p.product_code}"
+                                        data-brand="${p.brand_name}"
+                                        data-size="${p.size_name}">
+                                        <td><input type="checkbox" class="product-check" ${alreadyAdded}></td>
+                                        <td>${p.name}</td>
+                                        <td>${p.product_code}</td>
+                                        <td>${p.brand_name}</td>
+                                        <td>${p.size_name}</td>
+                                        <td><input type="number" min="1" class="form-control product-qty" value="${existingQty}" ${alreadyAdded ? '' : 'disabled'}></td>
+                                        <td><input type="text" class="form-control product-note" value="${existingNote ?? ''}" placeholder="Note" ${alreadyAdded ? '' : 'disabled'}></td>
+                                    </tr>
+                                `;
                         });
 
                         $('#categoryProductsBody').html(rows);
@@ -319,7 +342,8 @@
             |--------------------------------------------------------------------------
             */
             $(document).on('change', '#checkAllProducts', function() {
-                $('.product-check').prop('checked', $(this).is(':checked'));
+                let isChecked = $(this).is(':checked');
+                $('.product-check').prop('checked', isChecked).trigger('change');
             });
 
             /*

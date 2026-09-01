@@ -33,13 +33,17 @@
 
                     <div style="padding:24px;">
                         <div class="row">
-
-                            <!-- Requisition No (readonly preview) -->
+                            <!-- Wing -->
                             <div class="col-md-3 mb-3">
-                                <label class="form-label fw-bold">Requisition No</label>
-                                <input type="text" class="form-control" value="{{ $requisitionNoPreview }}" readonly>
+                                <label class="form-label fw-bold">Wing <span class="text-danger">*</span></label>
+                                <select class="form-select" name="wing_id" required>
+                                    <option value="">Select Wing</option>
+                                    @foreach ($wings as $wing)
+                                        <option value="{{ $wing->id }}">{{ $wing->name }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback wing_id-error"></div>
                             </div>
-
                             <!-- Requisition Type -->
                             <div class="col-md-3 mb-3">
                                 <label class="form-label fw-bold d-block">Type of Requisition <span
@@ -57,19 +61,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Wing -->
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label fw-bold">Wing <span class="text-danger">*</span></label>
-                                <select class="form-select" name="wing_id" required>
-                                    <option value="">Select Wing</option>
-                                    @foreach ($wings as $wing)
-                                        <option value="{{ $wing->id }}">{{ $wing->name }}</option>
-                                    @endforeach
-                                </select>
-                                <div class="invalid-feedback wing_id-error"></div>
-                            </div>
-
                             <!-- Warehouse -->
                             <div class="col-md-3 mb-3">
                                 <label class="form-label fw-bold">Warehouse <span class="text-danger">*</span></label>
@@ -82,6 +73,23 @@
                                 <div class="invalid-feedback warehouse_id-error"></div>
                             </div>
 
+                            <!-- Place of Supply -->
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label fw-bold">Place of Supply</label>
+                                <input type="text" class="form-control" name="place_of_supply"
+                                    placeholder="Enter Place of Supply">
+                                <div class="invalid-feedback place_of_supply-error"></div>
+                            </div>
+                            <!-- Requisition No (readonly preview) -->
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label fw-bold">Requisition No</label>
+                                <input type="text" class="form-control" value="{{ $requisitionNoPreview }}" readonly>
+                            </div>
+
+
+
+
+
                             <!-- Date -->
                             <div class="col-md-3 mb-3">
                                 <label class="form-label fw-bold">Requisition Date <span
@@ -91,26 +99,27 @@
                                 <div class="invalid-feedback date-error"></div>
                             </div>
 
+
+
+
+                            <!-- Note -->
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label fw-bold">Contact Person & Number</label>
+                                <textarea class="form-control" name="contact_person_info" rows="1" placeholder="Contact Person & number"></textarea>
+                            </div>
+
+                            <!-- Note -->
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label fw-bold">Note</label>
+                                <textarea class="form-control" name="note" rows="1" placeholder="Enter Note"></textarea>
+                                <div class="invalid-feedback note-error"></div>
+                            </div>
                             <!-- Requisition By (auto, readonly) -->
                             <div class="col-md-3 mb-3">
                                 <label class="form-label fw-bold">Requisition By</label>
                                 <input type="text" class="form-control" value="{{ Auth::user()->name }}" readonly>
                             </div>
 
-                            <!-- Place of Supply -->
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label fw-bold">Place of Supply</label>
-                                <input type="text" class="form-control" name="place_of_supply"
-                                    placeholder="Enter Place of Supply">
-                                <div class="invalid-feedback place_of_supply-error"></div>
-                            </div>
-
-                            <!-- Note -->
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">Note</label>
-                                <textarea class="form-control" name="note" rows="1" placeholder="Enter Note"></textarea>
-                                <div class="invalid-feedback note-error"></div>
-                            </div>
 
                         </div>
                     </div>
@@ -265,20 +274,20 @@
                                 requisitionItems[p.id].note : '';
 
                             rows += `
-                        <tr data-product-id="${p.id}"
-                            data-name="${p.name}"
-                            data-code="${p.product_code}"
-                            data-brand="${p.brand_name}"
-                            data-size="${p.size_name}">
-                            <td><input type="checkbox" class="product-check" ${alreadyAdded}></td>
-                            <td>${p.name}</td>
-                            <td>${p.product_code}</td>
-                            <td>${p.brand_name}</td>
-                            <td>${p.size_name}</td>
-                            <td><input type="number" min="1" class="form-control product-qty" value="${existingQty}"></td>
-                            <td><input type="text" class="form-control product-note" value="${existingNote}" placeholder="Note"></td>
-                        </tr>
-                    `;
+                                <tr data-product-id="${p.id}"
+                                    data-name="${p.name}"
+                                    data-code="${p.product_code}"
+                                    data-brand="${p.brand_name}"
+                                    data-size="${p.size_name}">
+                                    <td><input type="checkbox" class="product-check" ${alreadyAdded}></td>
+                                    <td>${p.name}</td>
+                                    <td>${p.product_code}</td>
+                                    <td>${p.brand_name}</td>
+                                    <td>${p.size_name}</td>
+                                    <td><input type="number" min="1" class="form-control product-qty" value="${existingQty}" ${alreadyAdded ? '' : 'disabled'}></td>
+                                    <td><input type="text" class="form-control product-note" value="${existingNote}" placeholder="Note" ${alreadyAdded ? '' : 'disabled'}></td>
+                                </tr>
+                            `;
                         });
 
                         $('#categoryProductsBody').html(rows);
@@ -294,14 +303,36 @@
                     }
                 });
             });
+            /*
+            |--------------------------------------------------------------------------
+            | Toggle Qty/Note fields based on checkbox state
+            |--------------------------------------------------------------------------
+            */
+            $(document).on('change', '.product-check', function() {
 
+                let row = $(this).closest('tr');
+                let qtyInput = row.find('.product-qty');
+                let noteInput = row.find('.product-note');
+
+                if ($(this).is(':checked')) {
+                    qtyInput.prop('disabled', false);
+                    noteInput.prop('disabled', false);
+                    if (!qtyInput.val() || qtyInput.val() <= 0) {
+                        qtyInput.val(1);
+                    }
+                } else {
+                    qtyInput.prop('disabled', true).val('');
+                    noteInput.prop('disabled', true).val('');
+                }
+            });
             /*
             |--------------------------------------------------------------------------
             | Check All
             |--------------------------------------------------------------------------
             */
             $(document).on('change', '#checkAllProducts', function() {
-                $('.product-check').prop('checked', $(this).is(':checked'));
+                let isChecked = $(this).is(':checked');
+                $('.product-check').prop('checked', isChecked).trigger('change');
             });
 
             /*
@@ -371,20 +402,20 @@
 
                 $.each(items, function(i, item) {
                     rows += `
-                <tr>
-                    <td>${item.name}</td>
-                    <td>${item.code}</td>
-                    <td>${item.brand}</td>
-                    <td>${item.size}</td>
-                    <td>${item.quantity}</td>
-                    <td>${item.note ?? ''}</td>
-                    <td>
-                        <button type="button" class="btn btn-sm btn-outline-danger remove-item" data-id="${item.product_id}">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            `;
+                        <tr>
+                            <td>${item.name}</td>
+                            <td>${item.code}</td>
+                            <td>${item.brand}</td>
+                            <td>${item.size}</td>
+                            <td>${item.quantity}</td>
+                            <td>${item.note ?? ''}</td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-outline-danger remove-item" data-id="${item.product_id}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
                 });
 
                 $('#summaryTableBody').html(rows);

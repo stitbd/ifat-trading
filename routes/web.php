@@ -115,19 +115,20 @@ Route::middleware(['auth'])->group(function () {
     Route::put('warehouse/update/{id}', [WarehouseController::class, 'update'])->name('warehouse.update');
     Route::put('warehouse/status/{id}', [WarehouseController::class, 'statusUpdate'])->name('warehouse.status');
 
-     Route::get('requisition/getdata', [RequisitionController::class, 'getdata'])
+    Route::get('requisition/getdata', [RequisitionController::class, 'getdata'])
         ->name('requisition.getdata');
     Route::get('requisition', [RequisitionController::class, 'index'])->name('requisition.index');
     Route::get('requisition/create', [RequisitionController::class, 'create'])->name('requisition.create');
     Route::get('requisition/products-by-category/{id}', [RequisitionController::class, 'getProductsByCategory'])->name('requisition.products-by-category');
     Route::post('requisition/store', [RequisitionController::class, 'store'])->name('requisition.store');
     Route::get('requisition/edit/{id}', [RequisitionController::class, 'edit'])->name('requisition.edit');
-     Route::get(
+    Route::get(
         '/requisition/{id}/view',
         [RequisitionController::class, 'view']
     )->name('requisition.view');
     Route::delete('requisition/distroy/{id}', [RequisitionController::class, 'distroy'])->name('requisition.destroy');
     Route::put('requisition/{id}', [RequisitionController::class, 'update'])->name('requisition.update');
+    Route::get('requisition/print/{id}', [RequisitionController::class, 'print'])->name('requisition.print');
     //asraf
 
     Route::get('wing/getdata', [WingController::class, 'getdata'])

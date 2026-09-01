@@ -41,6 +41,7 @@
                 </div>
 
                 <!-- Filters -->
+                <!-- Filters -->
                 <div class="row p-3" style="border-bottom:1px solid #eef0f2;">
 
                     <div class="col-md-3 mb-2">
@@ -70,9 +71,15 @@
                         </select>
                     </div>
 
-                    <div class="col-md-3 mb-2">
+                    <div class="col-md-2 mb-2">
+                        <button id="filter_apply" class="btn-admin-primary w-100">
+                            <i class="bi bi-funnel"></i> Filter
+                        </button>
+                    </div>
+
+                    <div class="col-md-1 mb-2">
                         <button id="filter_reset" class="btn btn-outline-secondary w-100">
-                            <i class="bi bi-x-circle"></i> Reset Filters
+                            <i class="bi bi-x-circle"></i>
                         </button>
                     </div>
 
@@ -310,7 +317,7 @@
             | Edit
             |--------------------------------------------------------------------------
             */
-            $('#filter_wing, #filter_category, #filter_brand').on('change', function() {
+            $('#filter_apply').on('click', function() {
                 table.ajax.reload();
             });
 
@@ -342,17 +349,11 @@
                     Swal.fire({
 
                         title: "Are you sure?",
-
                         text: "You won't be able to revert this!",
-
                         icon: "warning",
-
                         showCancelButton: true,
-
                         confirmButtonColor: "#d33",
-
                         cancelButtonColor: "#3085d6",
-
                         confirmButtonText: "Yes, delete it!"
 
                     }).then((result) => {

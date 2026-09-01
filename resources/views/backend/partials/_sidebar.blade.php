@@ -149,9 +149,9 @@
 
                     <div data-kt-menu-trigger="click"
                         class="menu-item
-        {{ $productInventoryActive ? 'show' : '' }}
-        {{ $productInventoryClass }}
-        menu-accordion">
+                        {{ $productInventoryActive ? 'show' : '' }}
+                        {{ $productInventoryClass }}
+                        menu-accordion">
 
                         <!--begin::Product Inventory Link-->
                         <span class="menu-link">
@@ -267,6 +267,85 @@
                                     </a>
                                 </div>
                             @endif
+
+                        </div>
+                        <!--end::Product Inventory Sub-->
+
+                    </div>
+
+                @endif
+
+
+
+                @if (auth()->user()->can('requisition.view') || auth()->user()->can('requisition.create'))
+
+                    @php
+                        $productInventoryActive =
+                            request()->routeIs('requisition.index') ||
+                            request()->routeIs('requisition.create') ||
+                            request()->routeIs('requisition.edit');
+
+                        $productInventoryClass = $productInventoryActive ? 'custom-show' : '';
+                    @endphp
+
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item
+                            {{ $productInventoryActive ? 'show' : '' }}
+                            {{ $productInventoryClass }}
+                            menu-accordion">
+
+                        <!--begin::Product Inventory Link-->
+                        <span class="menu-link">
+
+                            <span class="menu-icon">
+                                <i class="fa-solid fa-boxes-stacked fs-2"></i>
+                            </span>
+
+                            <span class="menu-title">
+                                Requisition
+                            </span>
+
+                            <span class="menu-arrow"></span>
+
+                        </span>
+                        <!--end::Product Inventory Link-->
+
+                        <!--begin::Product Inventory Sub-->
+                        <div class="menu-sub menu-sub-accordion">
+
+                            {{-- requisition --}}
+                            @if (auth()->user()->can('requisition.create'))
+                                <div class="menu-item">
+                                    <a class="menu-link
+                                        {{ request()->routeIs('requisition.create') ? 'active button-active' : '' }}"
+                                        href="{{ route('requisition.create') }}">
+                                        <span class="menu-bullet">
+                                            <i class="far fa-circle nav-icon"></i>
+                                        </span>
+                                        <span class="menu-title">
+                                            Add Requisition
+                                        </span>
+                                    </a>
+                                </div>
+                            @endif
+                            @if (auth()->user()->can('requisition.view'))
+                                <div class="menu-item">
+                                    <a class="menu-link
+                                        {{ request()->routeIs('requisition.index') ? 'active button-active' : '' }}"
+                                        href="{{ route('requisition.index') }}">
+                                        <span class="menu-bullet">
+                                            <i class="far fa-circle nav-icon"></i>
+                                        </span>
+                                        <span class="menu-title">
+                                            Requisition List
+                                        </span>
+                                    </a>
+                                </div>
+                            @endif
+
+
+
+
 
                         </div>
                         <!--end::Product Inventory Sub-->
