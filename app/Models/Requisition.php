@@ -11,6 +11,7 @@ class Requisition extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'contact_person_info',
         'requisition_no',
         'wing_id',
         'warehouse_id',

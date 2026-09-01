@@ -33,6 +33,7 @@ return new class extends Migration
             $table->text('note')->nullable();
 
             $table->string('place_of_supply')->nullable();
+            $table->string('contact_person_info')->nullable();
 
             $table->tinyInteger('status')->default(1);
 

@@ -5,7 +5,6 @@
 @endsection
 
 @section('content')
-
     <div class="app-toolbar py-3 py-lg-6">
         <div class="app-container container-fluid">
 
@@ -37,8 +36,7 @@
 
     <div id="kt_app_content" class="app-content flex-column-fluid">
 
-        <div id="kt_app_content_container"
-            class="app-container container-fluid">
+        <div id="kt_app_content_container" class="app-container container-fluid">
 
             <div class="admin-card">
 
@@ -48,8 +46,7 @@
                 <div class="admin-card-header">
 
                     <h5>
-                        <i class="bi bi-table"
-                            style="color:#4361ee;">
+                        <i class="bi bi-table" style="color:#4361ee;">
                         </i>
 
                         Requisition List
@@ -62,112 +59,67 @@
 
                 {{-- Filters --}}
 
-                <div class="row p-3"
-                    style="border-bottom:1px solid #eef0f2;">
-
+                {{-- Filters --}}
+                <div class="row p-3" style="border-bottom:1px solid #eef0f2;">
 
                     {{-- Wing --}}
-
-                    <div class="col-md-3 mb-2">
-
-                        <select
-                            id="filter_wing"
-                            class="form-select">
-
-                            <option value="">
-                                All Wings
-                            </option>
-
+                    <div class="col-md-2 mb-2">
+                        <select id="filter_wing" class="form-select">
+                            <option value="">All Wings</option>
                             @foreach ($wings as $wing)
-
-                                <option value="{{ $wing->id }}">
-                                    {{ $wing->name }}
-                                </option>
-
+                                <option value="{{ $wing->id }}">{{ $wing->name }}</option>
                             @endforeach
-
                         </select>
-
                     </div>
-
 
                     {{-- Warehouse --}}
-
-                    <div class="col-md-3 mb-2">
-
-                        <select
-                            id="filter_warehouse"
-                            class="form-select">
-
-                            <option value="">
-                                All Warehouses
-                            </option>
-
+                    <div class="col-md-2 mb-2">
+                        <select id="filter_warehouse" class="form-select">
+                            <option value="">All Warehouses</option>
                             @foreach ($warehouses as $warehouse)
-
-                                <option value="{{ $warehouse->id }}">
-                                    {{ $warehouse->name }}
-                                </option>
-
+                                <option value="{{ $warehouse->id }}">{{ $warehouse->name }}</option>
                             @endforeach
-
                         </select>
-
                     </div>
-
 
                     {{-- Requisition Type --}}
-
-                    <div class="col-md-3 mb-2">
-
-                        <select
-                            id="filter_requisition_type"
-                            class="form-select">
-
-                            <option value="">
-                                All Types
-                            </option>
-
-                            <option value="local">
-                                Local
-                            </option>
-
-                            <option value="import">
-                                Import
-                            </option>
-
-                          
-
+                    <div class="col-md-2 mb-2">
+                        <select id="filter_requisition_type" class="form-select">
+                            <option value="">All Types</option>
+                            <option value="local">Local</option>
+                            <option value="import">Import</option>
                         </select>
-
                     </div>
 
+                    {{-- From Date --}}
+                    <div class="col-md-2 mb-2">
+                        <input type="date" id="filter_date_from" class="form-control" placeholder="From Date">
+                    </div>
+
+                    {{-- To Date --}}
+                    <div class="col-md-2 mb-2">
+                        <input type="date" id="filter_date_to" class="form-control" placeholder="To Date">
+                    </div>
+
+                    {{-- Filter Button --}}
+                    <div class="col-md-1 mb-2">
+                        <button id="filter_apply" class="btn-admin-primary w-100">
+                            <i class="bi bi-funnel"></i> Filter
+                        </button>
+                    </div>
 
                     {{-- Reset --}}
-
-                    <div class="col-md-3 mb-2">
-
-                        <button
-                            id="filter_reset"
-                            class="btn btn-outline-secondary w-100">
-
+                    <div class="col-md-1 mb-2">
+                        <button id="filter_reset" class="btn btn-outline-secondary w-100">
                             <i class="bi bi-x-circle"></i>
-
-                            Reset Filters
-
                         </button>
-
                     </div>
 
                 </div>
 
-
                 {{-- DataTable --}}
 
-                <table
-                    id="requisitionTable"
-                    class="display admin-table"
-                    style="width:100%;">
+                <table id="requisitionTable" class="display admin-table" style="width:100%;">
 
                     <thead>
 
@@ -183,7 +135,6 @@
 
                             <th>Type</th>
 
-                            <th>Products</th>
 
                             <th>Total Quantity</th>
 
@@ -211,18 +162,11 @@
 
     {{-- Requisition View Modal --}}
 
-    <div
-        class="modal fade"
-        id="requisitionViewModal"
-        tabindex="-1"
-        aria-hidden="true">
+    <div class="modal fade" id="requisitionViewModal" tabindex="-1" aria-hidden="true">
 
-        <div
-            class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
 
-            <div
-                class="modal-content"
-                id="requisitionViewModalContent"
+            <div class="modal-content" id="requisitionViewModalContent"
                 style="
                     border-radius:12px;
                     border:none;
@@ -238,89 +182,86 @@
 
 
     <style>
-
         /*
-        |--------------------------------------------------------------------------
-        | Products column
-        |--------------------------------------------------------------------------
-        */
+                                        |--------------------------------------------------------------------------
+                                        | Products column
+                                        |--------------------------------------------------------------------------
+                                        */
 
         .requisition-products {
 
-            display:flex;
+            display: flex;
 
-            flex-direction:column;
+            flex-direction: column;
 
-            gap:4px;
+            gap: 4px;
 
         }
 
 
         .requisition-product-item {
 
-            background:#f8f9fa;
+            background: #f8f9fa;
 
-            border-radius:5px;
+            border-radius: 5px;
 
-            padding:4px 8px;
+            padding: 4px 8px;
 
-            font-size:13px;
+            font-size: 13px;
 
         }
 
 
         .requisition-product-name {
 
-            font-weight:600;
+            font-weight: 600;
 
-            color:#333;
+            color: #333;
 
         }
 
 
         .requisition-product-qty {
 
-            color:#777;
+            color: #777;
 
-            margin-left:5px;
+            margin-left: 5px;
 
         }
 
 
         /*
-        |--------------------------------------------------------------------------
-        | Serial badge
-        |--------------------------------------------------------------------------
-        */
+                                        |--------------------------------------------------------------------------
+                                        | Serial badge
+                                        |--------------------------------------------------------------------------
+                                        */
 
         .serial-badge {
 
-            display:inline-flex;
+            display: inline-flex;
 
-            align-items:center;
+            align-items: center;
 
-            justify-content:center;
+            justify-content: center;
 
-            min-width:28px;
+            min-width: 28px;
 
-            height:28px;
+            height: 28px;
 
-            background:#eef2ff;
+            background: #eef2ff;
 
-            color:#4361ee;
+            color: #4361ee;
 
-            border-radius:6px;
+            border-radius: 6px;
 
-            font-weight:600;
+            font-weight: 600;
 
         }
-
     </style>
 
 
 
     <script>
-
         $(document).ready(function() {
 
 
@@ -343,14 +284,11 @@
 
                     data: function(d) {
 
-                        d.wing_id =
-                            $('#filter_wing').val();
-
-                        d.warehouse_id =
-                            $('#filter_warehouse').val();
-
-                        d.requisition_type =
-                            $('#filter_requisition_type').val();
+                        d.wing_id = $('#filter_wing').val();
+                        d.warehouse_id = $('#filter_warehouse').val();
+                        d.requisition_type = $('#filter_requisition_type').val();
+                        d.date_from = $('#filter_date_from').val();
+                        d.date_to = $('#filter_date_to').val();
 
                     }
 
@@ -372,11 +310,9 @@
 
                         extend: 'excelHtml5',
 
-                        text:
-                            '<i class="bi bi-file-earmark-excel-fill"></i> Excel',
+                        text: '<i class="bi bi-file-earmark-excel-fill"></i> Excel',
 
-                        title:
-                            'Requisition List',
+                        title: 'Requisition List',
 
                         exportOptions: {
 
@@ -421,11 +357,9 @@
 
                         extend: 'print',
 
-                        text:
-                            '<i class="bi bi-printer-fill"></i> Print',
+                        text: '<i class="bi bi-printer-fill"></i> Print',
 
-                        title:
-                            'Requisition List',
+                        title: 'Requisition List',
 
                         exportOptions: {
 
@@ -505,8 +439,8 @@
 
                                 ?
 
-                                '<span class="serial-badge">'
-                                + number +
+                                '<span class="serial-badge">' +
+                                number +
                                 '</span>'
 
                                 :
@@ -583,18 +517,6 @@
                     | Products
                     |--------------------------------------------------------------------------
                     */
-
-                    {
-
-                        data: 'products',
-
-                        name: 'products',
-
-                        orderable: false,
-
-                        searchable: false
-
-                    },
 
 
                     /*
@@ -730,12 +652,7 @@
             |--------------------------------------------------------------------------
             */
 
-            $(
-                '#filter_wing, ' +
-                '#filter_warehouse, ' +
-                '#filter_requisition_type'
-            )
-            .on('change', function() {
+            $('#filter_apply').on('click', function() {
 
                 table.ajax.reload();
 
@@ -751,11 +668,13 @@
             $('#filter_reset').on('click', function() {
 
                 $(
-                    '#filter_wing, ' +
-                    '#filter_warehouse, ' +
-                    '#filter_requisition_type'
-                )
-                .val('');
+                        '#filter_wing, ' +
+                        '#filter_warehouse, ' +
+                        '#filter_requisition_type'
+                    )
+                    .val('');
+
+                $('#filter_date_from, #filter_date_to').val('');
 
                 table.ajax.reload();
 
@@ -805,39 +724,32 @@
 
                     Swal.fire({
 
-                        title:
-                            "Are you sure?",
+                            title: "Are you sure?",
 
-                        text:
-                            "You won't be able to revert this!",
+                            text: "You won't be able to revert this!",
 
-                        icon:
-                            "warning",
+                            icon: "warning",
 
-                        showCancelButton:
-                            true,
+                            showCancelButton: true,
 
-                        confirmButtonColor:
-                            "#d33",
+                            confirmButtonColor: "#d33",
 
-                        cancelButtonColor:
-                            "#3085d6",
+                            cancelButtonColor: "#3085d6",
 
-                        confirmButtonText:
-                            "Yes, delete it!"
+                            confirmButtonText: "Yes, delete it!"
 
-                    })
-                    .then((result) => {
+                        })
+                        .then((result) => {
 
-                        if (
-                            result.isConfirmed
-                        ) {
+                            if (
+                                result.isConfirmed
+                            ) {
 
-                            form.submit();
+                                form.submit();
 
-                        }
+                            }
 
-                    });
+                        });
 
                 }
             );
@@ -890,12 +802,10 @@
 
                     $.ajax({
 
-                        url:
-                            "{{ route('requisition.view', ':id') }}"
+                        url: "{{ route('requisition.view', ':id') }}"
                             .replace(':id', dataId),
 
-                        type:
-                            'GET',
+                        type: 'GET',
 
 
                         success: function(response) {
@@ -914,14 +824,11 @@
 
                             Swal.fire({
 
-                                icon:
-                                    'error',
+                                icon: 'error',
 
-                                title:
-                                    'Error',
+                                title: 'Error',
 
-                                text:
-                                    xhr.responseJSON?.message ||
+                                text: xhr.responseJSON?.message ||
                                     'Unable to load requisition details!'
 
                             });
@@ -949,17 +856,13 @@
 
                 Swal.fire({
 
-                    icon:
-                        "success",
+                    icon: "success",
 
-                    title:
-                        "{{ request('added-successfully') }}",
+                    title: "{{ request('added-successfully') }}",
 
-                    showConfirmButton:
-                        false,
+                    showConfirmButton: false,
 
-                    timer:
-                        2000
+                    timer: 2000
 
                 });
 
@@ -982,9 +885,6 @@
                 );
 
             });
-
         @endif
-
     </script>
-
 @endsection

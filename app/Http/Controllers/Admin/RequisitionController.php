@@ -24,22 +24,35 @@ class RequisitionController extends Controller implements HasMiddleware
     {
         return [
             'auth',
-
-            new Middleware('permission:requisition.view', only: ['index', 'getdata']),
-
+            new Middleware('permission:requisition.view', only: ['index', 'getdata', 'view', 'print']),
             new Middleware('permission:requisition.create', only: ['create', 'store']),
-
             new Middleware('permission:requisition.edit', only: ['edit', 'update']),
         ];
     }
-       public function index(){
-           $wings = Wing::where('status', 1)
+
+    /**
+     * Standalone print page (Ispahani Indent Form style)
+     */
+    public function print($id)
+    {
+        $data = Requisition::with([
+            'wing',
+            'warehouse',
+            'createdBy',
+            'details.product',
+        ])->findOrFail($id);
+
+        return view('backend.requisitions.print', compact('data'));
+    }
+    public function index()
+    {
+        $wings = Wing::where('status', 1)
             ->orderBy('name')
             ->get();
-            $warehouses = Warehouse::where('status', 1)
+        $warehouses = Warehouse::where('status', 1)
             ->orderBy('name')
             ->get();
-         return view('backend.requisitions.index',compact('wings','warehouses'));
+        return view('backend.requisitions.index', compact('wings', 'warehouses'));
     }
 
     public function getdata(Request $request)
@@ -62,6 +75,12 @@ class RequisitionController extends Controller implements HasMiddleware
                         'requisition_type',
                         $request->requisition_type
                     );
+                })
+                ->when($request->filled('date_from'), function ($query) use ($request) {
+                    $query->whereDate('date', '>=', $request->date_from);
+                })
+                ->when($request->filled('date_to'), function ($query) use ($request) {
+                    $query->whereDate('date', '<=', $request->date_to);
                 })
                 ->orderBy('created_at', 'desc')
                 ->get();
@@ -132,7 +151,7 @@ class RequisitionController extends Controller implements HasMiddleware
 
                     return $row->status
                         ? '<span class="status-pill status-active">
-                            <i class="bi bi-circle-fill"></i> Active
+                            <i class="bi bi-circle-fill"></i> On created User
                         </span>'
                         : '<span class="status-pill status-inactive">
                             <i class="bi bi-circle-fill"></i> Inactive
@@ -143,21 +162,30 @@ class RequisitionController extends Controller implements HasMiddleware
 
                     $viewBtn =
                         '<button
-                        data-id="' . $row->id . '"
-                        type="button"
-                        class="view action-icon-btn action-view me-2"
-                        title="View">
-                        <i class="bi bi-eye-fill"></i>
-                    </button>';
+                            data-id="' . $row->id . '"
+                            type="button"
+                            class="view action-icon-btn action-view me-2"
+                            title="View">
+                            <i class="bi bi-eye-fill"></i>
+                        </button>';
+
+                    $printBtn =
+                        '
+                        <a    href="' . route('requisition.print', $row->id) . '"
+                            target="_blank"
+                            class="print action-icon-btn action-print me-2"
+                            title="Print">
+                            <i class="bi bi-printer-fill"></i>
+                        </a>';
 
                     $editBtn =
                         '<button
-                        data-id="' . $row->id . '"
-                        type="button"
-                        class="edit action-icon-btn action-edit me-2"
-                        title="Edit">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </button>';
+                            data-id="' . $row->id . '"
+                            type="button"
+                            class="edit action-icon-btn action-edit me-2"
+                            title="Edit">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>';
 
                     $deleteUrl = route(
                         'requisition.destroy',
@@ -188,10 +216,11 @@ class RequisitionController extends Controller implements HasMiddleware
                     return '
                     <div class="d-flex align-items-center gap-2">
                         ' . $viewBtn . '
+                        ' . $printBtn . '
                         ' . $editBtn . '
                         ' . $deleteBtn . '
                     </div>
-                ';
+                 ';
                 })
 
                 ->rawColumns([
@@ -204,18 +233,19 @@ class RequisitionController extends Controller implements HasMiddleware
         }
     }
     public function view($id)
-{
-    $data = Requisition::with([
-        'wing',
-        'warehouse',
-        'details.product',
-    ])->findOrFail($id);
+    {
+        $data = Requisition::with([
+            'wing',
+            'warehouse',
+            'createdBy',
+            'details.product',
+        ])->findOrFail($id);
 
-    return view(
-        'backend.requisitions.view',
-        compact('data')
-    );
-}
+        return view(
+            'backend.requisitions.view',
+            compact('data')
+        );
+    }
     /**
      * Show Edit Requisition Page
      */
@@ -292,6 +322,7 @@ class RequisitionController extends Controller implements HasMiddleware
                 'date' => $request->date,
                 'note' => $request->note,
                 'place_of_supply' => $request->place_of_supply,
+                'contact_person_info' => $request->contact_person_info,
                 'updated_by' => Auth::id(),
             ]);
 
@@ -412,6 +443,7 @@ class RequisitionController extends Controller implements HasMiddleware
                 'date' => $request->date,
                 'note' => $request->note,
                 'place_of_supply' => $request->place_of_supply,
+                'contact_person_info' => $request->contact_person_info,
                 'status' => 1,
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
