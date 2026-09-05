@@ -129,6 +129,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('requisition/distroy/{id}', [RequisitionController::class, 'distroy'])->name('requisition.destroy');
     Route::put('requisition/{id}', [RequisitionController::class, 'update'])->name('requisition.update');
     Route::get('requisition/print/{id}', [RequisitionController::class, 'print'])->name('requisition.print');
+    Route::get('requisition/export/{id}', [RequisitionController::class, 'export'])->name('requisition.export');
     //asraf
 
     Route::get('wing/getdata', [WingController::class, 'getdata'])

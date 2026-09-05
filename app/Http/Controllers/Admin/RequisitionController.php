@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Yajra\DataTables\Facades\DataTables;
+use App\Exports\RequisitionExport;
+use Maatwebsite\Excel\Facades\Excel;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class RequisitionController extends Controller implements HasMiddleware
 {
@@ -30,6 +33,22 @@ class RequisitionController extends Controller implements HasMiddleware
         ];
     }
 
+    public function export($id)
+    {
+        $data = Requisition::with([
+            'wing',
+            'warehouse',
+            'createdBy',
+            'details.product.category',
+            'details.product.brand',
+            'details.product.productType',
+            'details.product.productSize',
+        ])->findOrFail($id);
+
+        $fileName = 'requisition-' . ($data->requisition_no ?? $id) . '.xlsx';
+
+        return Excel::download(new RequisitionExport($data), $fileName);
+    }
     /**
      * Standalone print page (Ispahani Indent Form style)
      */
@@ -39,7 +58,10 @@ class RequisitionController extends Controller implements HasMiddleware
             'wing',
             'warehouse',
             'createdBy',
-            'details.product',
+            'details.product.category',
+            'details.product.brand',
+            'details.product.productType',
+            'details.product.productSize',
         ])->findOrFail($id);
 
         return view('backend.requisitions.print', compact('data'));
@@ -54,7 +76,25 @@ class RequisitionController extends Controller implements HasMiddleware
             ->get();
         return view('backend.requisitions.index', compact('wings', 'warehouses'));
     }
+    public function distroy($id)
+    {
+        $find = Requisition::find($id);
 
+        if (!$find) {
+            Alert::error('Error', 'Requisition not found!');
+            return redirect()->route('requisition.index');
+        }
+
+        // deleted_by field set kora, delete() call korar AGE
+        $find->update([
+            'deleted_by' => auth()->user()->id,
+        ]);
+
+        $find->delete(); // soft delete, deleted_at set hobe
+
+        Alert::success('Success', 'Requisition deleted Successful!');
+        return redirect()->route('requisition.index');
+    }
     public function getdata(Request $request)
     {
         if ($request->ajax()) {
@@ -160,67 +200,44 @@ class RequisitionController extends Controller implements HasMiddleware
 
                 ->addColumn('action', function ($row) {
 
-                    $viewBtn =
-                        '<button
-                            data-id="' . $row->id . '"
-                            type="button"
-                            class="view action-icon-btn action-view me-2"
-                            title="View">
+                    $viewBtn = '<button data-id="' . $row->id . '" type="button" class="view action-icon-btn action-view me-2" title="View">
                             <i class="bi bi-eye-fill"></i>
                         </button>';
 
-                    $printBtn =
-                        '
-                        <a    href="' . route('requisition.print', $row->id) . '"
-                            target="_blank"
-                            class="print action-icon-btn action-print me-2"
-                            title="Print">
+                    $printBtn = '<a href="' . route('requisition.print', $row->id) . '" target="_blank" class="print action-icon-btn action-print me-2" title="Print">
                             <i class="bi bi-printer-fill"></i>
                         </a>';
 
-                    $editBtn =
-                        '<button
-                            data-id="' . $row->id . '"
-                            type="button"
-                            class="edit action-icon-btn action-edit me-2"
-                            title="Edit">
+                    $exportBtn = '<a href="' . route('requisition.export', $row->id) . '"
+                    class="export action-icon-btn action-export me-2 js-download-btn"
+                    title="Export to Excel" >
+                        <i class="bi bi-file-earmark-excel-fill"></i>
+                    </a>';
+                    $editBtn = '<button data-id="' . $row->id . '" type="button" class="edit action-icon-btn action-edit me-2" title="Edit">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>';
 
-                    $deleteUrl = route(
-                        'requisition.destroy',
-                        $row->id
-                    );
-
+                    $deleteUrl = route('requisition.destroy', $row->id);
                     $csrfToken = csrf_field();
-
                     $method = method_field('DELETE');
 
-                    $deleteBtn =
-                        '<form
-                        action="' . $deleteUrl . '"
-                        method="POST"
-                        style="display:inline;"
-                    >
-                        ' . $csrfToken . '
-                        ' . $method . '
-
-                        <button
-                            type="submit"
-                            class="delete action-icon-btn action-delete"
-                            title="Delete">
-                            <i class="bi bi-trash-fill"></i>
-                        </button>
-                    </form>';
+                    $deleteBtn = '<form action="' . $deleteUrl . '" method="POST" style="display:inline;">
+                            ' . $csrfToken . '
+                            ' . $method . '
+                            <button type="submit" class="delete action-icon-btn action-delete" title="Delete">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                        </form>';
 
                     return '
-                    <div class="d-flex align-items-center gap-2">
-                        ' . $viewBtn . '
-                        ' . $printBtn . '
-                        ' . $editBtn . '
-                        ' . $deleteBtn . '
-                    </div>
-                 ';
+                        <div class="d-flex align-items-center gap-2">
+                            ' . $viewBtn . '
+                            ' . $printBtn . '
+                            ' . $exportBtn . '
+                            ' . $editBtn . '
+                            ' . $deleteBtn . '
+                        </div>
+                    ';
                 })
 
                 ->rawColumns([
@@ -238,27 +255,30 @@ class RequisitionController extends Controller implements HasMiddleware
             'wing',
             'warehouse',
             'createdBy',
-            'details.product',
+            'details.product.category',
+            'details.product.brand',
+            'details.product.productType',
+            'details.product.productSize',
         ])->findOrFail($id);
 
-        return view(
-            'backend.requisitions.view',
-            compact('data')
-        );
+        return view('backend.requisitions.view', compact('data'));
     }
     /**
      * Show Edit Requisition Page
      */
     public function edit(string $id)
     {
-        $data = Requisition::with('details.product.brand', 'details.product.productSize')
-            ->findOrFail($id);
+        $data = Requisition::with([
+            'details.product.category',
+            'details.product.brand',
+            'details.product.productSize',
+        ])->findOrFail($id);
 
         $wings = Wing::where('status', 1)->orderBy('name')->get();
         $warehouses = Warehouse::where('status', 1)->orderBy('name')->get();
         $categories = Category::where('status', 1)->orderBy('name')->get();
 
-        // Existing items formatted for JS
+        // Existing items formatted for JS (matches actual schema)
         $existingItems = $data->details->map(function ($detail) {
             return [
                 'product_id' => $detail->product_id,
@@ -266,21 +286,19 @@ class RequisitionController extends Controller implements HasMiddleware
                 'code' => $detail->product?->product_code ?? '-',
                 'brand' => $detail->product?->brand?->name ?? '-',
                 'size' => $detail->product?->productSize?->name ?? '-',
-                'quantity' => $detail->quantity,
-                'note' => $detail->note,
+                'category' => $detail->product?->category?->name ?? 'Uncategorized',
+                'physical_stock' => (float) $detail->physical_stock,
+                'in_transit' => (float) $detail->in_transit_stock,
+                'lc_pending' => (float) $detail->lc_pending_stock,
+                'pi' => (float) $detail->pi_stock,
+                'sale_one' => (float) $detail->sale_one_stock,
+                'sale_two' => (float) $detail->sale_two_stock,
+                'sale_three' => (float) $detail->sale_three_stock,
+                'quantity' => (float) $detail->required_stock, // Requirement
             ];
         })->values();
 
-        return view(
-            'backend.requisitions.edit',
-            compact(
-                'data',
-                'wings',
-                'warehouses',
-                'categories',
-                'existingItems'
-            )
-        );
+        return view('backend.requisitions.edit', compact('data', 'wings', 'warehouses', 'categories', 'existingItems'));
     }
 
     /**
@@ -296,6 +314,7 @@ class RequisitionController extends Controller implements HasMiddleware
             'requisition_type' => 'required|in:local,import',
             'date' => 'required|date',
             'place_of_supply' => 'nullable|string|max:255',
+            'contact_person_info' => 'nullable|string|max:255',
             'note' => 'nullable|string',
             'items' => 'required|string',
         ]);
@@ -312,7 +331,9 @@ class RequisitionController extends Controller implements HasMiddleware
         try {
             DB::beginTransaction();
 
-            $totalQuantity = collect($items)->sum('quantity');
+            $totalQuantity = collect($items)->sum(function ($item) {
+                return $item['quantity'] ?? $item['required_stock'] ?? 0;
+            });
 
             $requisition->update([
                 'wing_id' => $request->wing_id,
@@ -331,15 +352,23 @@ class RequisitionController extends Controller implements HasMiddleware
 
             foreach ($items as $item) {
 
-                if (empty($item['product_id']) || empty($item['quantity'])) {
+                $requiredStock = $item['quantity'] ?? $item['required_stock'] ?? 0;
+
+                if (empty($item['product_id']) || $requiredStock <= 0) {
                     continue;
                 }
 
                 RequisitionDetail::create([
                     'requisition_id' => $requisition->id,
                     'product_id' => $item['product_id'],
-                    'quantity' => $item['quantity'],
-                    'note' => $item['note'] ?? null,
+                    'physical_stock' => $item['physical_stock'] ?? 0,
+                    'in_transit_stock' => $item['in_transit'] ?? $item['in_transit_stock'] ?? 0,
+                    'lc_pending_stock' => $item['lc_pending'] ?? $item['lc_pending_stock'] ?? 0,
+                    'pi_stock' => $item['pi'] ?? $item['pi_stock'] ?? 0,
+                    'sale_one_stock' => $item['sale_one'] ?? $item['sale_one_stock'] ?? 0,
+                    'sale_two_stock' => $item['sale_two'] ?? $item['sale_two_stock'] ?? 0,
+                    'sale_three_stock' => $item['sale_three'] ?? $item['sale_three_stock'] ?? 0,
+                    'required_stock' => $requiredStock,
                 ]);
             }
 
@@ -417,8 +446,9 @@ class RequisitionController extends Controller implements HasMiddleware
             'requisition_type' => 'required|in:local,import',
             'date' => 'required|date',
             'place_of_supply' => 'nullable|string|max:255',
+            'contact_person_info' => 'nullable|string|max:255',
             'note' => 'nullable|string',
-            'items' => 'required|string',
+            'items' => 'required|json', // 'json' rule confirms it's valid JSON before decoding
         ]);
 
         $items = json_decode($request->items, true);
@@ -433,7 +463,9 @@ class RequisitionController extends Controller implements HasMiddleware
         try {
             DB::beginTransaction();
 
-            $totalQuantity = collect($items)->sum('quantity');
+            $totalQuantity = collect($items)->sum(function ($item) {
+                return (float) ($item['quantity'] ?? $item['required_stock'] ?? 0);
+            });
 
             $requisition = Requisition::create([
                 'wing_id' => $request->wing_id,
@@ -451,15 +483,24 @@ class RequisitionController extends Controller implements HasMiddleware
 
             foreach ($items as $item) {
 
-                if (empty($item['product_id']) || empty($item['quantity'])) {
+                $requiredStock = (float) ($item['quantity'] ?? $item['required_stock'] ?? 0);
+
+                if (empty($item['product_id']) || $requiredStock <= 0) {
                     continue;
                 }
 
                 RequisitionDetail::create([
-                    'requisition_id' => $requisition->id,
-                    'product_id' => $item['product_id'],
-                    'quantity' => $item['quantity'],
-                    'note' => $item['note'] ?? null,
+                    'requisition_id'   => $requisition->id,
+                    'product_id'       => $item['product_id'],
+                    'physical_stock'   => (float) ($item['physical_stock'] ?? 0),
+                    'in_transit_stock' => (float) ($item['in_transit'] ?? $item['in_transit_stock'] ?? 0),
+                    'lc_pending_stock' => (float) ($item['lc_pending'] ?? $item['lc_pending_stock'] ?? 0),
+                    'pi_stock'         => (float) ($item['pi'] ?? $item['pi_stock'] ?? 0),
+                    'sale_one_stock'   => (float) ($item['sale_one'] ?? $item['sale_one_stock'] ?? 0),
+                    'sale_two_stock'   => (float) ($item['sale_two'] ?? $item['sale_two_stock'] ?? 0),
+                    'sale_three_stock' => (float) ($item['sale_three'] ?? $item['sale_three_stock'] ?? 0),
+                    'required_stock'   => $requiredStock,
+                    'note'             => $item['note'] ?? null,
                 ]);
             }
 
