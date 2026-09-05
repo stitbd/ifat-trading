@@ -1,5 +1,4 @@
-<div
-    class="modal-header align-items-start"
+<div class="modal-header align-items-start"
     style="
         background:#fff;
         border-bottom:1px solid #eef0f2;
@@ -8,26 +7,21 @@
 
     <div>
 
-        <h5
-            class="modal-title mb-1"
+        <h5 class="modal-title mb-1"
             style="
                 color:#1e1e2d;
                 font-weight:700;
                 font-size:18px;
             ">
 
-            <i
-                class="bi bi-box-seam-fill me-2"
-                style="color:#4361ee;">
+            <i class="bi bi-box-seam-fill me-2" style="color:#4361ee;">
             </i>
 
             Product Details
 
         </h5>
 
-        <p
-            class="mb-0"
-            style="
+        <p class="mb-0" style="
                 color:#8a8a9a;
                 font-size:13px;
             ">
@@ -38,26 +32,20 @@
 
     </div>
 
-    <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="modal">
+    <button type="button" class="btn-close" data-bs-dismiss="modal">
     </button>
 
 </div>
 
 
-<div
-    class="modal-body"
-    style="
+<div class="modal-body" style="
         padding:24px;
         background:#fbfbfd;
     ">
 
     <!-- Product Header -->
 
-    <div
-        class="p-4 mb-3"
+    <div class="p-4 mb-3"
         style="
             background:#fff;
             border:1px solid #eef0f2;
@@ -68,11 +56,8 @@
 
             <div class="col-md-3 text-center">
 
-                @if($data->image)
-
-                    <img
-                        src="{{ asset('products/image/' . $data->image) }}"
-                        alt="Product Image"
+                @if ($data->image)
+                    <img src="{{ asset('products/image/' . $data->image) }}" alt="Product Image"
                         style="
                             width:130px;
                             height:130px;
@@ -80,9 +65,7 @@
                             border-radius:12px;
                             border:1px solid #eef0f2;
                         ">
-
                 @else
-
                     <div
                         style="
                             width:130px;
@@ -96,13 +79,10 @@
                             color:#999;
                         ">
 
-                        <i
-                            class="bi bi-image"
-                            style="font-size:40px;">
+                        <i class="bi bi-image" style="font-size:40px;">
                         </i>
 
                     </div>
-
                 @endif
 
             </div>
@@ -145,26 +125,20 @@
 
                 <div class="mt-3">
 
-                    @if($data->status)
-
-                        <span
-                            class="status-pill status-active">
+                    @if ($data->status)
+                        <span class="status-pill status-active">
 
                             <i class="bi bi-circle-fill"></i>
                             Active
 
                         </span>
-
                     @else
-
-                        <span
-                            class="status-pill status-inactive">
+                        <span class="status-pill status-inactive">
 
                             <i class="bi bi-circle-fill"></i>
                             Inactive
 
                         </span>
-
                     @endif
 
                 </div>
@@ -178,21 +152,16 @@
 
     <!-- Basic Information -->
 
-    <div
-        class="p-4 mb-3"
+    <div class="p-4 mb-3"
         style="
             background:#fff;
             border:1px solid #eef0f2;
             border-radius:10px;
         ">
 
-        <h6
-            class="fw-bold mb-3"
-            style="color:#1e1e2d;">
+        <h6 class="fw-bold mb-3" style="color:#1e1e2d;">
 
-            <i
-                class="bi bi-info-circle me-2"
-                style="color:#4361ee;">
+            <i class="bi bi-info-circle me-2" style="color:#4361ee;">
             </i>
 
             Basic Information
@@ -253,6 +222,29 @@
 
             </div>
 
+            <div class="col-md-6 mb-3">
+
+                <div class="view-label">
+                    Hs Code
+                </div>
+
+                <div class="view-value">
+                    {{ $data->hs_code ?? '-' }}
+                </div>
+
+            </div>
+            <div class="col-md-6 mb-3">
+
+                <div class="view-label">
+                    Product Size
+                </div>
+
+                <div class="view-value">
+                    {{ $data->product_size ?? '-' }}
+                </div>
+
+            </div>
+
 
             <div class="col-md-6 mb-3">
 
@@ -286,21 +278,16 @@
 
     <!-- Product Specification -->
 
-    <div
-        class="p-4 mb-3"
+    <div class="p-4 mb-3"
         style="
             background:#fff;
             border:1px solid #eef0f2;
             border-radius:10px;
         ">
 
-        <h6
-            class="fw-bold mb-3"
-            style="color:#1e1e2d;">
+        <h6 class="fw-bold mb-3" style="color:#1e1e2d;">
 
-            <i
-                class="bi bi-gear me-2"
-                style="color:#4361ee;">
+            <i class="bi bi-gear me-2" style="color:#4361ee;">
             </i>
 
             Product Specification
@@ -336,7 +323,7 @@
             </div>
 
 
-            <div class="col-md-6 mb-3">
+            {{-- <div class="col-md-6 mb-3">
 
                 <div class="view-label">
                     Product Size
@@ -346,7 +333,7 @@
                     {{ $data->productSize?->name ?? '-' }}
                 </div>
 
-            </div>
+            </div> --}}
 
 
             <div class="col-md-6 mb-3">
@@ -381,21 +368,16 @@
 
     <!-- Stock & Other Information -->
 
-    <div
-        class="p-4"
+    <div class="p-4"
         style="
             background:#fff;
             border:1px solid #eef0f2;
             border-radius:10px;
         ">
 
-        <h6
-            class="fw-bold mb-3"
-            style="color:#1e1e2d;">
+        <h6 class="fw-bold mb-3" style="color:#1e1e2d;">
 
-            <i
-                class="bi bi-boxes me-2"
-                style="color:#4361ee;">
+            <i class="bi bi-boxes me-2" style="color:#4361ee;">
             </i>
 
             Stock & Other Information
@@ -450,18 +432,14 @@
 </div>
 
 
-<div
-    class="modal-footer"
+<div class="modal-footer"
     style="
         background:#fff;
         border-top:1px solid #eef0f2;
         padding:16px 24px;
     ">
 
-    <button
-        type="button"
-        class="btn"
-        data-bs-dismiss="modal"
+    <button type="button" class="btn" data-bs-dismiss="modal"
         style="
             border:1px solid #dfe2e8;
             color:#4a4a5a;
@@ -479,17 +457,15 @@
 
 
 <style>
+    .view-label {
+        color: #8a8a9a;
+        font-size: 12px;
+        margin-bottom: 4px;
+    }
 
-.view-label {
-    color:#8a8a9a;
-    font-size:12px;
-    margin-bottom:4px;
-}
-
-.view-value {
-    color:#1e1e2d;
-    font-size:14px;
-    font-weight:600;
-}
-
+    .view-value {
+        color: #1e1e2d;
+        font-size: 14px;
+        font-weight: 600;
+    }
 </style>

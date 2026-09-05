@@ -27,6 +27,8 @@ class Product extends Model
         'unit_of_measurement',
         'image',
         'min_alert_stock',
+        'hs_code',
+        'product_size',
         'status',
         'created_by',
         'updated_by',
