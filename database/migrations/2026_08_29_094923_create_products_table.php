@@ -27,6 +27,8 @@ return new class extends Migration
              $table->foreignId('warranty_period_id')->nullable()->constrained('warranty_periods')->nullOnDelete();
              $table->foreignId('vat_percentage_id')->nullable()->constrained('vat_percentages')->nullOnDelete();
              $table->string('position',100)->nullable();
+             $table->string('hs_code',50)->nullable();
+             $table->string('product_size',100)->nullable();
              $table->string('unit_of_measurement',100)->nullable();
              $table->string('image')->nullable();
              $table->integer('min_alert_stock')->nullable();

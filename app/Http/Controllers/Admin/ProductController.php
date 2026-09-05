@@ -361,8 +361,10 @@ class ProductController extends Controller implements HasMiddleware
     public function store(Request $request)
     {
         $request->validate([
-            'product_code' => 'required|string|max:25|unique:products,product_code',
+          
             'name' => 'required|string|max:100',
+            'hs_code' => 'required|string|max:100',
+            'product_size' => 'required|string|max:100',
 
             'wing_id' => 'required|exists:wings,id',
 
@@ -423,8 +425,10 @@ class ProductController extends Controller implements HasMiddleware
             }
 
             Product::create([
-                'product_code' => $request->product_code,
+                'product_code' => $this->generateProductCode(),
                 'name' => $request->name,
+                'hs_code' => $request->hs_code,
+                'product_size' => $request->product_size,
 
                 'categories_id' => $request->categories_id,
                 'sub_categories_id' => $request->sub_categories_id,
@@ -573,14 +577,10 @@ class ProductController extends Controller implements HasMiddleware
 
         $request->validate([
 
-            'product_code' => [
-                'required',
-                'string',
-                'max:25',
-                'unique:products,product_code,' . $id,
-            ],
 
             'name' => 'required|string|max:100',
+            'hs_code' => 'required|string|max:100',
+            'product_size' => 'required|string|max:100',
             'wing_id' => 'required|exists:wings,id',
 
             'categories_id' => 'nullable|exists:categories,id',
@@ -610,9 +610,11 @@ class ProductController extends Controller implements HasMiddleware
 
             $data = [
 
-                'product_code' => $request->product_code,
+
                 'name' => $request->name,
                 'wing_id' => $request->wing_id,
+                             'hs_code' => $request->hs_code,
+                'product_size' => $request->product_size,
 
                 'categories_id' => $request->categories_id,
                 'sub_categories_id' => $request->sub_categories_id,
@@ -685,7 +687,6 @@ class ProductController extends Controller implements HasMiddleware
             ]);
         } catch (\Exception $e) {
 
-            DB::rollBack();
 
             return response()->json([
                 'success' => false,
@@ -792,4 +793,16 @@ class ProductController extends Controller implements HasMiddleware
 
         return response()->json($productSizes);
     }
+    private function generateProductCode()
+{
+    $lastProduct = Product::whereNotNull('product_code')
+        ->orderByRaw('CAST(product_code AS UNSIGNED) DESC')
+        ->first();
+
+    if ($lastProduct && is_numeric($lastProduct->product_code)) {
+        return (int) $lastProduct->product_code + 1;
+    }
+
+    return 1001;
+}
 }
