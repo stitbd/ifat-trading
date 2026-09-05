@@ -1,131 +1,131 @@
-<!--begin::Header-->
-<div id="kt_app_header" class="app-header">
-    <!--begin::Header container-->
-    <div class="app-container container-fluid d-flex align-items-stretch justify-content-between"
-        id="kt_app_header_container">
-        <!--begin::Sidebar mobile toggle-->
-        <div class="d-flex align-items-center d-lg-none ms-n3 me-1 me-md-2" title="Show sidebar menu">
-            <div class="btn btn-icon btn-active-color-primary w-35px h-35px" id="kt_app_sidebar_mobile_toggle">
-                <i class="ki-duotone ki-abstract-14 fs-2 fs-md-1">
-                    <span class="path1"></span>
-                    <span class="path2"></span>
-                </i>
-            </div>
+<header class="topbar">
+    <div class="topbar-left">
+        <button class="icon-btn topbar-sidebar-toggle" id="topbarSidebarToggle" aria-label="Toggle sidebar">
+            <i class="bi bi-layout-sidebar-inset"></i>
+        </button>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="breadcrumb">
+            <span>Home</span>
+            <span class="separator">></span>
+            <span class="current">Dashboard</span>
         </div>
-        <!--end::Sidebar mobile toggle-->
-        <!--begin::Mobile logo-->
-        <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-            <a href="{{ route('dashboard') }}" class="d-lg-none" style="background: black; padding:5px">
-                <img alt="Logo" src="{{ asset('image/') }}" class="h-30px" />
-            </a>
-        </div>
-        <!--end::Mobile logo-->
-        <!--begin::Header wrapper-->
-        <div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1" id="kt_app_header_wrapper">
-            <!--begin::Menu wrapper-->
-            <div class="app-header-menu app-header-mobile-drawer align-items-stretch" data-kt-drawer="true"
-                data-kt-drawer-name="app-header-menu" data-kt-drawer-activate="{default: true, lg: false}"
-                data-kt-drawer-overlay="true" data-kt-drawer-width="250px" data-kt-drawer-direction="end"
-                data-kt-drawer-toggle="#kt_app_header_menu_toggle" data-kt-swapper="true"
-                data-kt-swapper-mode="{default: 'append', lg: 'prepend'}"
-                data-kt-swapper-parent="{default: '#kt_app_body', lg: '#kt_app_header_wrapper'}">
-                <!--begin::Menu-->
-                <div class="menu menu-rounded menu-column menu-lg-row my-5 my-lg-0 align-items-stretch fw-semibold px-2 px-lg-0"
-                    id="kt_app_header_menu" data-kt-menu="true">
-
-                </div>
-                <!--end::Menu-->
-            </div>
-            <!--end::Menu wrapper-->
-
-            <!--begin::Navbar-->
-            <div class="app-navbar flex-shrink-0">
-                <!--begin::Theme mode-->
-                <div class="app-navbar-item ms-1 ms-md-3">
-
-                    <!--begin::Menu toggle-->
-                    <a href="#"
-                        class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px"
-                        data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-attach="parent"
-                        data-kt-menu-placement="bottom-end">
-                        <i class="ki-duotone ki-night-day theme-light-show fs-2 fs-lg-1">
-                            <span class="path1"></span>
-                            <span class="path2"></span>
-                            <span class="path3"></span>
-                            <span class="path4"></span>
-                            <span class="path5"></span>
-                            <span class="path6"></span>
-                            <span class="path7"></span>
-                            <span class="path8"></span>
-                            <span class="path9"></span>
-                            <span class="path10"></span>
-                        </i>
-                        <i class="ki-duotone ki-moon theme-dark-show fs-2 fs-lg-1">
-                            <span class="path1"></span>
-                            <span class="path2"></span>
-                        </i>
-                    </a>
-                    <!--begin::Menu toggle-->
-                    <!--begin::Menu-->
-                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-title-gray-700 menu-icon-gray-500 menu-active-bg menu-state-color fw-semibold py-4 fs-base w-150px"
-                        data-kt-menu="true" data-kt-element="theme-mode-menu">
-                        <!--begin::Menu item-->
-                        <div class="menu-item px-3 my-0">
-                            <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="light">
-                                <span class="menu-icon" data-kt-element="icon">
-                                    <i class="ki-duotone ki-night-day fs-2">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                        <span class="path3"></span>
-                                        <span class="path4"></span>
-                                        <span class="path5"></span>
-                                        <span class="path6"></span>
-                                        <span class="path7"></span>
-                                        <span class="path8"></span>
-                                        <span class="path9"></span>
-                                        <span class="path10"></span>
-                                    </i>
-                                </span>
-                                <span class="menu-title">Light</span>
-                            </a>
-                        </div>
-                        <!--end::Menu item-->
-                        <!--begin::Menu item-->
-                        <div class="menu-item px-3 my-0">
-                            <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="dark">
-                                <span class="menu-icon" data-kt-element="icon">
-                                    <i class="ki-duotone ki-moon fs-2">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>
-                                </span>
-                                <span class="menu-title">Dark</span>
-                            </a>
-                        </div>
-                        <!--end::Menu item-->
-
-                    </div>
-                    <!--end::Menu-->
-                </div>
-                <!--end::Theme mode-->
-                <div class="d-flex align-items-center">
-
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
-
-                    <a href="javascript:void(0);" class="btn btn-danger" style="height: 42px"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        Sign Out
-                    </a>
-                </div>
-
-            </div>
-            <!--end::Navbar-->
-
-        </div>
-        <!--end::Header wrapper-->
     </div>
-    <!--end::Header container-->
-</div>
-<!--end::Header-->
+
+    <div class="topbar-brand-mobile">
+        <img src="images/logo.png" alt="ST TYRE" onerror="this.style.display='none'">
+    </div>
+
+    <div class="topbar-center">
+        <div class="dropdown">
+            <div class="date-range dropdown-toggle" id="dateRangeBtn" data-bs-toggle="dropdown"
+                data-bs-auto-close="outside" data-bs-popper-config='{"strategy":"fixed"}' aria-expanded="false">
+                <i class="bi bi-calendar"></i>
+                <span id="dateRangeText">Today</span>
+                <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="dropdown-menu date-range-menu" aria-labelledby="dateRangeBtn">
+                <ul class="date-preset-list">
+                    <li><a href="#" class="date-preset-option active" data-preset="Today">Today</a>
+                    </li>
+                    <li><a href="#" class="date-preset-option" data-preset="Yesterday">Yesterday</a>
+                    </li>
+                    <li><a href="#" class="date-preset-option" data-preset="This Week">This Week</a>
+                    </li>
+                    <li><a href="#" class="date-preset-option" data-preset="This Month">This Month</a>
+                    </li>
+                    <li><a href="#" class="date-preset-option" data-preset="This Quarter">This
+                            Quarter</a></li>
+                    <li><a href="#" class="date-preset-option" data-preset="This Year">This Year</a>
+                    </li>
+                </ul>
+                <div class="date-preset-divider"></div>
+                <a href="#" class="date-preset-option" id="customRangeToggle">Custom Range</a>
+                <div class="custom-range-inputs p-3" id="customRangeInputs">
+                    <div class="mb-2">
+                        <label class="form-label small mb-1">From</label>
+                        <input type="date" class="form-control form-control-sm" id="dateFrom" value="2026-05-01">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small mb-1">To</label>
+                        <input type="date" class="form-control form-control-sm" id="dateTo" value="2026-05-31">
+                    </div>
+                    <button type="button" class="btn btn-primary btn-sm w-100" id="applyDateRange">Apply</button>
+                </div>
+            </div>
+        </div>
+        <div class="dropdown">
+            <div class="product-select dropdown-toggle" id="productBtn" data-bs-toggle="dropdown"
+                data-bs-popper-config='{"strategy":"fixed"}' aria-expanded="false">
+                <i class="bi bi-box-seam"></i>
+                <span id="productText">All Products</span>
+                <i class="bi bi-chevron-down"></i>
+            </div>
+            <ul class="dropdown-menu" aria-labelledby="productBtn">
+                <li><a class="dropdown-item product-option" href="#" data-product="All Products">All
+                        Products</a>
+                </li>
+                <li><a class="dropdown-item product-option" href="#" data-product="Tyre">Tyre</a></li>
+                <li><a class="dropdown-item product-option" href="#" data-product="Bearing">Bearing</a>
+                </li>
+                <li><a class="dropdown-item product-option" href="#" data-product="Lubrication">Lubricationh</a>
+                </li>
+            </ul>
+        </div>
+        <div class="dropdown">
+            <div class="branch-select dropdown-toggle" id="branchBtn" data-bs-toggle="dropdown"
+                data-bs-popper-config='{"strategy":"fixed"}' aria-expanded="false">
+                <i class="bi bi-building"></i>
+                <span id="branchText">All Branch</span>
+                <i class="bi bi-chevron-down"></i>
+            </div>
+            <ul class="dropdown-menu" aria-labelledby="branchBtn">
+                <li><a class="dropdown-item branch-option" href="#" data-branch="All Branch">All
+                        Branch</a></li>
+                <li><a class="dropdown-item branch-option" href="#" data-branch="Head Office">Head
+                        Office</a>
+                </li>
+                <li><a class="dropdown-item branch-option" href="#" data-branch="Chattogram Branch">Chattogram
+                        Branch</a></li>
+                <li><a class="dropdown-item branch-option" href="#" data-branch="Sylhet Branch">Sylhet
+                        Branch</a></li>
+            </ul>
+        </div>
+    </div>
+    @php
+        $user = auth()->user();
+    @endphp
+
+    <div class="topbar-right">
+        <button class="icon-btn" id="topbarSearchBtn" aria-label="Search">
+            <i class="bi bi-search"></i>
+        </button>
+        <button class="icon-btn" id="fullscreenBtn" aria-label="Toggle Fullscreen">
+            <i class="bi bi-arrows-fullscreen"></i>
+        </button>
+        <button class="icon-btn" aria-label="Notifications">
+            <i class="bi bi-bell"></i>
+            <span class="notification-badge">12</span>
+        </button>
+        <div class="user-profile dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="{{ $user->profile_picture ? asset('image/' . $user->profile_picture) : asset('user.avif') }}"
+                alt="User">
+            <div class="user-info">
+                <div class="user-name">{{ $user->name }}</div>
+                {{-- <div class="user-role">{{ $user->role }}</div> --}}
+            </div>
+            <i class="bi bi-chevron-down"></i>
+        </div>
+        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
+            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item text-danger logout-btn" href="javascript:void(0);"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
+                        class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+        </ul>
+    </div>
+</header>

@@ -1,25 +1,59 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
+<!--
+Author: Keenthemes
+Product Name: Metronic
+Product Version: 8.1.8
+Purchase: https://1.envato.market/EA4JP
+Website: http://www.keenthemes.com
+Contact: support@keenthemes.com
+Follow: www.twitter.com/keenthemes
+Dribbble: www.dribbble.com/keenthemes
+Like: www.facebook.com/keenthemes
+License: For each use you must have a valid license purchased only from above link in order to legally use the theme for your project.
+-->
+<html lang="en">
+<!--begin::Head-->
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@yield('title') || </title>
+    <base href="" />
+    <title> @yield('title') || </title>
+    <meta charset="utf-8" />
+    <meta name="description"
+        content="The most advanced Bootstrap 5 Admin Theme with 40 unique prebuilt layouts on Themeforest trusted by 100,000 beginners and professionals. Multi-demo, Dark Mode, RTL support and complete React, Angular, Vue, Asp.Net Core, Rails, Spring, Blazor, Django, Express.js, Node.js, Flask, Symfony & Laravel versions. Grab your copy now and get life-time updates for free." />
+    <meta name="keywords"
+        content="metronic, bootstrap, bootstrap 5, angular, VueJs, React, Asp.Net Core, Rails, Spring, Blazor, Django, Express.js, Node.js, Flask, Symfony & Laravel starter kits, admin themes, web design, figma, web development, free templates, free admin themes, bootstrap theme, bootstrap template, bootstrap dashboard, bootstrap dak mode, bootstrap button, bootstrap datepicker, bootstrap timepicker, fullcalendar,  flaticon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title"
+        content="Metronic - Bootstrap Admin Template, HTML, VueJS, React, Angular. Laravel, Asp.Net Core, Ruby on Rails, Spring Boot, Blazor, Django, Express.js, Node.js, Flask Admin Dashboard Theme & Template" />
+    <meta property="og:url" content="https://keenthemes.com/metronic" />
+    <meta property="og:site_name" content="Keenthemes | Metronic" />
+    <link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
+    <link rel="stylesheet" href="{{ asset('font/kalpurush ANSI.ttf') }}">
     @php
         $company = \App\Models\Application::first();
         $companyLogo = $company ? $company->fav_icon : '';
     @endphp
-    <link rel="icon" href="{{ asset('image/application/' . $companyLogo) }}"type="image/png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="{{ asset('new-assets/css/style.css') }}" />
+    <link rel="shortcut icon" href="{{ asset('image/' . $companyLogo) }}" />
+    <!--begin::Fonts(mandatory for all pages)-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+    <!--end::Fonts-->
+    <!--begin::Vendor Stylesheets(used for this page only)-->
+    <link href="{{ asset('assets/plugins/custom/fullcalendar/fullcalendar.bundle.css') }}" rel="stylesheet"
+        type="text/css" />
 
 
-    {{-- new link  --}}
+    {{-- <link href="{{asset('assets/plugins/custom/datatables/datatables.bundle.css')}}" rel="stylesheet" type="text/css" /> --}}
+    <!--end::Vendor Stylesheets-->
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
+    <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
+    <!--end::Global Stylesheets Bundle-->
+
+
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
@@ -37,8 +71,6 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* DataTables length & search controls */
         .dataTables_wrapper .dataTables_length,
@@ -505,100 +537,32 @@
         }
     </style>
 </head>
+<!--end::Head-->
+<!--begin::Body-->
 
-<body>
-
-    @include('backend.partials._sidebar')
-    <div class="mobile-overlay" id="mobileOverlay"></div>
-
-    <div class="main-wrapper">
-        @include('backend.partials._header')
-
-        <main class="main-content">
-            <div class="">
-                <div id="loading">
-                    <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-                <div id="backdrop"></div>
-                @yield('content')
-            </div>
-            <footer class="footer">
-                <div class="footer-left">© 2026 ST TYRE ERP. All rights reserved.</div>
-                <div class="footer-center">Version 1.0.0</div>
-                <div class="footer-right">Developed by <a target="blank" href="www.stitbd.com">STIT BD</a></div>
-            </footer>
-        </main>
-    </div>
-
-    <!-- Mobile Bottom Navigation -->
-    <nav class="bottom-nav d-lg-none" id="bottomNav">
-        <a href="#" class="bottom-nav-item active">
-            <i class="bi bi-house-door-fill"></i>
-            <span>Home</span>
-        </a>
-        <a href="purchase-add.html" class="bottom-nav-item">
-            <i class="bi bi-cart3"></i>
-            <span>Purchase</span>
-        </a>
-        <a href="invoice-add.html" class="bottom-nav-fab" aria-label="New Sales Invoice">
-            <i class="bi bi-plus-lg"></i>
-        </a>
-        <a href="stock-management.html" class="bottom-nav-item">
-            <i class="bi bi-box-seam"></i>
-            <span>Inventory</span>
-        </a>
-        <div class="dropup">
-            <a href="#" class="bottom-nav-item dropdown-toggle no-caret" id="bottomNavProfileBtn"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                <img class="bottom-nav-avatar" src="images/profile.jpg" alt="Profile"
-                    onerror="this.src='https://ui-avatars.com/api/?name=MD+Shaokat&background=2563eb&color=fff'">
-                <span>Profile</span>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="bottomNavProfileBtn">
-                <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
-                <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item text-danger logout-btn" href="#"><i
-                            class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <!-- Logout Confirmation Modal -->
-    <!-- Logout Confirmation Modal -->
-    <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content logout-modal-content">
-                <div class="modal-body text-center pt-4">
-                    <div class="logout-modal-icon">
-                        <i class="bi bi-box-arrow-right"></i>
-                    </div>
-                    <h5 class="mt-3 mb-2">Log out of your account?</h5>
-                    <p class="text-muted mb-0">You'll need to sign in again to access the dashboard.</p>
-                </div>
-                <div class="modal-footer border-0 justify-content-center pb-4">
-                    <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger px-4" id="confirmLogoutBtn">
-                        <i class="bi bi-box-arrow-right me-1"></i> Logout
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Hidden logout form -->
-    <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
-        @csrf
-    </form>
-
+<body id="kt_app_body" data-kt-app-layout="dark-sidebar" data-kt-app-header-fixed="true"
+    data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" data-kt-app-sidebar-hoverable="true"
+    data-kt-app-sidebar-push-header="true" data-kt-app-sidebar-push-toolbar="true"
+    data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true" class="app-default">
+    <!--begin::Theme mode setup on page load-->
     <script>
-        $(document).on('click', '#confirmLogoutBtn', function() {
-            document.getElementById('logoutForm').submit();
-        });
+        var defaultThemeMode = "light";
+        var themeMode;
+        if (document.documentElement) {
+            if (document.documentElement.hasAttribute("data-bs-theme-mode")) {
+                themeMode = document.documentElement.getAttribute("data-bs-theme-mode");
+            } else {
+                if (localStorage.getItem("data-bs-theme") !== null) {
+                    themeMode = localStorage.getItem("data-bs-theme");
+                } else {
+                    themeMode = defaultThemeMode;
+                }
+            }
+            if (themeMode === "system") {
+                themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+            }
+            document.documentElement.setAttribute("data-bs-theme", themeMode);
+        }
     </script>
 
     <script>
@@ -664,6 +628,48 @@
             }
         });
     </script>
+    <!--end::Theme mode setup on page load-->
+    <!--begin::App-->
+    <div class="d-flex flex-column flex-root app-root" id="kt_app_root">
+        <!--begin::Page-->
+        <div class="app-page flex-column flex-column-fluid" id="kt_app_page">
+            @include('backend.partials._header')
+            <!--begin::Wrapper-->
+            <div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
+                @include('backend.partials._sidebar')
+                <!--begin::Main-->
+                <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+                    <!--begin::Content wrapper-->
+                    <div class="d-flex flex-column flex-column-fluid">
+
+                        <!--begin::Content-->
+                        <div class="">
+                            <div id="loading">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                            <div id="backdrop"></div>
+                            @yield('content')
+                        </div>
+                        <!--end::Content-->
+                    </div>
+                    <!--end::Content wrapper-->
+
+                </div>
+                <!--end:::Main-->
+            </div>
+            <!--end::Wrapper-->
+        </div>
+        <!--end::Page-->
+    </div>
+    <!--end::App-->
+
+
+    <!--begin::Javascript-->
+    <script>
+        var hostUrl = "assets/";
+    </script>
     @if (session('permission_error'))
         <script>
             $(document).ready(function() {
@@ -721,7 +727,17 @@
             e.stopPropagation();
         });
     </script>
-    @include('sweetalert::alert')
+
+
+    <!--begin::Global Javascript Bundle(mandatory for all pages)-->
+    <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
+    <!--end::Global Javascript Bundle-->
+    <!--begin::Vendors Javascript(used for this page only)-->
+
+
+
+    <script src="{{ asset('assets/plugins/custom/fullcalendar/fullcalendar.bundle.js') }}"></script>
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
@@ -733,6 +749,7 @@
     <script src="https://cdn.amcharts.com/lib/5/geodata/usaLow.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZonesLow.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZoneAreasLow.js"></script>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
@@ -743,6 +760,16 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <!--begin::Custom Javascript(used for this page only)-->
+    <script src="{{ asset('assets/js/widgets.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/custom/widgets.js') }}"></script>
+    <script src="{{ asset('assets/js/custom/apps/chat/chat.js') }}"></script>
+    <script src="{{ asset('assets/js/custom/utilities/modals/upgrade-plan.js') }}"></script>
+    <script src="{{ asset('assets/js/custom/utilities/modals/create-app.js') }}"></script>
+    <script src="{{ asset('assets/js/custom/utilities/modals/new-target.js') }}"></script>
+    <script src="{{ asset('assets/js/custom/utilities/modals/users-search.js') }}"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 
@@ -754,10 +781,10 @@
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <script src="{{ asset('new-assets/js/script.js') }}"></script>
+    @include('sweetalert::alert')
+    <!--end::Custom Javascript-->
+    <!--end::Javascript-->
 </body>
+<!--end::Body-->
 
 </html>
