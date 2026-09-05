@@ -21,8 +21,14 @@ return new class extends Migration
                 ->constrained('products')
                 ->onDelete('cascade');
 
-            $table->decimal('quantity', 20, 2);
-
+            $table->decimal('physical_stock', 20, 2);
+            $table->decimal('in_transit_stock', 20, 2);
+            $table->decimal('lc_pending_stock', 20, 2);
+            $table->decimal('pi_stock', 20, 2);
+            $table->decimal('sale_one_stock', 20, 2);
+            $table->decimal('sale_two_stock', 20, 2);
+            $table->decimal('sale_three_stock', 20, 2);
+            $table->decimal('required_stock', 20, 2);
             $table->text('note')->nullable();
 
             $table->timestamps();

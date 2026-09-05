@@ -107,7 +107,7 @@
                 style="border:1px solid #dfe2e8; color:#4a4a5a; border-radius:8px; padding:8px 18px; font-size:14px;">
                 <i class="bi bi-x-lg me-1"></i> Cancel
             </button>
-            <button type="submit" form="userEditModalForm" class="btn submit-btn"
+            <button type="btn" form="userEditModalForm" class="btn submit-btn"
                 style="background-color:#4361ee; color:#fff; border-radius:8px; padding:8px 20px; font-size:14px; font-weight:600;">
                 <i class="bi bi-check-lg me-1"></i> Update
             </button>
@@ -115,7 +115,6 @@
     </div>
 
 </div>
-
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
@@ -132,7 +131,6 @@
 
             showLoading();
             e.preventDefault();
-
             let formData = new FormData(this);
             let userId = $("#user_id").val();
 

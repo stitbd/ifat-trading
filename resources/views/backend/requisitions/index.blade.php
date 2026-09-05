@@ -63,7 +63,7 @@
                 <div class="row p-3" style="border-bottom:1px solid #eef0f2;">
 
                     {{-- Wing --}}
-                    <div class="col-md-2 mb-2">
+                    <div class="col-md-4 mb-2">
                         <select id="filter_wing" class="form-select">
                             <option value="">All Wings</option>
                             @foreach ($wings as $wing)
@@ -73,7 +73,7 @@
                     </div>
 
                     {{-- Warehouse --}}
-                    <div class="col-md-2 mb-2">
+                    <div class="col-md-4 mb-2">
                         <select id="filter_warehouse" class="form-select">
                             <option value="">All Warehouses</option>
                             @foreach ($warehouses as $warehouse)
@@ -83,7 +83,7 @@
                     </div>
 
                     {{-- Requisition Type --}}
-                    <div class="col-md-2 mb-2">
+                    <div class="col-md-4 mb-2">
                         <select id="filter_requisition_type" class="form-select">
                             <option value="">All Types</option>
                             <option value="local">Local</option>
@@ -102,7 +102,7 @@
                     </div>
 
                     {{-- Filter Button --}}
-                    <div class="col-md-1 mb-2">
+                    <div class="col-md-3 mb-2">
                         <button id="filter_apply" class="btn-admin-primary w-100">
                             <i class="bi bi-funnel"></i> Filter
                         </button>
@@ -118,40 +118,40 @@
                 </div>
 
                 {{-- DataTable --}}
+                <div class="table-responsive">
+                    <table id="requisitionTable" class="display admin-table" style="width:100%;">
 
-                <table id="requisitionTable" class="display admin-table" style="width:100%;">
+                        <thead>
 
-                    <thead>
+                            <tr>
 
-                        <tr>
+                                <th>#</th>
 
-                            <th>#</th>
+                                <th>Requisition No</th>
 
-                            <th>Requisition No</th>
+                                <th>Wing</th>
 
-                            <th>Wing</th>
+                                <th>Warehouse</th>
 
-                            <th>Warehouse</th>
-
-                            <th>Type</th>
+                                <th>Type</th>
 
 
-                            <th>Total Quantity</th>
+                                <th>Total Quantity</th>
 
-                            <th>Date</th>
+                                <th>Date</th>
 
-                            <th>Place of Supply</th>
+                                <th>Place of Supply</th>
 
-                            <th>Status</th>
+                                <th>Status</th>
 
-                            <th>Action</th>
+                                <th>Action</th>
 
-                        </tr>
+                            </tr>
 
-                    </thead>
+                        </thead>
 
-                </table>
-
+                    </table>
+                </div>
             </div>
 
         </div>
@@ -183,10 +183,10 @@
 
     <style>
         /*
-                                        |--------------------------------------------------------------------------
-                                        | Products column
-                                        |--------------------------------------------------------------------------
-                                        */
+                                                            |--------------------------------------------------------------------------
+                                                            | Products column
+                                                            |--------------------------------------------------------------------------
+                                                            */
 
         .requisition-products {
 
@@ -231,10 +231,10 @@
 
 
         /*
-                                        |--------------------------------------------------------------------------
-                                        | Serial badge
-                                        |--------------------------------------------------------------------------
-                                        */
+                                                            |--------------------------------------------------------------------------
+                                                            | Serial badge
+                                                            |--------------------------------------------------------------------------
+                                                            */
 
         .serial-badge {
 

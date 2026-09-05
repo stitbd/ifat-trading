@@ -1,17 +1,82 @@
 {{--
-    Requisition Details - Modal (matches Print page design)
+    Requisition Details - Modal (Category-wise grouped, matches actual schema)
     -------------------------------------------------------------
+    requisition_details columns:
+        physical_stock, in_transit_stock, lc_pending_stock,
+        pi_stock, sale_one_stock, sale_two_stock, sale_three_stock,
+        required_stock, note
+
     Expects `$data` = single Requisition model, eager-loaded with
-    `wing`, `warehouse`, `details.product.brand`, `details.product.productType`,
+    `wing`, `warehouse`, `details.product.category`,
+    `details.product.brand`, `details.product.productType`,
     `details.product.productSize`, `createdBy`.
 --}}
 @php
+    use Carbon\Carbon;
+
     $company = \App\Models\Application::first();
     $companyLogo = $company ? $company->logo : '';
     $companyName = $company ? $company->company_name : '';
     $companyAddress = $company ? $company->address : '';
     $companyPhone = $company ? $company->phone : '';
     $companyEmail = $company ? $company->company_email : '';
+
+    // Group details by category name
+    $groupedDetails = $data->details->groupBy(function ($detail) {
+        return $detail->product?->category?->name ?? 'Uncategorized';
+    });
+
+    $grandTotal = [
+        'physical_stock' => $data->details->sum('physical_stock'),
+        'in_transit_stock' => $data->details->sum('in_transit_stock'),
+        'lc_pending_stock' => $data->details->sum('lc_pending_stock'),
+        'pi_stock' => $data->details->sum('pi_stock'),
+        'sale_one_stock' => $data->details->sum('sale_one_stock'),
+        'sale_two_stock' => $data->details->sum('sale_two_stock'),
+        'sale_three_stock' => $data->details->sum('sale_three_stock'),
+        'required_stock' => $data->details->sum('required_stock'),
+    ];
+
+    /*
+                |--------------------------------------------------------------------------
+                | Dynamic date-based column labels — calculated from the Requisition Date
+                | itself, the same rules used on the Create Requisition form:
+                |   - AS ON        = the exact requisition date
+                |   - PI            = same month/year as the requisition date
+                |   - Sale 1 / 2 / 3 = the 3 months before the PI month (oldest -> newest)
+                |   - Requirement    = FOR {month}'{year} of the requisition date
+    |--------------------------------------------------------------------------
+    */
+$reqDate = $data->date ? Carbon::parse($data->date) : Carbon::now();
+
+$asOnLabel = 'AS ON ' . $reqDate->day . '.' . $reqDate->month . '.' . $reqDate->year;
+$piLabel = $reqDate->format('F') . "'" . $reqDate->year;
+$requirementLabel = 'FOR ' . strtoupper($reqDate->format('F')) . "'" . $reqDate->year;
+
+$formatSaleRange = function (Carbon $monthDate) {
+    $start = $monthDate->copy()->startOfMonth();
+    $end = $monthDate->copy()->endOfMonth();
+
+    return $start->format('jS') .
+        ' ' .
+        $start->format('M') .
+        "'" .
+        $start->format('y') .
+        ' to ' .
+        $end->format('jS') .
+        ' ' .
+        $end->format('M') .
+        "'" .
+        $end->format('y');
+    };
+
+    $sale3Month = $reqDate->copy()->subMonthsNoOverflow(1);
+    $sale2Month = $reqDate->copy()->subMonthsNoOverflow(2);
+    $sale1Month = $reqDate->copy()->subMonthsNoOverflow(3);
+
+    $saleOneLabel = $formatSaleRange($sale1Month);
+    $saleTwoLabel = $formatSaleRange($sale2Month);
+    $saleThreeLabel = $formatSaleRange($sale3Month);
 @endphp
 
 <div class="modal-header align-items-start" style="background:#fff; border-bottom:2px solid #14532d; padding:22px 24px;">
@@ -82,6 +147,11 @@
             </div>
 
             <div class="col-md-6 mb-3">
+                <div class="view-label">Contact Person & Number</div>
+                <div class="view-value">{{ $data->contact_person_info ?? '-' }}</div>
+            </div>
+
+            <div class="col-md-6 mb-3">
                 <div class="view-label">Place of Supply / Delivery Location</div>
                 <div class="view-value">{{ $data->place_of_supply ?? '-' }}</div>
             </div>
@@ -91,57 +161,115 @@
     </div>
 
 
-    {{-- ================= ITEMS TABLE (matches Print page columns) ================= --}}
+    {{-- ================= ITEMS TABLE (Category-wise grouped, actual schema) ================= --}}
     <div class="p-4 mb-3" style="background:#fff; border:1px solid #eef0f2; border-radius:10px;">
 
         <h6 class="fw-bold mb-3" style="color:#1e1e2d;">
             <i class="bi bi-box-seam me-2" style="color:#14532d;"></i>
-            Product Requisition Details
+            REQUIREMENT - {{ $requirementLabel }}
         </h6>
 
         <div class="table-responsive">
             <table class="table table-bordered align-middle mb-0" style="border-color:#333;">
                 <thead style="background:#f3f3f3;">
-                    <tr>
-                        <th class="text-center" style="width:50px;">SL. No</th>
-                        <th style="width:120px;">Category</th>
-                        <th>Product</th>
-                        <th>Note</th>
-                        <th class="text-center" style="width:110px;">Quantity</th>
+                    <tr class="text-center">
+                        <th style="width:50px;">SL</th>
+                        <th>Size</th>
+                        <th style="width:110px;">Physical Stock<br><small
+                                class="text-muted fw-normal">{{ $asOnLabel }}</small></th>
+                        <th style="width:110px;">In Transit<br><small
+                                class="text-muted fw-normal">{{ $asOnLabel }}</small></th>
+                        <th style="width:110px;">LC Pending<br><small
+                                class="text-muted fw-normal">{{ $asOnLabel }}</small></th>
+                        <th style="width:100px;">PI<br><small class="text-muted fw-normal">{{ $piLabel }}</small>
+                        </th>
+                        <th style="width:140px;">Sale 1<br><small
+                                class="text-muted fw-normal">{{ $saleOneLabel }}</small></th>
+                        <th style="width:140px;">Sale 2<br><small
+                                class="text-muted fw-normal">{{ $saleTwoLabel }}</small></th>
+                        <th style="width:140px;">Sale 3<br><small
+                                class="text-muted fw-normal">{{ $saleThreeLabel }}</small></th>
+                        <th style="width:110px;">Requirement<br><small
+                                class="text-muted fw-normal">{{ $requirementLabel }}</small></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($data->details as $index => $detail)
-                        <tr>
-                            <td class="text-center">
-                                <span class="serial-badge">{{ $index + 1 }}</span>
-                            </td>
-                            <td>{{ $detail->product?->category?->name ?? '-' }}</td>
-                            <td>
-                                <strong>Name: </strong> {{ $detail->product?->name ?? 'Unknown Product' }}<br>
-                                <strong>Brand: </strong> {{ $detail->product?->brand?->name ?? '-' }}<br>
-                                <strong>Type: </strong> {{ $detail->product?->productType?->name ?? '-' }}<br>
-                                <strong>Size: </strong> {{ $detail->product?->productSize?->name ?? '-' }}
-                            </td>
-                            <td>{{ $detail->note ?? '-' }}</td>
-                            <td class="text-center">
-                                <span class="quantity-badge">{{ number_format($detail->quantity, 0) }} Pcs</span>
+                    @forelse($groupedDetails as $categoryName => $categoryDetails)
+
+                        {{-- Category Header Row --}}
+                        <tr style="background:#eef2ff;">
+                            <td colspan="10" style="font-weight:700; color:#14532d;">
+                                {{ $categoryName }}
                             </td>
                         </tr>
+
+                        @php
+                            $subTotal = [
+                                'physical_stock' => $categoryDetails->sum('physical_stock'),
+                                'in_transit_stock' => $categoryDetails->sum('in_transit_stock'),
+                                'lc_pending_stock' => $categoryDetails->sum('lc_pending_stock'),
+                                'pi_stock' => $categoryDetails->sum('pi_stock'),
+                                'sale_one_stock' => $categoryDetails->sum('sale_one_stock'),
+                                'sale_two_stock' => $categoryDetails->sum('sale_two_stock'),
+                                'sale_three_stock' => $categoryDetails->sum('sale_three_stock'),
+                                'required_stock' => $categoryDetails->sum('required_stock'),
+                            ];
+                        @endphp
+
+                        @foreach ($categoryDetails as $index => $detail)
+                            <tr>
+                                <td class="text-center">
+                                    <span class="serial-badge">{{ $index + 1 }}</span>
+                                </td>
+                                <td>{{ $detail->product?->productSize?->name ?? '-' }}</td>
+                                <td class="text-center">{{ number_format($detail->physical_stock, 0) }}</td>
+                                <td class="text-center">{{ number_format($detail->in_transit_stock, 0) }}</td>
+                                <td class="text-center">{{ number_format($detail->lc_pending_stock, 0) }}</td>
+                                <td class="text-center">{{ number_format($detail->pi_stock, 0) }}</td>
+                                <td class="text-center">{{ number_format($detail->sale_one_stock, 0) }}</td>
+                                <td class="text-center">{{ number_format($detail->sale_two_stock, 0) }}</td>
+                                <td class="text-center">{{ number_format($detail->sale_three_stock, 0) }}</td>
+                                <td class="text-center">
+                                    <span class="quantity-badge">{{ number_format($detail->required_stock, 0) }}</span>
+                                </td>
+                            </tr>
+                        @endforeach
+
+                        {{-- Sub Total Row --}}
+                        <tr style="background:#f8f9fa; font-weight:600;">
+                            <td colspan="2" class="text-end">Sub Total</td>
+                            <td class="text-center">{{ number_format($subTotal['physical_stock'], 0) }}</td>
+                            <td class="text-center">{{ number_format($subTotal['in_transit_stock'], 0) }}</td>
+                            <td class="text-center">{{ number_format($subTotal['lc_pending_stock'], 0) }}</td>
+                            <td class="text-center">{{ number_format($subTotal['pi_stock'], 0) }}</td>
+                            <td class="text-center">{{ number_format($subTotal['sale_one_stock'], 0) }}</td>
+                            <td class="text-center">{{ number_format($subTotal['sale_two_stock'], 0) }}</td>
+                            <td class="text-center">{{ number_format($subTotal['sale_three_stock'], 0) }}</td>
+                            <td class="text-center">{{ number_format($subTotal['required_stock'], 0) }}</td>
+                        </tr>
+
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center text-muted py-4">
+                            <td colspan="10" class="text-center text-muted py-4">
                                 <i class="bi bi-box-seam" style="font-size:25px;"></i>
                                 <div class="mt-2">No products found.</div>
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
+
                 @if ($data->details->count())
                     <tfoot>
-                        <tr>
-                            <th colspan="4" class="text-end">Total Quantity</th>
-                            <th class="text-center">{{ number_format($data->details->sum('quantity'), 0) }} Pcs</th>
+                        <tr style="background:#14532d; color:#fff; font-weight:700;">
+                            <td colspan="2" class="text-end">Grand Total</td>
+                            <td class="text-center">{{ number_format($grandTotal['physical_stock'], 0) }}</td>
+                            <td class="text-center">{{ number_format($grandTotal['in_transit_stock'], 0) }}</td>
+                            <td class="text-center">{{ number_format($grandTotal['lc_pending_stock'], 0) }}</td>
+                            <td class="text-center">{{ number_format($grandTotal['pi_stock'], 0) }}</td>
+                            <td class="text-center">{{ number_format($grandTotal['sale_one_stock'], 0) }}</td>
+                            <td class="text-center">{{ number_format($grandTotal['sale_two_stock'], 0) }}</td>
+                            <td class="text-center">{{ number_format($grandTotal['sale_three_stock'], 0) }}</td>
+                            <td class="text-center">{{ number_format($grandTotal['required_stock'], 0) }}</td>
                         </tr>
                     </tfoot>
                 @endif
@@ -193,6 +321,12 @@
         line-height: 1.6;
     }
 
+    .product-code-sub {
+        display: block;
+        font-size: 12px;
+        color: #6c757d;
+    }
+
     .serial-badge {
         display: inline-flex;
         align-items: center;
@@ -210,7 +344,7 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: 55px;
+        min-width: 45px;
         padding: 6px 12px;
         background: #eef2ff;
         color: #14532d;
