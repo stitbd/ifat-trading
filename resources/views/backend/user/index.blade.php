@@ -24,9 +24,9 @@
                 <span class="icon-box"><i class="bi bi-people"></i></span>
                 <h1>User</h1>
             </div>
-            <button data-bs-toggle="modal" data-bs-target="#userCreateModal" class="btn-admin-primary">
+            <a href="{{ route('user.create') }}" class="btn-admin-primary">
                 <i class="bi bi-plus-lg"></i> Add User
-            </button>
+            </a>
         </div>
     </div>
 </div>
@@ -45,6 +45,7 @@
                         <th>#</th>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>User Type</th>
                         <th>Image</th>
                         <th>Role</th>
                         <th>Action</th>
@@ -54,14 +55,6 @@
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="userEditModal" tabindex="-1" aria-labelledby="userEditModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content admin-modal-content" id="modalShow"></div>
-    </div>
-</div>
-
-@include('backend.user.create')
 
 <style>
     table.dataTable td img {
@@ -86,7 +79,7 @@
                     text: '<i class="bi bi-file-earmark-excel-fill"></i> Excel',
                     title: 'User List',
                     exportOptions: {
-                        columns: [0, 1, 2, 4] // exclude Image & Action column
+                        columns: [0, 1, 2, 3, 5] // exclude Image & Action column
                     }
                 },
                 {
@@ -96,10 +89,10 @@
                     orientation: 'landscape', // Email কলাম লম্বা হতে পারে
                     pageSize: 'A4',
                     exportOptions: {
-                        columns: [0, 1, 2, 4] // exclude Image & Action column
+                        columns: [0, 1, 2, 3, 5] // exclude Image & Action column
                     },
                     customize: function(doc) {
-                        doc.content[1].table.widths = ['8%', '27%', '40%', '25%'];
+                        doc.content[1].table.widths = ['7%', '22%', '32%', '14%', '25%'];
 
                         doc.styles.tableHeader = {
                             bold: true,
@@ -116,7 +109,7 @@
                     text: '<i class="bi bi-printer-fill"></i> Print',
                     title: 'User List',
                     exportOptions: {
-                        columns: [0, 1, 2, 4] // exclude Image & Action column
+                        columns: [0, 1, 2, 3, 5] // exclude Image & Action column
                     }
                 }
             ],
@@ -138,6 +131,10 @@
                 {
                     data: 'email',
                     name: 'email'
+                },
+                {
+                    data: 'user_type',
+                    name: 'user_type'
                 },
                 {
                     data: 'image',
@@ -170,17 +167,8 @@
         table.buttons().container().appendTo('#userTableButtons');
     });
 
-    $(document).on('click', '.edit', function() {
-        var dataId = $(this).data('id');
-        $.ajax({
-            url: '/user/edit/' + dataId,
-            type: 'GET',
-            success: function(response) {
-                $('#modalShow').html(response);
-                $('#userEditModal').modal('show');
-            }
-        });
-    });
+    // Edit is now a full page (see UserController@edit), so no modal/ajax handler
+    // is needed here anymore — the action column already renders a plain <a> link.
 
     $(document).on('click', '.delete', function(event) {
         event.preventDefault();

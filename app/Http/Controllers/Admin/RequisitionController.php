@@ -33,6 +33,103 @@ class RequisitionController extends Controller implements HasMiddleware
         ];
     }
 
+    // Step 1: GU forward korbe SCI ka
+    public function forward(Requisition $requisition)
+    {
+        $requisition->update([
+            'forwarded_by'    => Auth::id(),
+            'forwarded_at'    => now(),
+            'workflow_status' => 'forwarded_to_sci',
+        ]);
+        return back()->with('success', 'Requisition forwarded to Supply Chain Incharge');
+    }
+
+    // Step 2: SCI approve
+    public function sciApprove(Request $request, Requisition $requisition)
+    {
+        $requisition->update([
+            'sci_approved_by' => Auth::id(),
+            'sci_approved_at' => now(),
+            'sci_remarks'     => $request->remarks,
+            'workflow_status' => 'forwarded_to_om',
+        ]);
+        return back()->with('success', 'Approved and forwarded to Operation Manager');
+    }
+
+    // Step 2: SCI reject
+    public function sciReject(Request $request, Requisition $requisition)
+    {
+        $requisition->update([
+            'sci_rejected_by' => Auth::id(),
+            'sci_rejected_at' => now(),
+            'sci_remarks'     => $request->remarks,
+            'workflow_status' => 'sci_rejected',
+        ]);
+        return back()->with('success', 'Requisition rejected');
+    }
+
+    // Step 3: OM approve
+    public function omApprove(Request $request, Requisition $requisition)
+    {
+        $requisition->update([
+            'om_approved_by'  => Auth::id(),
+            'om_approved_at'  => now(),
+            'om_remarks'      => $request->remarks,
+            'workflow_status' => 'forwarded_to_md',
+        ]);
+        return back()->with('success', 'Approved and forwarded to MD');
+    }
+
+    // Step 3: OM reject
+    public function omReject(Request $request, Requisition $requisition)
+    {
+        $requisition->update([
+            'om_rejected_by'  => Auth::id(),
+            'om_rejected_at'  => now(),
+            'om_remarks'      => $request->remarks,
+            'workflow_status' => 'om_rejected',
+        ]);
+        return back()->with('success', 'Requisition rejected');
+    }
+
+    // Step 4: MD approve
+    public function mdApprove(Request $request, Requisition $requisition)
+    {
+        $requisition->update([
+            'md_approved_by'  => Auth::id(),
+            'md_approved_at'  => now(),
+            'md_remarks'      => $request->remarks,
+            'workflow_status' => 'md_approved',
+        ]);
+        return back()->with('success', 'Approved. General User can now generate CS.');
+    }
+
+    // Step 4: MD reject
+    public function mdReject(Request $request, Requisition $requisition)
+    {
+        $requisition->update([
+            'md_rejected_by'  => Auth::id(),
+            'md_rejected_at'  => now(),
+            'md_remarks'      => $request->remarks,
+            'workflow_status' => 'md_rejected',
+        ]);
+        return back()->with('success', 'Requisition rejected');
+    }
+
+    // Step 5: MD approve korle GU CS generate korte parbe
+    public function generateCs(Requisition $requisition)
+    {
+        abort_unless($requisition->workflow_status === 'md_approved', 403);
+
+        $requisition->update([
+            'cs_generated_by' => Auth::id(),
+            'cs_generated_at' => now(),
+            'workflow_status' => 'cs_generated',
+        ]);
+        // CS generation logic ekhane
+        return back()->with('success', 'CS Generated');
+    }
+
     public function export($id)
     {
         $data = Requisition::with([
@@ -68,9 +165,8 @@ class RequisitionController extends Controller implements HasMiddleware
     }
     public function index()
     {
-        $wings = Wing::where('status', 1)
-            ->orderBy('name')
-            ->get();
+        $user = Auth::user();
+        $wings = $user->wings()->where('status', 1)->orderBy('name')->get();
         $warehouses = Warehouse::where('status', 1)
             ->orderBy('name')
             ->get();
@@ -98,12 +194,25 @@ class RequisitionController extends Controller implements HasMiddleware
     public function getdata(Request $request)
     {
         if ($request->ajax()) {
+            $user = Auth::user();
+            $assignedWingIds = $user->wings()->pluck('wings.id');
 
             $data = Requisition::with([
                 'wing',
                 'warehouse',
                 'details.product',
+                // CHANGE: workflow user relations eager load kora holo,
+                // jate history dekhate N+1 query na hoy
+                'forwardedBy',
+                'sciApprovedBy',
+                'sciRejectedBy',
+                'omApprovedBy',
+                'omRejectedBy',
+                'mdApprovedBy',
+                'mdRejectedBy',
+                'csGeneratedBy',
             ])
+                ->whereIn('wing_id', $assignedWingIds)
                 ->when($request->filled('wing_id'), function ($query) use ($request) {
                     $query->where('wing_id', $request->wing_id);
                 })
@@ -111,10 +220,11 @@ class RequisitionController extends Controller implements HasMiddleware
                     $query->where('warehouse_id', $request->warehouse_id);
                 })
                 ->when($request->filled('requisition_type'), function ($query) use ($request) {
-                    $query->where(
-                        'requisition_type',
-                        $request->requisition_type
-                    );
+                    $query->where('requisition_type', $request->requisition_type);
+                })
+                // CHANGE: naya filter - workflow_status diye o filter kora jabe (optional)
+                ->when($request->filled('workflow_status'), function ($query) use ($request) {
+                    $query->where('workflow_status', $request->workflow_status);
                 })
                 ->when($request->filled('date_from'), function ($query) use ($request) {
                     $query->whereDate('date', '>=', $request->date_from);
@@ -142,7 +252,6 @@ class RequisitionController extends Controller implements HasMiddleware
                 })
 
                 ->addColumn('requisition_type_name', function ($row) {
-
                     return $row->requisition_type ?? '-';
                 })
 
@@ -161,7 +270,6 @@ class RequisitionController extends Controller implements HasMiddleware
                 })
 
                 ->addColumn('products', function ($row) {
-
                     if ($row->details->isEmpty()) {
                         return '<span class="text-muted">No Product</span>';
                     }
@@ -169,17 +277,16 @@ class RequisitionController extends Controller implements HasMiddleware
                     $html = '<div class="d-flex flex-column gap-1">';
 
                     foreach ($row->details as $detail) {
-
                         $productName = $detail->product?->name ?? 'Unknown Product';
 
                         $html .= '
-                        <div>
-                            <strong>' . e($productName) . '</strong>
-                            <span class="text-muted">
-                                (Qty: ' . e($detail->quantity) . ')
-                            </span>
-                        </div>
-                    ';
+                    <div>
+                        <strong>' . e($productName) . '</strong>
+                        <span class="text-muted">
+                            (Qty: ' . e($detail->quantity) . ')
+                        </span>
+                    </div>
+                ';
                     }
 
                     $html .= '</div>';
@@ -187,32 +294,91 @@ class RequisitionController extends Controller implements HasMiddleware
                     return $html;
                 })
 
+                // CHANGE: puraton 'status' column ekhon 'workflow_status' dekhabe,
+                // age eta bool (active/inactive) chilo, ekhon workflow stage dekhabe
                 ->addColumn('status', function ($row) {
 
-                    return $row->status
-                        ? '<span class="status-pill status-active">
-                            <i class="bi bi-circle-fill"></i> On created User
-                        </span>'
-                        : '<span class="status-pill status-inactive">
-                            <i class="bi bi-circle-fill"></i> Inactive
-                        </span>';
+                    $map = [
+                        'pending'          => ['label' => 'Pending',              'class' => 'status-inactive'],
+                        'forwarded_to_sci' => ['label' => 'Forwarded to SCI',     'class' => 'status-active'],
+                        'sci_rejected'     => ['label' => 'Rejected by SCI',      'class' => 'status-rejected'],
+                        'forwarded_to_om'  => ['label' => 'Forwarded to OM',      'class' => 'status-active'],
+                        'om_rejected'      => ['label' => 'Rejected by OM',       'class' => 'status-rejected'],
+                        'forwarded_to_md'  => ['label' => 'Forwarded to MD',      'class' => 'status-active'],
+                        'md_approved'      => ['label' => 'Approved by MD',       'class' => 'status-active'],
+                        'md_rejected'      => ['label' => 'Rejected by MD',       'class' => 'status-rejected'],
+                        'cs_generated'     => ['label' => 'CS Generated',         'class' => 'status-active'],
+                    ];
+
+                    $current = $map[$row->workflow_status] ?? ['label' => 'Pending', 'class' => 'status-inactive'];
+
+                    return '<span class="status-pill ' . $current['class'] . '">
+                        <i class="bi bi-circle-fill"></i> ' . e($current['label']) . '
+                    </span>';
                 })
 
-                ->addColumn('action', function ($row) {
+                ->addColumn('workflow_history', function ($row) {
+
+                    $lines = [];
+
+                    if ($row->forwarded_by) {
+                        $lines[] = e($row->forwardedBy?->name ?? 'User') . ' forwarded on '
+                            . optional($row->forwarded_at)->format('d-m-Y h:i A');
+                    }
+                    if ($row->sci_approved_by) {
+                        $lines[] = e($row->sciApprovedBy?->name ?? 'SCI') . ' approved on '
+                            . optional($row->sci_approved_at)->format('d-m-Y h:i A');
+                    }
+                    if ($row->sci_rejected_by) {
+                        $lines[] = e($row->sciRejectedBy?->name ?? 'SCI') . ' rejected on '
+                            . optional($row->sci_rejected_at)->format('d-m-Y h:i A');
+                    }
+                    if ($row->om_approved_by) {
+                        $lines[] = e($row->omApprovedBy?->name ?? 'OM') . ' approved on '
+                            . optional($row->om_approved_at)->format('d-m-Y h:i A');
+                    }
+                    if ($row->om_rejected_by) {
+                        $lines[] = e($row->omRejectedBy?->name ?? 'OM') . ' rejected on '
+                            . optional($row->om_rejected_at)->format('d-m-Y h:i A');
+                    }
+                    if ($row->md_approved_by) {
+                        $lines[] = e($row->mdApprovedBy?->name ?? 'MD') . ' approved on '
+                            . optional($row->md_approved_at)->format('d-m-Y h:i A');
+                    }
+                    if ($row->md_rejected_by) {
+                        $lines[] = e($row->mdRejectedBy?->name ?? 'MD') . ' rejected on '
+                            . optional($row->md_rejected_at)->format('d-m-Y h:i A');
+                    }
+                    if ($row->cs_generated_by) {
+                        $lines[] = e($row->csGeneratedBy?->name ?? 'User') . ' generated CS on '
+                            . optional($row->cs_generated_at)->format('d-m-Y h:i A');
+                    }
+
+                    if (empty($lines)) {
+                        return '<span class="text-muted">No action yet</span>';
+                    }
+
+                    return '<div class="d-flex flex-column gap-1 small">'
+                        . implode('<br>', array_map('e', $lines))
+                        . '</div>';
+                })
+
+                ->addColumn('action', function ($row) use ($user) {
 
                     $viewBtn = '<button data-id="' . $row->id . '" type="button" class="view action-icon-btn action-view me-2" title="View">
-                            <i class="bi bi-eye-fill"></i>
-                        </button>';
+                        <i class="bi bi-eye-fill"></i>
+                    </button>';
 
                     $printBtn = '<a href="' . route('requisition.print', $row->id) . '" target="_blank" class="print action-icon-btn action-print me-2" title="Print">
                             <i class="bi bi-printer-fill"></i>
                         </a>';
 
                     $exportBtn = '<a href="' . route('requisition.export', $row->id) . '"
-                    class="export action-icon-btn action-export me-2 js-download-btn"
-                    title="Export to Excel" >
-                        <i class="bi bi-file-earmark-excel-fill"></i>
-                    </a>';
+                            class="export action-icon-btn action-export me-2 js-download-btn"
+                            title="Export to Excel" >
+                            <i class="bi bi-file-earmark-excel-fill"></i>
+                        </a>';
+
                     $editBtn = '<button data-id="' . $row->id . '" type="button" class="edit action-icon-btn action-edit me-2" title="Edit">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>';
@@ -222,27 +388,73 @@ class RequisitionController extends Controller implements HasMiddleware
                     $method = method_field('DELETE');
 
                     $deleteBtn = '<form action="' . $deleteUrl . '" method="POST" style="display:inline;">
-                            ' . $csrfToken . '
-                            ' . $method . '
-                            <button type="submit" class="delete action-icon-btn action-delete" title="Delete">
-                                <i class="bi bi-trash-fill"></i>
-                            </button>
-                        </form>';
+                                    ' . $csrfToken . '
+                                    ' . $method . '
+                                    <button type="submit" class="delete action-icon-btn action-delete" title="Delete">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                </form>';
 
+                    // ---- CHANGE: workflow action buttons - icon + text soho ----
+                    $workflowBtn = '';
+
+                    if ($row->workflow_status === 'pending' && $row->created_by === $user->id) {
+
+                        $workflowBtn = '<button data-id="' . $row->id . '" type="button" class="forward-btn forword-icon-btn action-workflow-btn me-2" title="Forward to SCI">
+                                            <i class="bi bi-send-fill"></i> <span>Forward</span>
+                                        </button>';
+                    } elseif ($row->workflow_status === 'forwarded_to_sci' && $user->user_type === 'sci') {
+
+                        $workflowBtn = '
+                            <button data-id="' . $row->id . '" type="button" class="sci-approve-btn forword-icon-btn action-workflow-btn text-success me-2" title="Approve">
+                                <i class="bi bi-check-circle-fill"></i> <span>Approve</span>
+                            </button>
+                            <button data-id="' . $row->id . '" type="button" class="sci-reject-btn forword-icon-btn action-workflow-btn text-danger me-2" title="Reject">
+                                <i class="bi bi-x-circle-fill"></i> <span>Reject</span>
+                            </button>';
+                    } elseif ($row->workflow_status === 'forwarded_to_om' && $user->user_type === 'om') {
+
+                        $workflowBtn = '
+        <button data-id="' . $row->id . '" type="button" class="om-approve-btn forword-icon-btn action-workflow-btn text-success me-2" title="Approve">
+            <i class="bi bi-check-circle-fill"></i> <span>Approve</span>
+        </button>
+        <button data-id="' . $row->id . '" type="button" class="om-reject-btn forword-icon-btn action-workflow-btn text-danger me-2" title="Reject">
+            <i class="bi bi-x-circle-fill"></i> <span>Reject</span>
+        </button>';
+                    } elseif ($row->workflow_status === 'forwarded_to_md' && $user->user_type === 'md') {
+
+                        $workflowBtn = '
+        <button data-id="' . $row->id . '" type="button" class="md-approve-btn forword-icon-btn action-workflow-btn text-success me-2" title="Approve">
+            <i class="bi bi-check-circle-fill"></i> <span>Approve</span>
+        </button>
+        <button data-id="' . $row->id . '" type="button" class="md-reject-btn forword-icon-btn action-workflow-btn text-danger me-2" title="Reject">
+            <i class="bi bi-x-circle-fill"></i> <span>Reject</span>
+        </button>';
+                    } elseif ($row->workflow_status === 'md_approved' && $row->created_by === $user->id) {
+
+                        $workflowBtn = '<button data-id="' . $row->id . '" type="button" class="generate-cs-btn forword-icon-btn action-workflow-btn me-2" title="Generate CS">
+            <i class="bi bi-file-earmark-plus-fill"></i> <span>Generate CS</span>
+        </button>';
+                    }
+                    // ---- END workflow action buttons ----
+
+                    // CHANGE: workflowBtn ekhon sobar age boshano holo
                     return '
-                        <div class="d-flex align-items-center gap-2">
-                            ' . $viewBtn . '
-                            ' . $printBtn . '
-                            ' . $exportBtn . '
-                            ' . $editBtn . '
-                            ' . $deleteBtn . '
-                        </div>
-                    ';
+        <div class="d-flex align-items-center gap-2" style="flex-wrap: wrap;">
+            ' . $workflowBtn . '
+            ' . $viewBtn . '
+            ' . $printBtn . '
+            ' . $exportBtn . '
+            ' . $editBtn . '
+            ' . $deleteBtn . '
+        </div>
+    ';
                 })
 
                 ->rawColumns([
                     'products',
                     'status',
+                    'workflow_history',
                     'action',
                 ])
 
@@ -428,7 +640,7 @@ class RequisitionController extends Controller implements HasMiddleware
                     'product_code' => $product->product_code,
                     'name' => $product->name,
                     'brand_name' => $product->brand?->name ?? '-',
-                    'size_name' => $product->productSize?->name ?? '-',
+                    'size_name' => $product->product_size ?? '-',
                 ];
             });
 

@@ -33,7 +33,7 @@
                         </p> --}}
 
                         <div class="row">
-                            <div class="col-md-12 mb-3">
+                            {{-- <div class="col-md-12 mb-3">
                                 <label class="form-label fw-bold" style="color:#1e1e2d; font-size:13px;">
                                     Category <span class="text-danger">*</span>
                                 </label>
@@ -45,7 +45,7 @@
                                     @endforeach
                                 </select>
                                 <div class="invalid-feedback category-error"></div>
-                            </div>
+                            </div> --}}
                             <!-- Name -->
                             <div class="col-md-12 mb-3">
                                 <label class="form-label fw-bold" style="color:#1e1e2d; font-size:13px;">

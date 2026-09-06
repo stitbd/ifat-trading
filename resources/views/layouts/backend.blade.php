@@ -40,6 +40,221 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /*
+|--------------------------------------------------------------------------
+| Action buttons wrapper
+|--------------------------------------------------------------------------
+*/
+
+        .forword-icon-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            height: 32px;
+            border-radius: 6px;
+            border: 1px solid #e2e4e9;
+            background: #fff;
+            color: #555;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+        }
+
+        .forword-icon-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        /* View */
+        .action-view {
+            color: #4361ee;
+            border-color: #d7ddfb;
+        }
+
+        .action-view:hover {
+            background: #eef2ff;
+        }
+
+        /* Print */
+        .action-print {
+            color: #6c757d;
+            border-color: #e2e4e9;
+        }
+
+        .action-print:hover {
+            background: #f1f3f5;
+        }
+
+        /* Export */
+        .action-export {
+            color: #198754;
+            border-color: #cdebd9;
+        }
+
+        .action-export:hover {
+            background: #eafaf1;
+        }
+
+        /* Edit */
+        .action-edit {
+            color: #ff9f1c;
+            border-color: #ffe6c2;
+        }
+
+        .action-edit:hover {
+            background: #fff6e9;
+        }
+
+        /* Delete */
+        .action-delete {
+            color: #e53e3e;
+            border-color: #fbd5d5;
+        }
+
+        .action-delete:hover {
+            background: #fdecea;
+        }
+
+
+        /*
+|--------------------------------------------------------------------------
+| Workflow buttons (Forward / Approve / Reject / Generate CS)
+| - icon + text pashapashi, alada alada color
+|--------------------------------------------------------------------------
+*/
+
+        .action-workflow-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            height: 32px;
+            padding: 0 12px;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            font-size: 12.5px;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+        }
+
+        .action-workflow-btn i {
+            font-size: 14px;
+        }
+
+        .action-workflow-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Forward button (GU -> SCI) - blue */
+        .forward-btn {
+            background: #eef2ff;
+            color: #4361ee;
+            border-color: #d7ddfb;
+        }
+
+        .forward-btn:hover {
+            background: #4361ee;
+            color: #fff;
+        }
+
+        /* Approve buttons (SCI / OM / MD) - green */
+        .sci-approve-btn,
+        .om-approve-btn,
+        .md-approve-btn {
+            background: #eafaf1;
+            color: #198754;
+            border-color: #cdebd9;
+        }
+
+        .sci-approve-btn:hover,
+        .om-approve-btn:hover,
+        .md-approve-btn:hover {
+            background: #198754;
+            color: #fff !important;
+        }
+
+        /* Reject buttons (SCI / OM / MD) - red */
+        .sci-reject-btn,
+        .om-reject-btn,
+        .md-reject-btn {
+            background: #fdecea;
+            color: #e53e3e;
+            border-color: #fbd5d5;
+        }
+
+        .sci-reject-btn:hover,
+        .om-reject-btn:hover,
+        .md-reject-btn:hover {
+            background: #e53e3e;
+            color: #fff !important;
+        }
+
+        /* Generate CS button - purple/violet, alada standout color */
+        .generate-cs-btn {
+            background: #f3ecfd;
+            color: #7c3aed;
+            border-color: #e2d2fb;
+        }
+
+        .generate-cs-btn:hover {
+            background: #7c3aed;
+            color: #fff;
+        }
+
+
+        /*
+|--------------------------------------------------------------------------
+| Status pill (Status column)
+|--------------------------------------------------------------------------
+*/
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-pill i {
+            font-size: 8px;
+        }
+
+        .status-active {
+            background: #eafaf1;
+            color: #198754;
+        }
+
+        .status-inactive {
+            background: #f1f3f5;
+            color: #6c757d;
+        }
+
+        .status-rejected {
+            background: #fdecea;
+            color: #e53e3e;
+        }
+
+
+        /*
+|--------------------------------------------------------------------------
+| History column
+|--------------------------------------------------------------------------
+*/
+
+        .requisition-history-cell {
+            max-width: 220px;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #555;
+            white-space: normal;
+        }
+
         /* DataTables length & search controls */
         .dataTables_wrapper .dataTables_length,
         .dataTables_wrapper .dataTables_filter {
@@ -221,11 +436,13 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
+            text-decoration: none;
         }
 
         .btn-admin-primary:hover {
             background: #3651d4;
             color: #fff;
+
         }
 
         /* Card wrapper for tables/content */
@@ -357,6 +574,7 @@
         .action-edit {
             color: #198754;
             border-color: #198754;
+            text-decoration: none;
         }
 
         .action-export {

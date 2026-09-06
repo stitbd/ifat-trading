@@ -74,16 +74,16 @@
                                     <div class="invalid-feedback product_code-error"></div>
                                 </div> --}}
 
-                                          <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">Wings <span class="text-danger">*</span></label>
-                                <select required class="form-select" name="wing_id">
-                                    <option value="">Select Wing</option>
-                                    @foreach ($wings as $wing)
-                                        <option value="{{ $wing->id }}">{{ $wing->name }}</option>
-                                    @endforeach
-                                </select>
-                                <div class="invalid-feedback wing_id-error"></div>
-                            </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Wings <span class="text-danger">*</span></label>
+                                    <select required class="form-select" name="wing_id">
+                                        <option value="">Select Wing</option>
+                                        @foreach ($wings as $wing)
+                                            <option value="{{ $wing->id }}">{{ $wing->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <div class="invalid-feedback wing_id-error"></div>
+                                </div>
 
 
                                 {{-- Product Name --}}
@@ -93,12 +93,8 @@
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                    <input type="text"
-                                        class="form-control"
-                                        name="name"
-                                        maxlength="100"
-                                        placeholder="Enter Product Name"
-                                        required>
+                                    <input type="text" class="form-control" name="name" maxlength="100"
+                                        placeholder="Enter Product Name" required>
 
                                     <div class="invalid-feedback name-error"></div>
                                 </div>
@@ -111,9 +107,7 @@
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                    <select class="form-select"
-                                        name="brand_id"
-                                        required>
+                                    <select class="form-select" name="brand_id" required>
 
                                         <option value="">
                                             Select Brand
@@ -138,9 +132,7 @@
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                    <select class="form-select"
-                                        name="manufacturer_id"
-                                        required>
+                                    <select class="form-select" name="manufacturer_id" required>
 
                                         <option value="">
                                             Select Manufacturer
@@ -165,9 +157,7 @@
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                    <select class="form-select"
-                                        name="country_of_origin_id"
-                                        required>
+                                    <select class="form-select" name="country_of_origin_id" required>
 
                                         <option value="">
                                             Select Country
@@ -192,10 +182,7 @@
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                    <select class="form-select"
-                                        name="categories_id"
-                                        id="categories_id"
-                                        required>
+                                    <select class="form-select" name="categories_id" id="categories_id" required>
 
                                         <option value="">
                                             Select Category
@@ -220,14 +207,14 @@
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                    <select class="form-select"
-                                        name="product_type_id"
-                                        id="product_type_id"
-                                        required>
+                                    <select class="form-select" name="product_type_id" id="product_type_id" required>
 
                                         <option value="">
                                             Select Product Type
                                         </option>
+                                        @foreach ($productTypes as $item)
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @endforeach
 
                                     </select>
 
@@ -237,42 +224,34 @@
 
                                 {{-- Product Size --}}
 
-                                   <div class="col-md-6 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <label class="form-label fw-bold">
                                         Product Size
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                        <input type="text"
-                                        class="form-control"
-                                        name="product_size"
-                                        maxlength="100"
-                                        placeholder="Enter Product Size"
-                                        required>
+                                    <input type="text" class="form-control" name="product_size" maxlength="100"
+                                        placeholder="Enter Product Size" required>
 
                                     <div class="invalid-feedback product_size_id-error"></div>
                                 </div>
 
 
 
-                           
+
 
 
                                 {{-- Position --}}
                                 <div class="col-md-6 mb-3">
 
-                                    <div class="p-3 rounded"
-                                        style="background:#f8f9ff;border:1px solid #e3e7ff;">
+                                    <div class="p-3 rounded" style="background:#f8f9ff;border:1px solid #e3e7ff;">
 
                                         <label class="form-label fw-bold">
                                             Position
                                             <span class="text-danger">*</span>
                                         </label>
 
-                                        <select class="form-select"
-                                            name="position"
-                                            id="position"
-                                            required>
+                                        <select class="form-select" name="position" id="position" required>
 
                                             <option value="">
                                                 Select Position
@@ -310,12 +289,8 @@
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                    <input type="text"
-                                        class="form-control"
-                                        name="hs_code"
-                                        maxlength="100"
-                                        placeholder="Enter Product HS Code"
-                                        required>
+                                    <input type="text" class="form-control" name="hs_code" maxlength="100"
+                                        placeholder="Enter Product HS Code" required>
 
                                     <div class="invalid-feedback hs_code-error"></div>
                                 </div>
@@ -328,12 +303,8 @@
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                    <input type="text"
-                                        class="form-control"
-                                        name="unit_of_measurement"
-                                        maxlength="100"
-                                        placeholder="e.g. PCS"
-                                        required>
+                                    <input type="text" class="form-control" name="unit_of_measurement"
+                                        maxlength="100" placeholder="e.g. PCS" required>
 
                                     <div class="invalid-feedback unit_of_measurement-error"></div>
                                 </div>
@@ -346,9 +317,7 @@
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                    <select class="form-select"
-                                        name="vat_percentage_id"
-                                        required>
+                                    <select class="form-select" name="vat_percentage_id" required>
 
                                         <option value="">
                                             Select VAT
@@ -373,8 +342,7 @@
                             OPTIONAL FIELDS
                         ========================================================== --}}
 
-                        <div class="pt-4"
-                            style="border-top:1px solid #eef0f2;">
+                        <div class="pt-4" style="border-top:1px solid #eef0f2;">
 
                             <div class="d-flex align-items-center mb-3">
 
@@ -396,9 +364,7 @@
                                         Product Subcategory
                                     </label>
 
-                                    <select class="form-select"
-                                        name="sub_categories_id"
-                                        id="sub_categories_id">
+                                    <select class="form-select" name="sub_categories_id" id="sub_categories_id">
 
                                         <option value="">
                                             Select Sub Category
@@ -409,16 +375,13 @@
                                     <div class="invalid-feedback sub_categories_id-error"></div>
                                 </div>
 
-                                     <div class="col-md-6 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <label class="form-label fw-bold">
                                         Product Size
-                                        
+
                                     </label>
 
-                                    <select class="form-select"
-                                        name="product_size_id"
-                                        id="product_size_id"
-                                        >
+                                    <select class="form-select" name="product_size_id" id="product_size_id">
 
                                         <option value="">
                                             Select Product Size
@@ -436,8 +399,7 @@
                                         Vehicle Type
                                     </label>
 
-                                    <select class="form-select"
-                                        name="vehicle_type_id">
+                                    <select class="form-select" name="vehicle_type_id">
 
                                         <option value="">
                                             Select Vehicle Type
@@ -461,9 +423,7 @@
                                         Barcode / QR Code
                                     </label>
 
-                                    <input type="text"
-                                        class="form-control"
-                                        name="barcode"
+                                    <input type="text" class="form-control" name="barcode"
                                         placeholder="Enter Barcode / QR Code">
 
                                     <div class="invalid-feedback barcode-error"></div>
@@ -476,10 +436,7 @@
                                         Product Image
                                     </label>
 
-                                    <input type="file"
-                                        class="form-control"
-                                        name="image"
-                                        accept="image/*">
+                                    <input type="file" class="form-control" name="image" accept="image/*">
 
                                     <div class="invalid-feedback image-error"></div>
                                 </div>
@@ -491,8 +448,7 @@
                                         Warranty Period
                                     </label>
 
-                                    <select class="form-select"
-                                        name="warranty_period_id">
+                                    <select class="form-select" name="warranty_period_id">
 
                                         <option value="">
                                             Select Warranty
@@ -516,10 +472,7 @@
                                         Minimum Stock Alart
                                     </label>
 
-                                    <input type="number"
-                                        class="form-control"
-                                        name="min_alert_stock"
-                                        min="0"
+                                    <input type="number" class="form-control" name="min_alert_stock" min="0"
                                         placeholder="Enter Minimum Stock Alart">
 
                                     <div class="invalid-feedback min_alert_stock-error"></div>
@@ -532,8 +485,7 @@
                                         Active / Inactive Status
                                     </label>
 
-                                    <select class="form-select"
-                                        name="status">
+                                    <select class="form-select" name="status">
 
                                         <option value="1">
                                             Active
@@ -556,11 +508,9 @@
                             BUTTONS
                         ========================================================== --}}
 
-                        <div class="d-flex justify-content-end gap-2 mt-4 pt-3"
-                            style="border-top:1px solid #eef0f2;">
+                        <div class="d-flex justify-content-end gap-2 mt-4 pt-3" style="border-top:1px solid #eef0f2;">
 
-                            <a href="{{ route('product.index') }}"
-                                class="btn"
+                            <a href="{{ route('product.index') }}" class="btn"
                                 style="border:1px solid #dfe2e8;
                                        color:#4a4a5a;
                                        border-radius:8px;
@@ -570,8 +520,7 @@
                                 Cancel
                             </a>
 
-                            <button type="submit"
-                                class="btn submit-btn"
+                            <button type="submit" class="btn submit-btn"
                                 style="background:#4361ee;
                                        color:#fff;
                                        border-radius:8px;
@@ -610,9 +559,9 @@
                     '<option value="">Select Sub Category</option>'
                 );
 
-                $("#product_type_id").html(
-                    '<option value="">Select Product Type</option>'
-                );
+                // $("#product_type_id").html(
+                //     '<option value="">Select Product Type</option>'
+                // );
 
                 $("#product_size_id").html(
                     '<option value="">Select Product Size</option>'
@@ -658,27 +607,27 @@
                 |--------------------------------------------------------------------------
                 */
 
-                $.ajax({
-                    url: "{{ route('product.product-types', ':id') }}"
-                        .replace(":id", categoryId),
+                // $.ajax({
+                //     url: "{{ route('product.product-types', ':id') }}"
+                //         .replace(":id", categoryId),
 
-                    type: "GET",
+                //     type: "GET",
 
-                    success: function(data) {
+                //     success: function(data) {
 
-                        $.each(data, function(i, item) {
+                //         $.each(data, function(i, item) {
 
-                            $("#product_type_id").append(
-                                $("<option>", {
-                                    value: item.id,
-                                    text: item.name
-                                })
-                            );
+                //             $("#product_type_id").append(
+                //                 $("<option>", {
+                //                     value: item.id,
+                //                     text: item.name
+                //                 })
+                //             );
 
-                        });
+                //         });
 
-                    }
-                });
+                //     }
+                // });
 
 
                 /*

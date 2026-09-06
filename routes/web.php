@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ProductTypeController;
 use App\Http\Controllers\Admin\RequisitionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SubcategoryController;
+use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VatPercentageController;
 use App\Http\Controllers\Admin\VehicleTypeController;
@@ -38,6 +39,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
     Route::put('user/update/{id}', [UserController::class, 'update'])->name('user.update');
 
+
+    Route::get('supplier', [SupplierController::class, 'index'])->name('supplier.index');
+    Route::get('supplier/getdata', [SupplierController::class, 'getdata'])->name('supplier.getdata');
+    Route::post('supplier/store', [SupplierController::class, 'store'])->name('supplier.store');
+    Route::get('supplier/edit/{id}', [SupplierController::class, 'edit'])->name('supplier.edit');
+    Route::put('supplier/update/{id}', [SupplierController::class, 'update'])->name('supplier.update');
+    Route::get('supplier/view/{id}', [SupplierController::class, 'view'])->name('supplier.view');
+    Route::delete('supplier/destroy/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
 
 
     // routes/web.php (admin group er vitore)
@@ -130,6 +139,20 @@ Route::middleware(['auth'])->group(function () {
     Route::put('requisition/{id}', [RequisitionController::class, 'update'])->name('requisition.update');
     Route::get('requisition/print/{id}', [RequisitionController::class, 'print'])->name('requisition.print');
     Route::get('requisition/export/{id}', [RequisitionController::class, 'export'])->name('requisition.export');
+
+    Route::post('requisitions/{requisition}/forward', [RequisitionController::class, 'forward'])->name('requisition.forward');
+
+    Route::post('requisitions/{requisition}/sci-approve', [RequisitionController::class, 'sciApprove'])->name('requisition.sci.approve');
+    Route::post('requisitions/{requisition}/sci-reject', [RequisitionController::class, 'sciReject'])->name('requisition.sci.reject');
+
+    Route::post('requisitions/{requisition}/om-approve', [RequisitionController::class, 'omApprove'])->name('requisition.om.approve');
+    Route::post('requisitions/{requisition}/om-reject', [RequisitionController::class, 'omReject'])->name('requisition.om.reject');
+
+    Route::post('requisitions/{requisition}/md-approve', [RequisitionController::class, 'mdApprove'])->name('requisition.md.approve');
+    Route::post('requisitions/{requisition}/md-reject', [RequisitionController::class, 'mdReject'])->name('requisition.md.reject');
+
+    Route::post('requisitions/{requisition}/generate-cs', [RequisitionController::class, 'generateCs'])->name('requisition.generate-cs');
+
     //asraf
 
     Route::get('wing/getdata', [WingController::class, 'getdata'])
