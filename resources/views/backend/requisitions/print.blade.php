@@ -25,12 +25,12 @@
     ];
 
     /*
-        |--------------------------------------------------------------------------
-        | Dynamic date-based column labels — same rules as Create/View:
-        |   - AS ON          = the exact requisition date
-        |   - PI              = same month/year as the requisition date
-        |   - Sale 1 / 2 / 3  = the 3 months before the PI month (oldest -> newest)
-        |   - Requirement      = FOR {month}'{year} of the requisition date
+            |--------------------------------------------------------------------------
+            | Dynamic date-based column labels — same rules as Create/View:
+            |   - AS ON          = the exact requisition date
+            |   - PI              = same month/year as the requisition date
+            |   - Sale 1 / 2 / 3  = the 3 months before the PI month (oldest -> newest)
+            |   - Requirement      = FOR {month}'{year} of the requisition date
     |--------------------------------------------------------------------------
     */
 $reqDate = $data->date ? Carbon::parse($data->date) : Carbon::now();
@@ -308,7 +308,7 @@ $formatSaleRange = function (Carbon $monthDate) {
                 @foreach ($categoryDetails as $index => $detail)
                     <tr>
                         <td class="text-center">{{ $index + 1 }}</td>
-                        <td class="text-center">{{ $detail->product?->productSize?->name ?? '-' }}</td>
+                        <td class="text-center">{{ $detail->product?->product_size ?? '-' }}</td>
                         <td class="text-center">{{ number_format($detail->physical_stock, 0) }}</td>
                         <td class="text-center">{{ number_format($detail->in_transit_stock, 0) }}</td>
                         <td class="text-center">{{ number_format($detail->lc_pending_stock, 0) }}</td>

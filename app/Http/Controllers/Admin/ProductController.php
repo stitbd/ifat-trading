@@ -361,7 +361,7 @@ class ProductController extends Controller implements HasMiddleware
     public function store(Request $request)
     {
         $request->validate([
-          
+
             'name' => 'required|string|max:100',
             'hs_code' => 'required|string|max:100',
             'product_size' => 'required|string|max:100',
@@ -613,7 +613,7 @@ class ProductController extends Controller implements HasMiddleware
 
                 'name' => $request->name,
                 'wing_id' => $request->wing_id,
-                             'hs_code' => $request->hs_code,
+                'hs_code' => $request->hs_code,
                 'product_size' => $request->product_size,
 
                 'categories_id' => $request->categories_id,
@@ -794,15 +794,15 @@ class ProductController extends Controller implements HasMiddleware
         return response()->json($productSizes);
     }
     private function generateProductCode()
-{
-    $lastProduct = Product::whereNotNull('product_code')
-        ->orderByRaw('CAST(product_code AS UNSIGNED) DESC')
-        ->first();
+    {
+        $lastProduct = Product::whereNotNull('product_code')
+            ->orderByRaw('CAST(product_code AS UNSIGNED) DESC')
+            ->first();
 
-    if ($lastProduct && is_numeric($lastProduct->product_code)) {
-        return (int) $lastProduct->product_code + 1;
+        if ($lastProduct && is_numeric($lastProduct->product_code)) {
+            return (int) $lastProduct->product_code + 1;
+        }
+
+        return 1001;
     }
-
-    return 1001;
-}
 }

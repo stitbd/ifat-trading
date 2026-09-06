@@ -166,7 +166,7 @@ class ProductTypeController extends Controller implements HasMiddleware
     {
         $request->validate([
             'name'        => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
+            // 'category_id' => 'required|exists:categories,id',
             'status'      => 'nullable|boolean',
         ]);
 
@@ -209,7 +209,7 @@ class ProductTypeController extends Controller implements HasMiddleware
 
         $request->validate([
             'name'        => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
+            // 'category_id' => 'required|exists:categories,id',
             'status'      => 'nullable|boolean',
         ]);
 

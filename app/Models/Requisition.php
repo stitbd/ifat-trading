@@ -10,23 +10,44 @@ class Requisition extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [
-        'contact_person_info',
-        'requisition_no',
-        'wing_id',
-        'warehouse_id',
-        'requisition_type',
-        'total_quantity',
-        'date',
-        'note',
-        'place_of_supply',
-        'status',
-        'created_by',
-        'updated_by',
-        'deleted_by',
-    ];
+    protected $guarded = [];
 
+    public function forwardedBy()
+    {
+        return $this->belongsTo(User::class, 'forwarded_by');
+    }
 
+    public function sciApprovedBy()
+    {
+        return $this->belongsTo(User::class, 'sci_approved_by');
+    }
+    public function sciRejectedBy()
+    {
+        return $this->belongsTo(User::class, 'sci_rejected_by');
+    }
+
+    public function omApprovedBy()
+    {
+        return $this->belongsTo(User::class, 'om_approved_by');
+    }
+    public function omRejectedBy()
+    {
+        return $this->belongsTo(User::class, 'om_rejected_by');
+    }
+
+    public function mdApprovedBy()
+    {
+        return $this->belongsTo(User::class, 'md_approved_by');
+    }
+    public function mdRejectedBy()
+    {
+        return $this->belongsTo(User::class, 'md_rejected_by');
+    }
+
+    public function csGeneratedBy()
+    {
+        return $this->belongsTo(User::class, 'cs_generated_by');
+    }
 
     protected static function boot()
     {

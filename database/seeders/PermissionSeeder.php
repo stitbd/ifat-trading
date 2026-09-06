@@ -196,8 +196,16 @@ class PermissionSeeder extends Seeder
                     'requisition.approve',
                 ]
             ],
-
-            // ===== System Settings =====
+            [
+                'group_name' => 'supplier',
+                'permissions' => [
+                    'supplier.view',
+                    'supplier.create',
+                    'supplier.edit',
+                    'supplier.delete',
+                    'supplier.approve',
+                ]
+            ],
             [
                 'group_name' => 'System Settings',
                 'permissions' => [

@@ -23,6 +23,7 @@
         'vat-percentage.*',
         'warranty-period.*',
         'warehouse.*',
+        'supplier.*',
     ];
 
     $isDashboardActive = request()->routeIs('dashboard');
@@ -195,6 +196,13 @@
                         </a>
                     @endif
 
+                    @if (auth()->user()->can('supplier.view'))
+                        <a class="nav-item-link {{ request()->routeIs('supplier.*') ? 'active' : '' }}"
+                            href="{{ route('supplier.index') }}">
+                            <span class="nav-icon"><i class="bi bi-truck"></i></span>
+                            <span class="nav-label">Suppliers</span>
+                        </a>
+                    @endif
                     @if (auth()->user()->can('wing.view'))
                         <a class="nav-item-link {{ request()->routeIs('wing.*') ? 'active' : '' }}"
                             href="{{ route('wing.index') }}">

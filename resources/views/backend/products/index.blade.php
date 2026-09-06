@@ -18,7 +18,7 @@
                     <h1>Product</h1>
                 </div>
 
-                <a href="{{ route('product.create') }}" class="btn-admin-primary">
+                <a href="{{ route('product.create') }}" class="btn-admin-primary" style="text-decoration:none;">
                     <i class="bi bi-plus-lg"></i>
                     Add Product
                 </a>

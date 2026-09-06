@@ -31,7 +31,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Category</th>
+                        {{-- <th>Category</th> --}}
                         <th>Name</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -62,7 +62,7 @@
                     text: '<i class="bi bi-file-earmark-excel-fill"></i> Excel',
                     title: 'Product Type List',
                     exportOptions: {
-                        columns: [0, 1, 2, 3] // exclude Action column
+                        columns: [0, 1, 2] // exclude Action column
                     }
                 },
                 {
@@ -72,7 +72,7 @@
                     orientation: 'portrait',
                     pageSize: 'A4',
                     exportOptions: {
-                        columns: [0, 1, 2, 3] // exclude Action column
+                        columns: [0, 1, 2] // exclude Action column
                     },
                     customize: function(doc) {
                         doc.content[1].table.widths = ['8%', '32%', '35%', '25%'];
@@ -107,10 +107,10 @@
                             1) +
                         '</span>' : (meta.row + meta.settings._iDisplayStart + 1)
                 },
-                {
-                    data: 'category',
-                    name: 'category'
-                },
+                // {
+                //     data: 'category',
+                //     name: 'category'
+                // },
                 {
                     data: 'name',
                     name: 'name'
