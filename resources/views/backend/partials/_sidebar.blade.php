@@ -12,7 +12,7 @@
         'product-type.*',
         'product-size.*',
     ];
-    $requisitionRoutePatterns = ['requisition.*'];
+    $requisitionRoutePatterns = ['requisition.*', 'comparative-statement.*'];
     $userMgmtRoutePatterns = ['user.*', 'role.*'];
     $systemSettingsRoutePatterns = [
         'applications.*',
@@ -29,6 +29,7 @@
     $isDashboardActive = request()->routeIs('dashboard');
     $isInventoryActive = request()->routeIs($inventoryRoutePatterns);
     $isRequisitionActive = request()->routeIs($requisitionRoutePatterns);
+
     $isUserMgmtActive = request()->routeIs($userMgmtRoutePatterns);
     $isSystemSettingsActive = request()->routeIs($systemSettingsRoutePatterns);
 @endphp
@@ -112,7 +113,9 @@
             </div>
         @endif
 
-        @if (auth()->user()->can('requisition.view') || auth()->user()->can('requisition.create'))
+        @if (auth()->user()->can('requisition.view') ||
+                auth()->user()->can('comparative_statement.view') ||
+                auth()->user()->can('requisition.create'))
             <div class="nav-section">
                 <div class="nav-section-header {{ $isRequisitionActive ? 'active' : '' }}" data-tip="Requisition"
                     onclick="toggleNavSection(this)">
@@ -134,6 +137,13 @@
                             href="{{ route('requisition.index') }}">
                             <span class="nav-icon"><i class="bi bi-list-check"></i></span>
                             <span class="nav-label">Requisition List</span>
+                        </a>
+                    @endif
+                    @if (auth()->user()->can('comparative_statement.view'))
+                        <a class="nav-item-link {{ request()->routeIs('comparative-statement.index') || request()->routeIs('comparative-statement.show') || request()->routeIs('comparative-statement.edit') ? 'active' : '' }}"
+                            href="{{ route('comparative-statement.index') }}">
+                            <span class="nav-icon"><i class="bi bi-list-check"></i></span>
+                            <span class="nav-label">Comparative Statements (Cs)</span>
                         </a>
                     @endif
                 </div>

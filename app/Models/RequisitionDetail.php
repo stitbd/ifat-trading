@@ -16,4 +16,14 @@ class RequisitionDetail extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function comparativeStatementDetails()
+    {
+        return $this->hasMany(\App\Models\ComparativeStatementDetail::class);
+    }
+
+    public function getCsCreatedQtyAttribute(): float
+    {
+        return (float) $this->comparativeStatementDetails()->sum('cs_qty');
+    }
 }

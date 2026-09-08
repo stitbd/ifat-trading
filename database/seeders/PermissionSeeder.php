@@ -197,6 +197,16 @@ class PermissionSeeder extends Seeder
                 ]
             ],
             [
+                'group_name' => 'Comparative Statement',
+                'permissions' => [
+                    'comparative_statement.view',
+                    'comparative_statement.create',
+                    'comparative_statement.edit',
+                    'comparative_statement.delete',
+                    'comparative_statement.approve',
+                ]
+            ],
+            [
                 'group_name' => 'supplier',
                 'permissions' => [
                     'supplier.view',
