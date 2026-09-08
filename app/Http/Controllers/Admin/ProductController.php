@@ -134,7 +134,6 @@ class ProductController extends Controller implements HasMiddleware
                 'countryOfOrigin',
                 'productType',
                 'vehicleType',
-                'productSize',
                 'warrantyPeriod',
                 'vatPercentage',
             ])
@@ -149,7 +148,6 @@ class ProductController extends Controller implements HasMiddleware
                 })
                 ->orderBy('created_at', 'desc')
                 ->get();
-
             return DataTables::of($data)
 
                 ->addIndexColumn()
@@ -209,9 +207,9 @@ class ProductController extends Controller implements HasMiddleware
                     return $row->vehicleType?->name ?? '-';
                 })
 
-                ->addColumn('product_size_name', function ($row) {
-                    return $row->productSize?->name ?? '-';
-                })
+                // ->addColumn('product_size_name', function ($row) {
+                //     return $row->productSize?->name ?? '-';
+                // })
 
                 ->addColumn('warranty_name', function ($row) {
                     return $row->warrantyPeriod?->title ?? '-';
@@ -362,7 +360,7 @@ class ProductController extends Controller implements HasMiddleware
     {
         $request->validate([
 
-            'name' => 'required|string|max:100',
+            'name' => 'nullable|string|max:100',
             'hs_code' => 'required|string|max:100',
             'product_size' => 'required|string|max:100',
 
@@ -578,7 +576,7 @@ class ProductController extends Controller implements HasMiddleware
         $request->validate([
 
 
-            'name' => 'required|string|max:100',
+            'name' => 'nullable|string|max:100',
             'hs_code' => 'required|string|max:100',
             'product_size' => 'required|string|max:100',
             'wing_id' => 'required|exists:wings,id',

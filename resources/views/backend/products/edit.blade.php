@@ -61,19 +61,19 @@
 
                             <div class="row">
 
-                                                <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">Wings <span class="text-danger">*</span></label>
-                                <select required class="form-select" name="wing_id">
-                                    <option value="">Select Wing</option>
-                                    @foreach ($wings as $wing)
-                                        <option value="{{ $wing->id }}"
-                                            {{ $data->wing_id == $wing->id ? 'selected' : '' }}>
-                                            {{ $wing->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <div class="invalid-feedback wing_id-error"></div>
-                            </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Wings <span class="text-danger">*</span></label>
+                                    <select required class="form-select" name="wing_id">
+                                        <option value="">Select Wing</option>
+                                        @foreach ($wings as $wing)
+                                            <option value="{{ $wing->id }}"
+                                                {{ $data->wing_id == $wing->id ? 'selected' : '' }}>
+                                                {{ $wing->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="invalid-feedback wing_id-error"></div>
+                                </div>
 
                                 {{-- Product Code / SKU --}}
                                 {{-- <div class="col-md-6 mb-3">
@@ -93,22 +93,7 @@
                                 </div> --}}
 
 
-                                {{-- Product Name --}}
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold">
-                                        Product Name
-                                        <span class="text-danger">*</span>
-                                    </label>
 
-                                    <input type="text"
-                                        class="form-control"
-                                        name="name"
-                                        maxlength="100"
-                                        value="{{ $data->name }}"
-                                        required>
-
-                                    <div class="invalid-feedback name-error"></div>
-                                </div>
 
 
                                 {{-- Product Brand --}}
@@ -118,9 +103,7 @@
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                    <select class="form-select"
-                                        name="brand_id"
-                                        required>
+                                    <select class="form-select" name="brand_id" required>
 
                                         <option value="">
                                             Select Brand
@@ -146,9 +129,7 @@
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                    <select class="form-select"
-                                        name="manufacturer_id"
-                                        required>
+                                    <select class="form-select" name="manufacturer_id" required>
 
                                         <option value="">
                                             Select Manufacturer
@@ -174,9 +155,7 @@
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                    <select class="form-select"
-                                        name="country_of_origin_id"
-                                        required>
+                                    <select class="form-select" name="country_of_origin_id" required>
 
                                         <option value="">
                                             Select Country
@@ -202,10 +181,7 @@
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                    <select class="form-select"
-                                        name="categories_id"
-                                        id="edit_categories_id"
-                                        required>
+                                    <select class="form-select" name="categories_id" id="edit_categories_id" required>
 
                                         <option value="">
                                             Select Category
@@ -231,10 +207,7 @@
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                    <select class="form-select"
-                                        name="product_type_id"
-                                        id="edit_product_type_id"
-                                        required>
+                                    <select class="form-select" name="product_type_id" id="edit_product_type_id" required>
 
                                         <option value="">
                                             Select Product Type
@@ -254,18 +227,14 @@
 
 
                                 {{-- Product Size --}}
-                                               <div class="col-md-6 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <label class="form-label fw-bold">
                                         Product Size
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                        <input type="text"
-                                        class="form-control"
-                                        name="product_size"
-                                        maxlength="100"
-                                        placeholder="Enter Product Size"
-                                        required value="{{ $data->product_size }}">
+                                    <input type="text" class="form-control" name="product_size" maxlength="100"
+                                        placeholder="Enter Product Size" required value="{{ $data->product_size }}">
 
                                     <div class="invalid-feedback product_size_id-error"></div>
                                 </div>
@@ -274,30 +243,24 @@
                                 {{-- Position --}}
                                 <div class="col-md-6 mb-3">
 
-                                    <div class="p-3 rounded"
-                                        style="background:#f8f9ff;border:1px solid #e3e7ff;">
+                                    <div class="p-3 rounded" style="background:#f8f9ff;border:1px solid #e3e7ff;">
 
                                         <label class="form-label fw-bold">
                                             Position
                                             <span class="text-danger">*</span>
                                         </label>
 
-                                        <select class="form-select"
-                                            name="position"
-                                            id="position"
-                                            required>
+                                        <select class="form-select" name="position" id="position" required>
 
                                             <option value="">
                                                 Select Position
                                             </option>
 
-                                            <option value="Front"
-                                                {{ $data->position == 'Front' ? 'selected' : '' }}>
+                                            <option value="Front" {{ $data->position == 'Front' ? 'selected' : '' }}>
                                                 Front
                                             </option>
 
-                                            <option value="Rear"
-                                                {{ $data->position == 'Rear' ? 'selected' : '' }}>
+                                            <option value="Rear" {{ $data->position == 'Rear' ? 'selected' : '' }}>
                                                 Rear
                                             </option>
 
@@ -327,12 +290,8 @@
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                    <input type="text"
-                                        class="form-control"
-                                        name="hs_code"
-                                        maxlength="100"
-                                        value="{{ $data->hs_code }}"
-                                        required>
+                                    <input type="text" class="form-control" name="hs_code" maxlength="100"
+                                        value="{{ $data->hs_code }}" required>
 
                                     <div class="invalid-feedback hs_code-error"></div>
                                 </div>
@@ -345,12 +304,8 @@
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                    <input type="text"
-                                        class="form-control"
-                                        name="unit_of_measurement"
-                                        maxlength="100"
-                                        value="{{ $data->unit_of_measurement }}"
-                                        required>
+                                    <input type="text" class="form-control" name="unit_of_measurement"
+                                        maxlength="100" value="{{ $data->unit_of_measurement }}" required>
 
                                     <div class="invalid-feedback unit_of_measurement-error"></div>
                                 </div>
@@ -363,9 +318,7 @@
                                         <span class="text-danger">*</span>
                                     </label>
 
-                                    <select class="form-select"
-                                        name="vat_percentage_id"
-                                        required>
+                                    <select class="form-select" name="vat_percentage_id" required>
 
                                         <option value="">
                                             Select VAT
@@ -391,8 +344,7 @@
                             OPTIONAL FIELDS
                         ========================================================== --}}
 
-                        <div class="pt-4"
-                            style="border-top:1px solid #eef0f2;">
+                        <div class="pt-4" style="border-top:1px solid #eef0f2;">
 
                             <div class="d-flex align-items-center mb-3">
 
@@ -408,15 +360,25 @@
 
                             <div class="row">
 
+                                {{-- Product Name --}}
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">
+                                        Product Name
+
+                                    </label>
+
+                                    <input type="text" class="form-control" name="name" maxlength="100"
+                                        value="{{ $data->name }}">
+
+                                    <div class="invalid-feedback name-error"></div>
+                                </div>
                                 {{-- Product Subcategory --}}
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-bold">
                                         Product Subcategory
                                     </label>
 
-                                    <select class="form-select"
-                                        name="sub_categories_id"
-                                        id="edit_sub_categories_id">
+                                    <select class="form-select" name="sub_categories_id" id="edit_sub_categories_id">
 
                                         <option value="">
                                             Select Sub Category
@@ -435,18 +397,18 @@
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">Product Size</label>
-                                <select class="form-select" name="product_size_id" id="edit_product_size_id">
-                                    <option value="">Select Product Size</option>
-                                    @foreach ($productSizes as $size)
-                                        <option value="{{ $size->id }}"
-                                            {{ $data->product_size_id == $size->id ? 'selected' : '' }}>
-                                            {{ $size->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <div class="invalid-feedback product_size_id-error"></div>
-                            </div>
+                                    <label class="form-label fw-bold">Product Size</label>
+                                    <select class="form-select" name="product_size_id" id="edit_product_size_id">
+                                        <option value="">Select Product Size</option>
+                                        @foreach ($productSizes as $size)
+                                            <option value="{{ $size->id }}"
+                                                {{ $data->product_size_id == $size->id ? 'selected' : '' }}>
+                                                {{ $size->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="invalid-feedback product_size_id-error"></div>
+                                </div>
 
 
                                 {{-- Vehicle Type --}}
@@ -455,8 +417,7 @@
                                         Vehicle Type
                                     </label>
 
-                                    <select class="form-select"
-                                        name="vehicle_type_id">
+                                    <select class="form-select" name="vehicle_type_id">
 
                                         <option value="">
                                             Select Vehicle Type
@@ -481,11 +442,8 @@
                                         Barcode / QR Code
                                     </label>
 
-                                    <input type="text"
-                                        class="form-control"
-                                        name="barcode"
-                                        value="{{ $data->barcode ?? '' }}"
-                                        placeholder="Enter Barcode / QR Code">
+                                    <input type="text" class="form-control" name="barcode"
+                                        value="{{ $data->barcode ?? '' }}" placeholder="Enter Barcode / QR Code">
 
                                     <div class="invalid-feedback barcode-error"></div>
                                 </div>
@@ -497,17 +455,13 @@
                                         Product Image
                                     </label>
 
-                                    <input type="file"
-                                        class="form-control"
-                                        name="image"
-                                        accept="image/*">
+                                    <input type="file" class="form-control" name="image" accept="image/*">
 
                                     <div class="invalid-feedback image-error"></div>
 
                                     @if ($data->image)
                                         <div class="mt-2">
-                                            <img src="{{ asset('products/image/' . $data->image) }}"
-                                                width="90"
+                                            <img src="{{ asset('products/image/' . $data->image) }}" width="90"
                                                 height="90"
                                                 style="object-fit:cover;
                                                        border-radius:8px;
@@ -524,8 +478,7 @@
                                         Warranty Period
                                     </label>
 
-                                    <select class="form-select"
-                                        name="warranty_period_id">
+                                    <select class="form-select" name="warranty_period_id">
 
                                         <option value="">
                                             Select Warranty
@@ -550,12 +503,8 @@
                                         Minimum Stock Alart
                                     </label>
 
-                                    <input type="number"
-                                        class="form-control"
-                                        name="min_alert_stock"
-                                        min="0"
-                                        value="{{ $data->min_alert_stock }}"
-                                        placeholder="Enter Minimum Stock Alart">
+                                    <input type="number" class="form-control" name="min_alert_stock" min="0"
+                                        value="{{ $data->min_alert_stock }}" placeholder="Enter Minimum Stock Alart">
 
                                     <div class="invalid-feedback min_alert_stock-error"></div>
                                 </div>
@@ -567,16 +516,13 @@
                                         Active / Inactive Status
                                     </label>
 
-                                    <select class="form-select"
-                                        name="status">
+                                    <select class="form-select" name="status">
 
-                                        <option value="1"
-                                            {{ $data->status == 1 ? 'selected' : '' }}>
+                                        <option value="1" {{ $data->status == 1 ? 'selected' : '' }}>
                                             Active
                                         </option>
 
-                                        <option value="0"
-                                            {{ $data->status == 0 ? 'selected' : '' }}>
+                                        <option value="0" {{ $data->status == 0 ? 'selected' : '' }}>
                                             Inactive
                                         </option>
 
@@ -593,11 +539,9 @@
                             BUTTONS
                         ========================================================== --}}
 
-                        <div class="d-flex justify-content-end gap-2 mt-4 pt-3"
-                            style="border-top:1px solid #eef0f2;">
+                        <div class="d-flex justify-content-end gap-2 mt-4 pt-3" style="border-top:1px solid #eef0f2;">
 
-                            <a href="{{ route('product.index') }}"
-                                class="btn"
+                            <a href="{{ route('product.index') }}" class="btn"
                                 style="border:1px solid #dfe2e8;
                                        color:#4a4a5a;
                                        border-radius:8px;
@@ -607,8 +551,7 @@
                                 Cancel
                             </a>
 
-                            <button type="submit"
-                                class="btn submit-btn"
+                            <button type="submit" class="btn submit-btn"
                                 style="background:#4361ee;
                                        color:#fff;
                                        border-radius:8px;
@@ -821,11 +764,11 @@
 
                             Swal.fire({
                                 icon: "error",
-                                title: xhr.status === 403
-                                    ? "Access Denied"
-                                    : (xhr.status === 404
-                                        ? "Not Found"
-                                        : "Error"),
+                                title: xhr.status === 403 ?
+                                    "Access Denied" :
+                                    (xhr.status === 404 ?
+                                        "Not Found" :
+                                        "Error"),
 
                                 text: xhr.responseJSON?.message ||
                                     "Something went wrong!"

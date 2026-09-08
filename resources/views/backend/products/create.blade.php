@@ -87,17 +87,7 @@
 
 
                                 {{-- Product Name --}}
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold">
-                                        Product Name
-                                        <span class="text-danger">*</span>
-                                    </label>
-
-                                    <input type="text" class="form-control" name="name" maxlength="100"
-                                        placeholder="Enter Product Name" required>
-
-                                    <div class="invalid-feedback name-error"></div>
-                                </div>
+       
 
 
                                 {{-- Product Brand --}}
@@ -342,6 +332,7 @@
                             OPTIONAL FIELDS
                         ========================================================== --}}
 
+                          
                         <div class="pt-4" style="border-top:1px solid #eef0f2;">
 
                             <div class="d-flex align-items-center mb-3">
@@ -357,6 +348,18 @@
                             </div>
 
                             <div class="row">
+
+                                                       <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">
+                                        Product Name
+                                        
+                                    </label>
+
+                                    <input type="text" class="form-control" name="name" maxlength="100"
+                                        placeholder="Enter Product Name" >
+
+                                    <div class="invalid-feedback name-error"></div>
+                                </div>
 
                                 {{-- Product Subcategory --}}
                                 <div class="col-md-6 mb-3">
