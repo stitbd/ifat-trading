@@ -92,7 +92,7 @@
                         <tr>
                             <th>#</th>
                             <th>Product Code</th>
-                            <th>Name</th>
+                            <th>Product Size</th>
                             <th>Image</th>
                             <th>Wing</th>
                             <th>Category</th>
@@ -248,8 +248,8 @@
                     },
 
                     {
-                        data: 'name',
-                        name: 'name'
+                        data: 'product_size',
+                        name: 'product_size'
                     },
 
                     {
