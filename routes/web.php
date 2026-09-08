@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ApplicationController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ComparativeStatementController;
 use App\Http\Controllers\Admin\CountryOfOriginController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\ManufacturerController;
@@ -151,8 +152,43 @@ Route::middleware(['auth'])->group(function () {
     Route::post('requisitions/{requisition}/md-approve', [RequisitionController::class, 'mdApprove'])->name('requisition.md.approve');
     Route::post('requisitions/{requisition}/md-reject', [RequisitionController::class, 'mdReject'])->name('requisition.md.reject');
 
-    Route::post('requisitions/{requisition}/generate-cs', [RequisitionController::class, 'generateCs'])->name('requisition.generate-cs');
+    // ComparativeStatementController
+    Route::get('requisitions/{requisition}/generate-cs', [ComparativeStatementController::class, 'create'])->name('requisition.generate-cs');
+    Route::post('requisitions/{requisition}/generate-cs', [ComparativeStatementController::class, 'store'])->name('requisition.generate-cs.store');
 
+
+    Route::get('comparative-statement', [ComparativeStatementController::class, 'index'])
+        ->name('comparative-statement.index');
+    Route::get('comparative-statement/getdata', [ComparativeStatementController::class, 'getdata'])
+        ->name('comparative-statement.getdata');
+    Route::get('comparative-statement/{comparativeStatement}/view', [ComparativeStatementController::class, 'view'])
+        ->name('comparative-statement.view');
+    Route::delete('comparative-statement/{comparativeStatement}', [ComparativeStatementController::class, 'destroy'])
+        ->name('comparative-statement.destroy');
+    Route::get('comparative-statement/{comparativeStatement}/print', [ComparativeStatementController::class, 'printView'])
+        ->name('comparative-statement.print');
+    Route::get('comparative-statement/{comparativeStatement}/edit', [ComparativeStatementController::class, 'edit'])
+        ->name('comparative-statement.edit');
+    Route::put('comparative-statement/{comparativeStatement}', [ComparativeStatementController::class, 'update'])
+        ->name('comparative-statement.update');
+
+
+
+    Route::post('comparative-statements/{comparativeStatement}/forward', [ComparativeStatementController::class, 'forward'])->name('comparative-statement.forward');
+
+    Route::post('comparative-statements/{comparativeStatement}/sci-approve', [ComparativeStatementController::class, 'sciApprove'])->name('comparative-statement.sci.approve');
+    Route::post('comparative-statements/{comparativeStatement}/sci-reject', [ComparativeStatementController::class, 'sciReject'])->name('comparative-statement.sci.reject');
+
+    Route::post('comparative-statements/{comparativeStatement}/om-approve', [ComparativeStatementController::class, 'omApprove'])->name('comparative-statement.om.approve');
+    Route::post('comparative-statements/{comparativeStatement}/om-reject', [ComparativeStatementController::class, 'omReject'])->name('comparative-statement.om.reject');
+
+    Route::post('comparative-statements/{comparativeStatement}/md-approve', [ComparativeStatementController::class, 'mdApprove'])->name('comparative-statement.md.approve');
+    Route::post('comparative-statements/{comparativeStatement}/md-reject', [ComparativeStatementController::class, 'mdReject'])->name('comparative-statement.md.reject');
+
+    Route::get('comparative-statement/{comparativeStatement}/create-po', [ComparativeStatementController::class, 'createPO'])
+        ->name('comparative-statement.create-po');
+    Route::post('comparative-statement/{comparativeStatement}/store-po', [ComparativeStatementController::class, 'storePO'])
+        ->name('comparative-statement.store-po');
     //asraf
 
     Route::get('wing/getdata', [WingController::class, 'getdata'])

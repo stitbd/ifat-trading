@@ -161,7 +161,6 @@
                                     <thead>
                                         <tr class="text-center">
                                             <th width="40"><input type="checkbox" id="checkAllProducts"></th>
-                                            <th>Product Name</th>
                                             <th>Size</th>
                                             <th width="120">Physical Stock<br><small
                                                     class="as-on-label text-muted fw-normal"></small></th>
@@ -440,25 +439,24 @@
                             let requirement = existing ? existing.quantity : 1;
 
                             rows += `
-                                <tr data-product-id="${p.id}"
-                                    data-name="${p.name}"
-                                    data-code="${p.product_code}"
-                                    data-brand="${p.brand_name}"
-                                    data-size="${p.size_name}"
-                                    data-category="${categoryName}">
-                                    <td class="text-center"><input type="checkbox" class="product-check" ${alreadyAdded}></td>
-                                    <td>${p.name}<span class="product-code-sub">${p.product_code}</span></td>
-                                    <td>${p.size_name}</td>
-                                    <td><input type="number" min="0" class="form-control product-physical-stock" value="${physicalStock}" ${disabledAttr}></td>
-                                    <td><input type="number" min="0" class="form-control product-in-transit" value="${inTransit}" ${disabledAttr}></td>
-                                    <td><input type="number" min="0" class="form-control product-lc-pending" value="${lcPending}" ${disabledAttr}></td>
-                                    <td><input type="number" min="0" class="form-control product-pi" value="${pi}" ${disabledAttr}></td>
-                                    <td><input type="number" min="0" class="form-control product-sale-one" value="${saleOne}" ${disabledAttr}></td>
-                                    <td><input type="number" min="0" class="form-control product-sale-two" value="${saleTwo}" ${disabledAttr}></td>
-                                    <td><input type="number" min="0" class="form-control product-sale-three" value="${saleThree}" ${disabledAttr}></td>
-                                    <td><input type="number" min="1" class="form-control product-requirement" value="${requirement}" ${disabledAttr}></td>
-                                </tr>
-                            `;
+                                    <tr data-product-id="${p.id}"
+                                        data-name="${p.name}"
+                                        data-code="${p.product_code}"
+                                        data-brand="${p.brand_name}"
+                                        data-size="${p.size_name}"
+                                        data-category="${categoryName}">
+                                        <td class="text-center"><input type="checkbox" class="product-check" ${alreadyAdded}></td>
+                                        <td>${p.size_name}</td>
+                                        <td><input type="number" min="0" class="form-control product-physical-stock" value="${physicalStock}" ${disabledAttr}></td>
+                                        <td><input type="number" min="0" class="form-control product-in-transit" value="${inTransit}" ${disabledAttr}></td>
+                                        <td><input type="number" min="0" class="form-control product-lc-pending" value="${lcPending}" ${disabledAttr}></td>
+                                        <td><input type="number" min="0" class="form-control product-pi" value="${pi}" ${disabledAttr}></td>
+                                        <td><input type="number" min="0" class="form-control product-sale-one" value="${saleOne}" ${disabledAttr}></td>
+                                        <td><input type="number" min="0" class="form-control product-sale-two" value="${saleTwo}" ${disabledAttr}></td>
+                                        <td><input type="number" min="0" class="form-control product-sale-three" value="${saleThree}" ${disabledAttr}></td>
+                                        <td><input type="number" min="1" class="form-control product-requirement" value="${requirement}" ${disabledAttr}></td>
+                                    </tr>
+                                `;
                         });
 
                         $('#categoryProductsBody').html(rows);

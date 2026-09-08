@@ -200,10 +200,10 @@
 
     <style>
         /*
-                                |--------------------------------------------------------------------------
-                                | Products column
-                                |--------------------------------------------------------------------------
-                                */
+                                    |--------------------------------------------------------------------------
+                                    | Products column
+                                    |--------------------------------------------------------------------------
+                                    */
 
         .requisition-products {
             display: flex;
@@ -229,10 +229,10 @@
         }
 
         /*
-                                |--------------------------------------------------------------------------
-                                | Serial badge
-                                |--------------------------------------------------------------------------
-                                */
+                                    |--------------------------------------------------------------------------
+                                    | Serial badge
+                                    |--------------------------------------------------------------------------
+                                    */
 
         .serial-badge {
             display: inline-flex;
@@ -733,11 +733,11 @@
             |--------------------------------------------------------------------------
             */
 
-            $(document).on('click', '.generate-cs-btn', function() {
-                let dataId = $(this).data('id');
-                let url = "{{ url('requisitions') }}/" + dataId + "/generate-cs";
-                callWorkflowAction(url, 'Generate CS?', 'This will finalize the requisition.', false);
-            });
+            // $(document).on('click', '.generate-cs-btn', function() {
+            //     let dataId = $(this).data('id');
+            //     let url = "{{ url('requisitions') }}/" + dataId + "/generate-cs";
+            //     callWorkflowAction(url, 'Generate CS?', 'This will finalize the requisition.', false);
+            // });
 
         });
 

@@ -1,189 +1,432 @@
 <!DOCTYPE html>
-
-<html lang="en">
-<!--begin::Head-->
+<html lang="en" data-bs-theme="light">
 
 <head>
-    <base href="../../../" />
-    <title> @yield('title') || Login</title>
-    <meta charset="utf-8" />
-    <meta name="description"
-        content="The most advanced Bootstrap 5 Admin Theme with 40 unique prebuilt layouts on Themeforest trusted by 100,000 beginners and professionals. Multi-demo, Dark Mode, RTL support and complete React, Angular, Vue, Asp.Net Core, Rails, Spring, Blazor, Django, Express.js, Node.js, Flask, Symfony & Laravel versions. Grab your copy now and get life-time updates for free." />
-    <meta name="keywords"
-        content="metronic, bootstrap, bootstrap 5, angular, VueJs, React, Asp.Net Core, Rails, Spring, Blazor, Django, Express.js, Node.js, Flask, Symfony & Laravel starter kits, admin themes, web design, figma, web development, free templates, free admin themes, bootstrap theme, bootstrap template, bootstrap dashboard, bootstrap dak mode, bootstrap button, bootstrap datepicker, bootstrap timepicker, fullcalendar, datatables, flaticon" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:type" content="article" />
-    <meta property="og:title"
-        content="Metronic - Bootstrap Admin Template, HTML, VueJS, React, Angular. Laravel, Asp.Net Core, Ruby on Rails, Spring Boot, Blazor, Django, Express.js, Node.js, Flask Admin Dashboard Theme & Template" />
-    <meta property="og:url" content="https://keenthemes.com/metronic" />
-    <meta property="og:site_name" content="Keenthemes | Metronic" />
-    <link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@yield('title') || Login</title>
+
     @php
         $company = \App\Models\Application::first();
-        $companyLogo = $company ? $company->fav_icon : '';
+        $companyLogo = $company ? $company->logo : '';
+        $companyFavIcon = $company ? $company->fav_icon : '';
+        $companyName = $company ? $company->company_name : 'ST TYRE ERP';
     @endphp
-    <link rel="shortcut icon" href="{{ asset('image/' . $companyLogo) }}" />
-    <!--begin::Fonts(mandatory for all pages)-->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
-    <!--end::Fonts-->
-    <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
-    <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
-    <!--end::Global Stylesheets Bundle-->
-</head>
-<!--end::Head-->
-<!--begin::Body-->
 
-<body id="kt_body" class="app-blank">
-    <!--begin::Theme mode setup on page load-->
+    <link rel="icon" href="{{ asset('image/application/' . $companyFavIcon) }}" type="image/png" />
+
+    <!--begin::Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <!--end::Fonts-->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+    <style>
+        :root {
+            --brand-primary: #4361ee;
+            --brand-primary-dark: #3651d4;
+            --brand-success: #198754;
+            --text-dark: #1e1e2d;
+            --text-muted: #7e8299;
+            --border-light: #eef0f2;
+        }
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            background: #f5f6fa;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Page shell
+        |--------------------------------------------------------------------------
+        */
+        .auth-shell {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Left brand / aside panel — mirrors admin sidebar dark navy + brand blue
+        |--------------------------------------------------------------------------
+        */
+        .auth-aside {
+            width: 46%;
+            background: linear-gradient(160deg, #1b2559 0%, var(--brand-primary) 100%);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 48px;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        .auth-aside::before {
+            content: "";
+            position: absolute;
+            width: 480px;
+            height: 480px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            top: -140px;
+            right: -140px;
+        }
+
+        .auth-aside::after {
+            content: "";
+            position: absolute;
+            width: 360px;
+            height: 360px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            bottom: -120px;
+            left: -100px;
+        }
+
+        .auth-aside .brand-logo {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 40px;
+        }
+
+        .auth-aside .brand-logo img {
+            max-height: 70px;
+            filter: brightness(0) invert(1);
+        }
+
+        .auth-aside .brand-logo .brand-fallback {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .auth-aside h1 {
+            position: relative;
+            z-index: 2;
+            font-size: 30px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .auth-aside p {
+            position: relative;
+            z-index: 2;
+            font-size: 15px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 380px;
+            line-height: 1.7;
+            margin-bottom: 40px;
+        }
+
+        .auth-feature-list {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+            max-width: 360px;
+        }
+
+        .auth-feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 13.5px;
+            font-weight: 500;
+        }
+
+        .auth-feature-item i {
+            font-size: 16px;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Right form panel
+        |--------------------------------------------------------------------------
+        */
+        .auth-form-side {
+            width: 54%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 420px;
+            background: #fff;
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(30, 30, 45, 0.05);
+            padding: 44px 40px;
+        }
+
+        .auth-card .icon-box {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            background: #eaf0ff;
+            color: var(--brand-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .auth-card h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .auth-card .auth-subtitle {
+            font-size: 13.5px;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        .form-label-sm {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .auth-input-group {
+            position: relative;
+            margin-bottom: 18px;
+        }
+
+        .auth-input-group i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9aa0ac;
+            font-size: 15px;
+        }
+
+        .auth-input-group .form-control {
+            border: 1px solid #dfe2e8;
+            border-radius: 8px;
+            padding: 11px 14px 11px 40px;
+            font-size: 14px;
+            background: #fff;
+            box-shadow: none;
+        }
+
+        .auth-input-group .form-control:focus {
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .auth-input-group .form-control.is-invalid {
+            border-color: #f1416c;
+        }
+
+        .auth-input-group .toggle-password {
+            position: absolute;
+            right: 14px;
+            left: auto;
+            cursor: pointer;
+        }
+
+        .invalid-feedback-text {
+            color: #f1416c;
+            font-size: 12.5px;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .btn-auth-submit {
+            width: 100%;
+            background: var(--brand-primary);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-weight: 700;
+            font-size: 14.5px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.15s ease;
+        }
+
+        .btn-auth-submit:hover {
+            background: var(--brand-primary-dark);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .auth-footer-note {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 28px;
+        }
+
+        .auth-copyright {
+            text-align: center;
+            font-size: 12px;
+            color: #b5b8c2;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 991px) {
+            .auth-aside {
+                display: none;
+            }
+
+            .auth-form-side {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="auth-shell">
+
+        <!--begin::Aside-->
+        <div class="auth-aside">
+            <div class="brand-logo">
+                @if ($companyLogo)
+                    <img src="{{ asset('image/application/' . $companyLogo) }}" alt="{{ $companyName }}" />
+                @else
+                    <div class="brand-fallback">{{ $companyName }}</div>
+                @endif
+            </div>
+            <h1>Secure Admin Access</h1>
+            <p>Manage sales, purchases, inventory and requisitions from one powerful dashboard built for your team.</p>
+
+            <div class="auth-feature-list">
+                <div class="auth-feature-item">
+                    <i class="bi bi-graph-up-arrow"></i>
+                    Real-time sales &amp; purchase overview
+                </div>
+                <div class="auth-feature-item">
+                    <i class="bi bi-box-seam"></i>
+                    Live inventory &amp; stock aging insights
+                </div>
+                <div class="auth-feature-item">
+                    <i class="bi bi-shield-lock"></i>
+                    Role-based, secure access control
+                </div>
+            </div>
+        </div>
+        <!--end::Aside-->
+
+        <!--begin::Form side-->
+        <div class="auth-form-side">
+            <div class="auth-card">
+                <div class="icon-box">
+                    <i class="bi bi-shield-lock-fill"></i>
+                </div>
+                <h1>Sign In</h1>
+                <div class="auth-subtitle">Enter your credentials to access the dashboard</div>
+
+                <form class="w-100" action="{{ route('login') }}" method="post">
+                    @csrf
+
+                    <div class="mb-3">
+                        <label class="form-label-sm">Email Address</label>
+                        <div class="auth-input-group">
+                            <i class="bi bi-envelope"></i>
+                            <input type="text" placeholder="you@company.com" name="email" autocomplete="off"
+                                value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" />
+                        </div>
+                        @error('email')
+                            <span class="invalid-feedback-text">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label-sm">Password</label>
+                        <div class="auth-input-group">
+                            <i class="bi bi-lock"></i>
+                            <input type="password" placeholder="••••••••" name="password" id="passwordInput"
+                                autocomplete="off" class="form-control @error('password') is-invalid @enderror" />
+                            <i class="bi bi-eye toggle-password" id="togglePassword"></i>
+                        </div>
+                        @error('password')
+                            <span class="invalid-feedback-text">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="d-flex justify-content-end mb-4">
+                        {{-- <a href="#" class="fs-13" style="color:var(--brand-primary); font-weight:600; text-decoration:none;">Forgot password?</a> --}}
+                    </div>
+
+                    <button type="submit" class="btn-auth-submit">
+                        <span class="indicator-label">
+                            <i class="bi bi-box-arrow-in-right"></i> Sign In
+                        </span>
+                    </button>
+
+                    <div class="auth-footer-note">
+                        Welcome back! Please log in to manage your dashboard efficiently.
+                    </div>
+                </form>
+
+                <div class="auth-copyright">
+                    © {{ date('Y') }} {{ $companyName }}. All rights reserved.
+                </div>
+            </div>
+        </div>
+        <!--end::Form side-->
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        var defaultThemeMode = "light";
-        var themeMode;
-        if (document.documentElement) {
-            if (document.documentElement.hasAttribute("data-bs-theme-mode")) {
-                themeMode = document.documentElement.getAttribute("data-bs-theme-mode");
-            } else {
-                if (localStorage.getItem("data-bs-theme") !== null) {
-                    themeMode = localStorage.getItem("data-bs-theme");
-                } else {
-                    themeMode = defaultThemeMode;
-                }
-            }
-            if (themeMode === "system") {
-                themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-            }
-            document.documentElement.setAttribute("data-bs-theme", themeMode);
+        const toggleBtn = document.getElementById('togglePassword');
+        const pwdInput = document.getElementById('passwordInput');
+        if (toggleBtn && pwdInput) {
+            toggleBtn.addEventListener('click', function() {
+                const isPassword = pwdInput.getAttribute('type') === 'password';
+                pwdInput.setAttribute('type', isPassword ? 'text' : 'password');
+                this.classList.toggle('bi-eye');
+                this.classList.toggle('bi-eye-slash');
+            });
         }
     </script>
-    <!--end::Theme mode setup on page load-->
-    <!--begin::Root-->
-    <div class="d-flex flex-column flex-root" id="kt_app_root">
-        <!--begin::Authentication - Sign-in -->
-        <div class="d-flex flex-column flex-lg-row flex-column-fluid">
-            <!--begin::Body-->
-            <div class="d-flex flex-column flex-lg-row-fluid w-lg-50 p-10 order-2 order-lg-1">
-                <!--begin::Form-->
-                <div class="d-flex flex-center flex-column flex-lg-row-fluid">
-                    <!--begin::Wrapper-->
-                    <div class="w-lg-500px p-10">
-                        <!--begin::Form-->
-                        <form class="form w-100" action="{{ route('login') }}" method="post">
-                            @csrf
-                            <!--begin::Heading-->
-                            <div class="text-center mb-11">
-                                <!--begin::Title-->
-                                <h1 class="text-dark fw-bolder mb-3">Sign In</h1>
-                                <!--end::Title-->
-                                <!--begin::Subtitle-->
-                                <div class="text-gray-500 fw-semibold fs-6">Your Admin Access</div>
-                                <!--end::Subtitle=-->
-                            </div>
-                            <!--begin::Heading-->
-                            <!--begin::Login options-->
-
-                            <!--end::Separator-->
-                            <!--begin::Input group=-->
-                            <div class="fv-row mb-8">
-                                <!--begin::Email-->
-                                <input type="text" placeholder="Email" name="email" autocomplete="off"
-                                    class="form-control bg-transparent @error('email') is-invalid @enderror" />
-                                @error('email')
-                                    <p class="text-danger">{{ $message }}</p>
-                                @enderror
-                                <!--end::Email-->
-                            </div>
-                            <!--end::Input group=-->
-                            <div class="fv-row mb-3">
-                                <!--begin::Password-->
-                                <input type="password" placeholder="Password" name="password" autocomplete="off"
-                                    class="form-control bg-transparent @error('password') is-invalid @enderror " />
-                                @error('password')
-                                    <p class="text-danger">{{ $message }}</p>
-                                @enderror
-                                <!--end::Password-->
-                            </div>
-                            <!--end::Input group=-->
-
-                            <!--begin::Submit button-->
-                            <div class="d-grid mb-10">
-                                <button type="submit" class="btn btn-primary">
-                                    <!--begin::Indicator label-->
-                                    <span class="indicator-label">Sign In</span>
-                                    <!--end::Indicator label-->
-                                    <!--begin::Indicator progress-->
-                                    <span class="indicator-progress">Please wait...
-                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-                                    <!--end::Indicator progress-->
-                                </button>
-                            </div>
-                            <!--end::Submit button-->
-                            <!--begin::Sign up-->
-                            <div class="text-gray-500 text-center fw-semibold fs-6">
-                                Welcome back! Please log in to manage your dashboard efficiently.
-                            </div>
-                            <!--end::Sign up-->
-                        </form>
-                        <!--end::Form-->
-                    </div>
-                    <!--end::Wrapper-->
-                </div>
-                <!--end::Form-->
-
-            </div>
-            <!--end::Body-->
-            <!--begin::Aside-->
-            <div class="d-flex flex-lg-row-fluid w-lg-50 bgi-size-cover bgi-position-center order-1 order-lg-2"
-                style="background-image: url({{ asset('assets/media/misc/auth-bg.png') }})">
-                <!--begin::Content-->
-                <div class="d-flex flex-column flex-center py-7 py-lg-15 px-5 px-md-15 w-100">
-                    <!--begin::Logo-->
-                    @php
-                        $company = \App\Models\Application::first();
-                        $companyLogo = $company ? $company->logo : '';
-                        $companyName = $company ? $company->company_name : '';
-                    @endphp
-                    <a href="../../demo1/dist/index.html" class="mb-0 mb-lg-12">
-                        <img alt="Logo" src="{{ asset('image/' . $companyLogo) }}" class="h-60px h-lg-75px" />
-                    </a>
-                    <!--end::Logo-->
-                    <!--begin::Image-->
-                    <img class="d-none d-lg-block mx-auto w-275px w-md-50 w-xl-600px mb-10 mb-lg-20"
-                        src="{{ asset('assets/launch.png') }}" alt="" />
-                    <!--end::Image-->
-                    <!--begin::Title-->
-                    <h1 class="d-none d-lg-block text-white fs-2qx fw-bolder text-center mb-7">
-                        Secure Admin Access
-                    </h1>
-                    <div class="d-none d-lg-block text-white fs-base text-center">
-                        Manage your dashboard with ease and efficiency.
-                        <br />Sign in to access powerful tools and insights.
-                        <br />Your security is our priority.
-                    </div>
-                    <!--end::Text-->
-                </div>
-                <!--end::Content-->
-            </div>
-            <!--end::Aside-->
-        </div>
-        <!--end::Authentication - Sign-in-->
-    </div>
-    <!--end::Root-->
-    <!--begin::Javascript-->
-    <script>
-        var hostUrl = "assets/";
-    </script>
-    <!--begin::Global Javascript Bundle(mandatory for all pages)-->
-    <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
-    <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
-    <!--end::Global Javascript Bundle-->
-    <!--begin::Custom Javascript(used for this page only)-->
-
-    {{-- <script src="{{asset('assets/js/custom/authentication/sign-in/general.js')}}"></script> --}}
-    {{-- @include('sweetalert::alert') --}}
-    <!--end::Custom Javascript-->
-    <!--end::Javascript-->
 </body>
-<!--end::Body-->
 
 </html>

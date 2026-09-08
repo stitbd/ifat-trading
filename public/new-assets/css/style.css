@@ -343,7 +343,7 @@ body {
     border-radius: 8px;
     margin-bottom: 2px;
     transition: all 0.2s;
-    white-space: nowrap;
+    /* white-space: nowrap; */
     position: relative;
 }
 
